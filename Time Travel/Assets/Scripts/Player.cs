@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+   
     public Transform[] points;
     public float speed = 15f;
     public bool movingAllowed;
@@ -11,10 +12,12 @@ public class Player : MonoBehaviour
     public int curIndex;
     public int ran;
 
-
+    public List<GameManager.items> itemCards;
     void Start()
     {
         transform.position = points[curIndex].transform.position;
+        itemCards = new List<GameManager.items>();
+        itemCards.Add(GameManager.items.hint);
     }
 
     // Update is called once per frame

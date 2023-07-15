@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+    public enum items { hint, erase, pass, cardSteal, timeSteal, bind };
+
     public Player player;
 
     public bool gameOver;
@@ -15,6 +18,16 @@ public class GameManager : MonoBehaviour
     
 
     public static int playerStartPoint = 0;
+
+    public Canvas problemCanvas;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -47,4 +60,18 @@ public class GameManager : MonoBehaviour
         player.movingAllowed = true;
     }
 
+    public void showProblem()
+    {
+        problemCanvas.gameObject.SetActive(true);
+    }
+
+    public int getPlayerNextPosition()
+    {
+        return player.curIndex+newDiceSide;
+    }
+
+    public void useItemCard(items itemName)
+    {
+        player.itemCards.Remove(itemName);
+    }
 }

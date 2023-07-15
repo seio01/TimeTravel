@@ -26,8 +26,9 @@ public class Dice : MonoBehaviour
         
         manager.newDiceSide = ranSide + 1;
 
-        yield return new WaitForSeconds(1f);
-        manager.MovePlayer();
+        yield return new WaitForSeconds(1.5f);
+
+        manager.showProblem();
     }
 
 }

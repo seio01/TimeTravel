@@ -6,7 +6,7 @@ using TMPro;
 public class resultPanel : MonoBehaviour
 {
     TMP_Text resultText;
-    public GameObject problemPanel;
+    public GameObject problemCanvas;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +39,7 @@ public class resultPanel : MonoBehaviour
             this.gameObject.GetComponent<Image>().color = backGroundColor;
         }
         yield return new WaitForSeconds(0.75f);
-        problemPanel.SetActive(false);
+        problemCanvas.SetActive(false);
         this.gameObject.SetActive(false);
     }
     
