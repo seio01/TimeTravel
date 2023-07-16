@@ -24,10 +24,14 @@ public class Dice : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
         
-        manager.newDiceSide = ranSide + 1;
-
+        //ranSide + 1;
+        manager.newDiceSide = 7;
+        
         yield return new WaitForSeconds(1f);
-        manager.MovePlayer();
+        manager.diceImg.SetActive(false);
+        manager.CheckCurPoint(GameManager.playerStartPoint + 7);
+        
+        //manager.MovePlayer();
     }
 
 }

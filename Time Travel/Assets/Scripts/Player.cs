@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public GameManager manager;
     public Transform[] points;
     public float speed = 15f;
     public bool movingAllowed;
-    public bool transporting;
+    public bool moveLadder;
+    public bool moveTransport;
     public int curIndex;
     public int ran;
 
@@ -22,11 +24,11 @@ public class Player : MonoBehaviour
     {
         if (movingAllowed)
             MovePath();
-        if (transporting)
-        {
+        if (moveLadder)
+            MoveLadder();
+        if (moveTransport)
             Transport();
-        }
-            
+
     }
 
     public void MovePath()
@@ -43,24 +45,56 @@ public class Player : MonoBehaviour
         
     }
 
-    //»ç´Ù¸®Ä­
-    //¹®Á¦Ä­
-    //Æ÷ÅÐÄ­
 
-    public void Transport()
+    //»ç´Ù¸®Ä­ ÀÌµ¿
+    public void MoveLadder()
     {
+
         switch (curIndex - 1)
         {
-            case 6:
-                transform.position = Vector2.MoveTowards(transform.position, points[35].transform.position, speed * Time.deltaTime);
-                GameManager.playerStartPoint = 35;
-                break;
-            case 14:
-                transform.position = points[29].transform.position;
-                GameManager.playerStartPoint = 29;
+            case 7:
+                transform.position = Vector2.MoveTowards(transform.position, points[36].transform.position, speed * Time.deltaTime);
+                GameManager.playerStartPoint = 36;
+                
+                if(transform.position == points[36].transform.position)
+                {
+                    curIndex = 37;
+                    manager.isLadder = false;
+                    manager.finishRound = true;
+                }
+                    
                 break;
 
         }
         
+        
+
+    }
+
+    //Æ÷ÅÐÄ­ ÀÌµ¿
+    public void Transport()
+    {
+        switch (curIndex - 1)
+        {
+            case 15:
+                transform.position = points[30].transform.position;
+                GameManager.playerStartPoint = 30;
+                break;
+            case 26:
+                transform.position = points[38].transform.position;
+                GameManager.playerStartPoint = 38;
+                break;
+            case 29:
+                transform.position = points[15].transform.position;
+                GameManager.playerStartPoint = 15;
+                break;
+            case 37:
+                transform.position = points[26].transform.position;
+                GameManager.playerStartPoint = 26;
+                break;
+
+        }
+        manager.isTransport = false;
+        manager.finishRound = true;
     }
 }

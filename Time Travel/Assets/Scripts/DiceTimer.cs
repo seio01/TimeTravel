@@ -27,11 +27,13 @@ public class DiceTimer : MonoBehaviour
 
         else if (diceTime <= 0)
         {
-            //Time.timeScale = 0.0f;
             diceTimeText.gameObject.SetActive(false);
             dice.RollDice();
+            diceTime = 3;
+            manager.timerOn = false;
         }
 
         diceTimeText.text = Mathf.Round(diceTime).ToString();
     }
+
 }
