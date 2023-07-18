@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class DiceTimer : MonoBehaviour
 {
     public GameManager manager;
-    public float diceTime = 10f;
     public Text diceTimeText;
     public Dice dice;
 
+    public float diceTime = 10f; //나중에 수정해야
     void Start()
     {
         diceTimeText.text = diceTime.ToString();

@@ -74,6 +74,8 @@ public class problem : MonoBehaviour
         {
             GameManager.instance.MovePlayer();
         }
+        else
+            GameManager.instance.finishRound = true; //추가한 부분
     }
 
     void setProblemID()

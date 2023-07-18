@@ -7,25 +7,25 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public enum items { hint, erase, pass, cardSteal, timeSteal, bind };
-
-
     public static int playerStartPoint = 0;
 
     public Player player;
-    public Dice dice;
-    public Space spaceAction;
-
     public int newDiceSide;
     public bool timerOn;
     public bool isLadder;
     public bool isTransport;
     public bool finishRound;
     public string spaceCategory;
+
+    [Header("UI")]
     public Canvas problemCanvas;
+    public Dice dice;
+    public Space spaceAction;
     public Text diceTimer;
     public Text spaceText;
     public GameObject space;
     public GameObject diceImg;
+
     void Awake()
     {
         if (instance == null)
@@ -43,7 +43,6 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         //when to stop moving
-        //newDiseSide
         if(player.curIndex > playerStartPoint + newDiceSide)
         {
             player.movingAllowed = false;
@@ -57,8 +56,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (finishRound)
-            RoundStart();
-
+            Invoke("RoundStart", 1);
     }
 
     public void RoundStart()
@@ -92,6 +90,14 @@ public class GameManager : MonoBehaviour
     {
         switch (diceNum)
         {
+            //test
+            /*case 1:
+            case 2:
+            case 4:
+            case 5:
+            case 6:
+            */
+            //test
             case 3:
             case 8:
             case 11:

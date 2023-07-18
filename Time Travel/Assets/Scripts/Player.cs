@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     public GameManager manager;
     public Transform[] points;
+
     public float speed = 15f;
     public bool movingAllowed;
     public bool moveLadder;
