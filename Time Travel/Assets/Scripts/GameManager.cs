@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+    public enum items { hint, erase, pass, cardSteal, timeSteal, bind };
+
+
     public static int playerStartPoint = 0;
 
     public Player player;
@@ -17,12 +21,18 @@ public class GameManager : MonoBehaviour
     public bool isTransport;
     public bool finishRound;
     public string spaceCategory;
-
+    public Canvas problemCanvas;
     public Text diceTimer;
     public Text spaceText;
     public GameObject space;
     public GameObject diceImg;
-
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -62,18 +72,26 @@ public class GameManager : MonoBehaviour
     {
         player.movingAllowed = true;
     }
+    public void showProblem()
+    {
+        problemCanvas.gameObject.SetActive(true);
+    }
+
+    //Ãß°¡
+    public int getPlayerNextPosition()
+    {
+        return player.curIndex + newDiceSide;
+    }
+
+    public void useItemCard(items itemName)
+    {
+        player.itemCards.Remove(itemName);
+    }
 
     public void CheckCurPoint(int diceNum)
     {
         switch (diceNum)
         {
-            //test
-            case 1:
-            case 2:
-            case 4:
-            case 5:
-            case 6:
-            //test
             case 3:
             case 8:
             case 11:

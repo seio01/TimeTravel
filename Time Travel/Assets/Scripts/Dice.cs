@@ -25,11 +25,11 @@ public class Dice : MonoBehaviour
         }
         
         //ranSide + 1;
-        manager.newDiceSide = 7;
+        manager.newDiceSide = ranSide + 1;
         
         yield return new WaitForSeconds(1f);
         manager.diceImg.SetActive(false);
-        manager.CheckCurPoint(GameManager.playerStartPoint + 7);
+        manager.CheckCurPoint(GameManager.playerStartPoint + ranSide + 1);
         
         //manager.MovePlayer();
     }

@@ -13,10 +13,12 @@ public class Player : MonoBehaviour
     public int curIndex;
     public int ran;
 
-
+    public List<GameManager.items> itemCards;
     void Start()
     {
         transform.position = points[curIndex].transform.position;
+        itemCards = new List<GameManager.items>();
+        itemCards.Add(GameManager.items.hint);
     }
 
     // Update is called once per frame
@@ -61,17 +63,57 @@ public class Player : MonoBehaviour
                     curIndex = 37;
                     manager.isLadder = false;
                     manager.finishRound = true;
-                }
-                    
+                } 
                 break;
+            case 22:
+                transform.position = Vector2.MoveTowards(transform.position, points[48].transform.position, speed * Time.deltaTime);
+                GameManager.playerStartPoint = 48;
 
+                if (transform.position == points[48].transform.position)
+                {
+                    curIndex = 49;
+                    manager.isLadder = false;
+                    manager.finishRound = true;
+                }
+                break;
+            case 53:
+                transform.position = Vector2.MoveTowards(transform.position, points[60].transform.position, speed * Time.deltaTime);
+                GameManager.playerStartPoint = 60;
+
+                if (transform.position == points[60].transform.position)
+                {
+                    curIndex = 61;
+                    manager.isLadder = false;
+                    manager.finishRound = true;
+                }
+                break;
+            case 64:
+                transform.position = Vector2.MoveTowards(transform.position, points[73].transform.position, speed * Time.deltaTime);
+                GameManager.playerStartPoint = 73;
+
+                if (transform.position == points[73].transform.position)
+                {
+                    curIndex = 74;
+                    manager.isLadder = false;
+                    manager.finishRound = true;
+                }
+                break;
+            case 76:
+                transform.position = Vector2.MoveTowards(transform.position, points[84].transform.position, speed * Time.deltaTime);
+                GameManager.playerStartPoint = 84;
+
+                if (transform.position == points[84].transform.position)
+                {
+                    curIndex = 85;
+                    manager.isLadder = false;
+                    manager.finishRound = true;
+                }
+                break;
         }
-        
-        
 
     }
 
-    //Æ÷ÅÐÄ­ ÀÌµ¿
+    //Æ÷ÅÐÄ­ ÀÌµ¿ ¼öÁ¤ÇÊ¿ä
     public void Transport()
     {
         switch (curIndex - 1)

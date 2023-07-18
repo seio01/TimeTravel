@@ -38,7 +38,8 @@ public class Space : MonoBehaviour
                 manager.isTransport = true;
                 break;
             case "Problem":
-                SceneManager.LoadScene("SampleScene");
+                //문제 푸는 부분
+                manager.showProblem();
                 break;
         }
 
