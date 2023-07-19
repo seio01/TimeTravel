@@ -8,7 +8,6 @@ public class Dice : MonoBehaviour
     public GameManager manager;
     public Image curSide;
     public Sprite[] diceSides;
-
     public void RollDice()
     {
         StartCoroutine(RollDiceRoutine());
@@ -24,11 +23,14 @@ public class Dice : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
         
+        //ranSide + 1--> test용으로 바꾸기 checkcurPoint랑;
         manager.newDiceSide = ranSide + 1;
-
-        yield return new WaitForSeconds(1.5f);
-
-        manager.showProblem();
+        
+        yield return new WaitForSeconds(1f);
+        manager.diceImg.SetActive(false);
+        manager.CheckCurPoint(GameManager.playerStartPoint + ranSide + 1);
+        
+        //manager.MovePlayer();
     }
 
 }

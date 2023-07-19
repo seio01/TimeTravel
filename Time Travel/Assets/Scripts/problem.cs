@@ -47,12 +47,13 @@ public class problem : MonoBehaviour
 
     }
 
+
     void OnEnable()
     {
         getPlayerNextPosition();
         Debug.Log(playerPosition);
         setProblemID();
-        Debug.Log("문제 번호: "+problemID);
+        Debug.Log("문제 번호: " + problemID);
         getInfoFromCSV();
         setImage();
         controlButtons();
@@ -73,10 +74,13 @@ public class problem : MonoBehaviour
         {
             GameManager.instance.MovePlayer();
         }
+        else
+            GameManager.instance.finishRound = true; //추가한 부분
     }
 
     void setProblemID()
     {
+        Debug.Log(playerPosition);
         if (playerPosition >= 1 && playerPosition <= 8)
         {
             problemID = Random.Range(1, 30);
@@ -89,7 +93,7 @@ public class problem : MonoBehaviour
         }
         else if (playerPosition >= 21 && playerPosition <= 40)
         {
-            //problemID = Random.Range(1, 고려시대 문제 수) + 95;
+            problemID = Random.Range(1, 80) + 95;
             prevDynasty = 95;
         }
         else if (playerPosition >= 41 && playerPosition <= 70)
@@ -119,32 +123,37 @@ public class problem : MonoBehaviour
 
     void getInfoFromCSV()
     {
-        dynasty = problemData[problemID - 1+prevDynasty]["시대"].ToString();
-        problemType = problemData[problemID - 1+prevDynasty]["유형"].ToString();
-        isHaveHint = problemData[problemID - 1+ prevDynasty]["힌트 여부"].ToString();
-        hintString = problemData[problemID - 1+ prevDynasty]["힌트"].ToString();
+        dynasty = problemData[problemID - 1]["시대"].ToString();
+        problemType = problemData[problemID - 1]["유형"].ToString();
+        isHaveHint = problemData[problemID - 1]["힌트 여부"].ToString();
+        hintString = problemData[problemID - 1]["힌트"].ToString();
         dynastyText.text = dynasty;
     }
 
     void setImage()
     {
         string graphName = dynasty + problemID;
-        Sprite[] dynastyImageGraph=null;
+        Sprite[] dynastyImageGraph = null;
         switch (dynasty)
         {
-            case "고조선": dynastyImageGraph = problemScript.dynasty1;
+            case "고조선":
+                dynastyImageGraph = problemScript.dynasty1;
                 break;
-            case "삼국시대": dynastyImageGraph = problemScript.dynasty2;
+            case "삼국시대":
+                dynastyImageGraph = problemScript.dynasty2;
                 break;
-            case "고려": dynastyImageGraph = problemScript.dynasty3;
+            case "고려":
+                dynastyImageGraph = problemScript.dynasty3;
                 break;
-            case "조선시대": dynastyImageGraph = problemScript.dynasty4;
+            case "조선시대":
+                dynastyImageGraph = problemScript.dynasty4;
                 break;
-            case "근대이후": dynastyImageGraph = problemScript.dynasty5;
+            case "근대이후":
+                dynastyImageGraph = problemScript.dynasty5;
                 break;
             default: break;
         }
-        Sprite sprite = dynastyImageGraph[problemID - 1];
+        Sprite sprite = dynastyImageGraph[problemID - 1 - prevDynasty];
         problemImage.GetComponent<Image>().sprite = sprite;
         problemImage.GetComponent<Image>().SetNativeSize();
     }
@@ -226,6 +235,31 @@ public class problem : MonoBehaviour
             hintPanel.SetActive(true);
             GameManager.instance.useItemCard(GameManager.items.hint);
         }
+    }
+
+    public void passProblem()
+    {
+        GameManager.instance.useItemCard(GameManager.items.pass);
+        StopCoroutine("setTimer");
+        resultPanel.SetActive(true);
+        resultText.text = "문제를 패스했습니다. \n";
+        string correctAnswer = answerData[problemID - 1]["답"].ToString();
+        if (problemType == "ox")
+        {
+            if (correctAnswer == "1")
+            {
+                resultText.text += "정답은 o 였습니다.";
+            }
+            else
+            {
+                resultText.text += "정답은 x 였습니다.";
+            }
+        }
+        else
+        {
+            resultText.text += "정답은 " + correctAnswer + "번이었습니다.";
+        }
+        isPlayerCorrect = true;
     }
 
     public void getPlayerNextPosition()

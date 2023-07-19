@@ -8,10 +8,10 @@ public class resultPanel : MonoBehaviour
     TMP_Text resultText;
     public GameObject problemCanvas;
     // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
         resultText = transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
-        StartCoroutine("setAlphaValue");
     }
 
     // Update is called once per frame
@@ -22,7 +22,13 @@ public class resultPanel : MonoBehaviour
 
     void OnEnable()
     {
-
+        Color backGroundColor = this.gameObject.GetComponent<Image>().color;
+        Color textColor = new Color(65f/255f, 39f/255f, 27f/255f);
+        backGroundColor.a = 1.0f;
+        textColor.a = 1.0f;
+        this.gameObject.GetComponent<Image>().color = backGroundColor;
+        resultText.color = textColor;
+        StartCoroutine("setAlphaValue");
     }
 
     IEnumerator setAlphaValue()
