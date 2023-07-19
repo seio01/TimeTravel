@@ -369,7 +369,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 154145900}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1223628118}
+        m_TargetAssemblyTypeName: problem, Assembly-CSharp
+        m_MethodName: passProblem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &154145900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -578,8 +590,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 421.5, y: -141.5}
-  m_SizeDelta: {x: 871, y: 183}
+  m_AnchoredPosition: {x: 421.5, y: -66.5}
+  m_SizeDelta: {x: 885, y: 33}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &172980911
 MonoBehaviour:
@@ -601,7 +613,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ca5216e3a6442df4a834709c0aa706fc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2c40a910da1b6a148a000946dd0bd9ed, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2602,7 +2614,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43564
+  m_Name: pb_Mesh26064
   serializedVersion: 10
   m_SubMeshes: []
   m_Shapes:
@@ -3106,9 +3118,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 1339857779}
-  diceTime: 3
   diceTimeText: {fileID: 794302226}
   dice: {fileID: 195150733}
+  diceTime: 3
 --- !u!1 &836926287
 GameObject:
   m_ObjectHideFlags: 0
@@ -4389,7 +4401,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -0.000027656555}
-  m_SizeDelta: {x: 0, y: 233}
+  m_SizeDelta: {x: 0, y: 83}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1163123749
 MonoBehaviour:
@@ -5578,8 +5590,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 666202851}
-  dice: {fileID: 195150733}
-  spaceAction: {fileID: 493624325}
   newDiceSide: 0
   timerOn: 0
   isLadder: 0
@@ -5587,6 +5597,8 @@ MonoBehaviour:
   finishRound: 0
   spaceCategory: 
   problemCanvas: {fileID: 1323493764}
+  dice: {fileID: 195150733}
+  spaceAction: {fileID: 493624325}
   diceTimer: {fileID: 794302226}
   spaceText: {fileID: 429777916}
   space: {fileID: 1176336833}
@@ -6056,6 +6068,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2051968885}
     m_Modifications:
+    - target: {fileID: 8852677459241948565, guid: 4dec1a26f7b1321489c65ceec6bd84ba, type: 3}
+      propertyPath: m_FontData.m_RichText
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8852677459542749465, guid: 4dec1a26f7b1321489c65ceec6bd84ba, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6066,7 +6082,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8852677459542749465, guid: 4dec1a26f7b1321489c65ceec6bd84ba, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8852677459542749465, guid: 4dec1a26f7b1321489c65ceec6bd84ba, type: 3}
       propertyPath: m_AnchorMax.x
@@ -6086,11 +6102,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8852677459542749465, guid: 4dec1a26f7b1321489c65ceec6bd84ba, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 800
+      value: 950
       objectReference: {fileID: 0}
     - target: {fileID: 8852677459542749465, guid: 4dec1a26f7b1321489c65ceec6bd84ba, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 250
+      value: 220
       objectReference: {fileID: 0}
     - target: {fileID: 8852677459542749465, guid: 4dec1a26f7b1321489c65ceec6bd84ba, type: 3}
       propertyPath: m_LocalPosition.x

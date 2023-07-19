@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     {
         transform.position = points[curIndex].transform.position;
         itemCards = new List<GameManager.items>();
-        itemCards.Add(GameManager.items.hint);
+        itemCards.Add(GameManager.items.pass);
     }
 
     // Update is called once per frame
@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
                 
                 if(transform.position == points[36].transform.position)
                 {
-                    curIndex = 37;
+                    curIndex = 36;
                     manager.isLadder = false;
                     manager.finishRound = true;
                 } 
@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
 
                 if (transform.position == points[48].transform.position)
                 {
-                    curIndex = 49;
+                    curIndex = 48;
                     manager.isLadder = false;
                     manager.finishRound = true;
                 }
@@ -83,7 +83,7 @@ public class Player : MonoBehaviour
 
                 if (transform.position == points[60].transform.position)
                 {
-                    curIndex = 61;
+                    curIndex = 60;
                     manager.isLadder = false;
                     manager.finishRound = true;
                 }
@@ -94,7 +94,7 @@ public class Player : MonoBehaviour
 
                 if (transform.position == points[73].transform.position)
                 {
-                    curIndex = 74;
+                    curIndex = 73;
                     manager.isLadder = false;
                     manager.finishRound = true;
                 }
@@ -105,7 +105,7 @@ public class Player : MonoBehaviour
 
                 if (transform.position == points[84].transform.position)
                 {
-                    curIndex = 85;
+                    curIndex = 84;
                     manager.isLadder = false;
                     manager.finishRound = true;
                 }

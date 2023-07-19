@@ -118,7 +118,7 @@ public class GameManager : MonoBehaviour
             case 82:
             case 91:
                 spaceCategory = "Nothing";
-                spaceText.text = "현재 칸은 빈칸입니다.\n 바로 이동가능합니다.";
+                spaceText.text = "현재 칸은 빈 칸입니다.\n 바로 이동가능합니다.";
                 break;
             case 7:
             case 22:
@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
             case 64:
             case 76:
                 spaceCategory = "Ladder";
-                spaceText.text = "현재 칸은 사다리칸입니다.\n 사다리를 타고 이동합니다.";
+                spaceText.text = "현재 칸은 사다리 칸입니다.\n 사다리를 타고 이동합니다.";
                 break;
             case 15:
             case 30:
@@ -139,11 +139,11 @@ public class GameManager : MonoBehaviour
             case 62:
             case 90:
                 spaceCategory = "Portal";
-                spaceText.text = "현재 칸은 포털칸입니다.\n 같은 색깔의 포털로 이동합니다.";
+                spaceText.text = "현재 칸은 포털 칸입니다.\n 같은 색깔의 포털로 이동합니다.";
                 break;
             default:
                 spaceCategory = "Problem";
-                spaceText.text = "현재 칸은 문제칸입니다.\n 문제를 맞추면 이동가능합니다.";
+                spaceText.text = "현재 칸은 문제 칸입니다.\n 문제를 맞추면 이동가능합니다.";
                 break;
         }
         space.SetActive(true);
@@ -154,10 +154,10 @@ public class GameManager : MonoBehaviour
 
     IEnumerator DoActionRoutine()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         space.SetActive(false);
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
         spaceAction.DoAction(spaceCategory);
     }
 
