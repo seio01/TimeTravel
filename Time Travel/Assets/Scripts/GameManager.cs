@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
             if (isLadder && !player.movingAllowed)
                 player.moveLadder = true;
             else if (isTransport && !player.movingAllowed)
-                player.moveTransport = true;
+                player.Transport();
             else
                 finishRound = true;
         }
@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
 
     public void RoundStart()
     {
+        player.moveLadder = false;
         finishRound = false;
         diceImg.SetActive(true);
         diceTimer.gameObject.SetActive(true);
@@ -91,12 +92,9 @@ public class GameManager : MonoBehaviour
         switch (diceNum)
         {
             //test
-            /*case 1:
-            case 2:
-            case 4:
             case 5:
-            case 6:
-            */
+            case 10:
+            
             //test
             case 3:
             case 8:

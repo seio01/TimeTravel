@@ -8,6 +8,12 @@ public class Dice : MonoBehaviour
     public GameManager manager;
     public Image curSide;
     public Sprite[] diceSides;
+
+    void OnEnable()
+    {
+        curSide.sprite = diceSides[0];
+    }
+
     public void RollDice()
     {
         StartCoroutine(RollDiceRoutine());

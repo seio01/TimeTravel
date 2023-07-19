@@ -649,7 +649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &195150732
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2495,7 +2495,6 @@ MonoBehaviour:
   speed: 15
   movingAllowed: 0
   moveLadder: 0
-  moveTransport: 0
   curIndex: 0
   ran: 0
   itemCards: 
@@ -6069,7 +6068,15 @@ PrefabInstance:
     m_TransformParent: {fileID: 2051968885}
     m_Modifications:
     - target: {fileID: 8852677459241948565, guid: 4dec1a26f7b1321489c65ceec6bd84ba, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: a592350e4e398b3468cba8ae9b4d9499, type: 3}
+    - target: {fileID: 8852677459241948565, guid: 4dec1a26f7b1321489c65ceec6bd84ba, type: 3}
       propertyPath: m_FontData.m_RichText
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852677459241948567, guid: 4dec1a26f7b1321489c65ceec6bd84ba, type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8852677459542749465, guid: 4dec1a26f7b1321489c65ceec6bd84ba, type: 3}

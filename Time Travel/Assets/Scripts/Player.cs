@@ -10,7 +10,6 @@ public class Player : MonoBehaviour
     public float speed = 15f;
     public bool movingAllowed;
     public bool moveLadder;
-    public bool moveTransport;
     public int curIndex;
     public int ran;
 
@@ -29,8 +28,6 @@ public class Player : MonoBehaviour
             MovePath();
         if (moveLadder)
             MoveLadder();
-        if (moveTransport)
-            Transport();
 
     }
 
@@ -58,7 +55,6 @@ public class Player : MonoBehaviour
             case 7:
                 transform.position = Vector2.MoveTowards(transform.position, points[36].transform.position, speed * Time.deltaTime);
                 GameManager.playerStartPoint = 36;
-                
                 if(transform.position == points[36].transform.position)
                 {
                     curIndex = 36;
@@ -122,22 +118,104 @@ public class Player : MonoBehaviour
             case 15:
                 transform.position = points[30].transform.position;
                 GameManager.playerStartPoint = 30;
+                if (transform.position == points[30].transform.position)
+                {
+                    curIndex = 31;
+                    manager.isTransport = false;
+                    manager.finishRound = true;
+                }
                 break;
             case 26:
                 transform.position = points[38].transform.position;
                 GameManager.playerStartPoint = 38;
+                if (transform.position == points[38].transform.position)
+                {
+                    curIndex = 39;
+                    manager.isTransport = false;
+                    manager.finishRound = true;
+                }
                 break;
-            case 29:
+            case 30:
                 transform.position = points[15].transform.position;
                 GameManager.playerStartPoint = 15;
+                if (transform.position == points[15].transform.position)
+                {
+                    curIndex = 16;
+                    manager.isTransport = false;
+                    manager.finishRound = true;
+                }
                 break;
-            case 37:
+            case 32:
+                transform.position = points[80].transform.position;
+                GameManager.playerStartPoint = 80;
+                if (transform.position == points[80].transform.position)
+                {
+                    curIndex = 81;
+                    manager.isTransport = false;
+                    manager.finishRound = true;
+                }
+                break;
+            case 38:
                 transform.position = points[26].transform.position;
                 GameManager.playerStartPoint = 26;
+                if (transform.position == points[26].transform.position)
+                {
+                    curIndex = 27;
+                    manager.isTransport = false;
+                    manager.finishRound = true;
+                }
                 break;
-
+            case 46:
+                transform.position = points[46].transform.position;
+                GameManager.playerStartPoint = 46;
+                if (transform.position == points[46].transform.position)
+                {
+                    curIndex = 47;
+                    manager.isTransport = false;
+                    manager.finishRound = true;
+                }
+                break;
+            case 62:
+                transform.position = points[62].transform.position;
+                GameManager.playerStartPoint = 62;
+                if (transform.position == points[62].transform.position)
+                {
+                    curIndex = 63;
+                    manager.isTransport = false;
+                    manager.finishRound = true;
+                }
+                break;
+            case 67:
+                transform.position = points[67].transform.position;
+                GameManager.playerStartPoint = 67;
+                if (transform.position == points[67].transform.position)
+                {
+                    curIndex = 68;
+                    manager.isTransport = false;
+                    manager.finishRound = true;
+                }
+                break;
+            case 80:
+                transform.position = points[80].transform.position;
+                GameManager.playerStartPoint = 80;
+                if (transform.position == points[80].transform.position)
+                {
+                    curIndex = 81;
+                    manager.isTransport = false;
+                    manager.finishRound = true;
+                }
+                break;
+            case 90:
+                transform.position = points[90].transform.position;
+                GameManager.playerStartPoint = 90;
+                if (transform.position == points[90].transform.position)
+                {
+                    curIndex = 91;
+                    manager.isTransport = false;
+                    manager.finishRound = true;
+                }
+                break;
+           
         }
-        manager.isTransport = false;
-        manager.finishRound = true;
     }
 }
