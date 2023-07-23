@@ -34,9 +34,14 @@ public class Dice : MonoBehaviour
         
         yield return new WaitForSeconds(1f);
         manager.diceImg.SetActive(false);
-        manager.CheckCurPoint(GameManager.playerStartPoint + ranSide + 1);
-        
-        //manager.MovePlayer();
+        if(!manager.secondRoll)
+            manager.CheckCurPoint(GameManager.playerStartPoint + ranSide + 1);
+        else
+        {
+            Debug.Log("second roll");
+            manager.MovePlayer();
+        }
+            
     }
 
 }
