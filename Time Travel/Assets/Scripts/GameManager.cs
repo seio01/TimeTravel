@@ -173,7 +173,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateGaugeImg()
     {
-        for (int i = 0; i < correctCount-1; i++)
+        for (int i = 0; i < correctCount; i++)
         {
             gaugeImg[i].color = new Color(1, 1, 1, 1);
         }
@@ -182,7 +182,7 @@ public class GameManager : MonoBehaviour
     IEnumerator RollDiceAgain()
     {
         secondRoll = true;
-        spaceText.text = "주사위를 한번 더 굴릴 수 있습니다!";
+        spaceText.text = "..설명추가...? 주사위를 한번 더 굴릴 수 있습니다!";
         space.SetActive(true);
 
         yield return new WaitForSeconds(1.5f);
