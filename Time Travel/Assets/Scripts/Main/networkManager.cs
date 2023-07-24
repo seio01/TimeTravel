@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
@@ -92,7 +93,15 @@ public class networkManager : MonoBehaviourPunCallbacks
     //방 만들기 버튼
     public void CreateRoom()
     {
-        PhotonNetwork.CreateRoom(roomPassword, new RoomOptions { MaxPlayers = maxPlayer });
+        RoomOptions roomOptions = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = maxPlayer };
+        PhotonNetwork.CreateRoom(roomPassword, roomOptions);
+    }
+
+    //방 만들기 실패하면
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        connectionInfoText.text = "방 만들기 실패, 재시도중...";
+        CreateRoom();
     }
 
     //Enter Room
@@ -111,11 +120,9 @@ public class networkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         connectionInfoText.text = "방 참가 성공";
-        //Item선택하는 부분
-        
-        
-        
-        //PhotonNetwork.LoadLevel("SampleScene"); //모든 참가자가 SampleScene 로드
+        SceneManager.LoadScene("Room"); 
+
+
     }
 
 
