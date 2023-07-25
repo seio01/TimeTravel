@@ -16,28 +16,47 @@ public class RoomManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        Debug.Log("maxplayer" + PhotonNetwork.CurrentRoom.MaxPlayers);
+        Debug.Log("nickname" + PhotonNetwork.LocalPlayer.NickName);
+
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
             playerList[i].gameObject.SetActive(true);
-            
         }
-        //자기자신 닉네임 부여//
-        CheckReadyCounts();
+
+        playerList[0].GetComponentInChildren<TMP_Text>().text = PhotonNetwork.LocalPlayer.NickName;
     }
 
-    void CheckReadyCounts()
+
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        if(readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)
+        if (PhotonNetwork.IsMasterClient)
         {
-            StartGame();
+            if(readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)
+                StartGame();
+        }
+
+        for(int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        {
+            if(playerList[i].GetComponentInChildren<TMP_Text>().text == "")
+            {
+                playerList[i].GetComponentInChildren<TMP_Text>().text = newPlayer.NickName;
+                break;
+            }
         }
     }
+
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        
+    }
+
     public void PickItems()
     {
         //아이템 뽑기
         //아이템 뽑기 완료하면 자동 레디되게
-        //readyText.SetActive(true);
-        //readyCounts++;
+        readyText.SetActive(true);
+        readyCounts++;
     }
 
     public void StartGame()

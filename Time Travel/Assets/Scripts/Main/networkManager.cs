@@ -31,8 +31,23 @@ public class networkManager : MonoBehaviourPunCallbacks
         for(int i = 0; i < joinButton.Length;i++)
             joinButton[i].interactable = false; //접속 시도시 버튼 클릭 못하게
         connectionInfoText.text = "마스터 서버에 접속 중...";
-        PhotonNetwork.NickName = nickNameInput.GetComponent<TMP_InputField>().text; //닉네임 입력
+        PhotonNetwork.LocalPlayer.NickName = nickNameInput.text; //닉네임 입력
         maxPlayer = 4;
+    }
+
+    void Update()
+    {
+        if(nickNameInput.text != "")
+        {
+            for (int i = 0; i < joinButton.Length; i++)
+                joinButton[i].interactable = true; //룸 접속 버튼 활성화
+        }
+
+        else if (nickNameInput.text == "")
+        {
+            for (int i = 0; i < joinButton.Length; i++)
+                joinButton[i].interactable = false; 
+        }
     }
 
     public void setMaxPlayer(int num)
@@ -42,8 +57,6 @@ public class networkManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        for (int i = 0; i < joinButton.Length; i++)
-            joinButton[i].interactable = true; //룸 접속 버튼 활성화
         connectionInfoText.text = "온라인 : 마스터 서버와 연결됨";
     }
 
@@ -119,9 +132,8 @@ public class networkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        connectionInfoText.text = "방 참가 성공";
+        connectionInfoText.text = "방 참가 성공.";
         SceneManager.LoadScene("Room"); 
-
 
     }
 
