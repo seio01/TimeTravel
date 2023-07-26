@@ -8,6 +8,12 @@ public class Dice : MonoBehaviour
     public GameManager manager;
     public Image curSide;
     public Sprite[] diceSides;
+
+    void OnEnable()
+    {
+        curSide.sprite = diceSides[0];
+    }
+
     public void RollDice()
     {
         StartCoroutine(RollDiceRoutine());
@@ -28,9 +34,14 @@ public class Dice : MonoBehaviour
         
         yield return new WaitForSeconds(1f);
         manager.diceImg.SetActive(false);
-        manager.CheckCurPoint(GameManager.playerStartPoint + ranSide + 1);
-        
-        //manager.MovePlayer();
+        if(!manager.secondRoll)
+            manager.CheckCurPoint(GameManager.playerStartPoint + ranSide + 1);
+        else
+        {
+            Debug.Log("second roll");
+            manager.MovePlayer();
+        }
+            
     }
 
 }

@@ -73,9 +73,13 @@ public class problem : MonoBehaviour
         if (isPlayerCorrect == true)
         {
             GameManager.instance.MovePlayer();
+            //추가
+            GameManager.instance.correctCount++;
+            GameManager.instance.UpdateGaugeImg();
+
         }
         else
-            GameManager.instance.finishRound = true; //추가한 부분
+            GameManager.instance.finishRound = true; 
     }
 
     void setProblemID()

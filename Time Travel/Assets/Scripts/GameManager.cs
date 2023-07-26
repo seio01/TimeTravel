@@ -15,7 +15,9 @@ public class GameManager : MonoBehaviour
     public bool isLadder;
     public bool isTransport;
     public bool finishRound;
+    public bool secondRoll;//정답 5번일때 
     public string spaceCategory;
+    public int correctCount;
 
     [Header("UI")]
     public Canvas problemCanvas;
@@ -25,6 +27,7 @@ public class GameManager : MonoBehaviour
     public Text spaceText;
     public GameObject space;
     public GameObject diceImg;
+    public Image[] gaugeImg;
 
     void Awake()
     {
@@ -47,10 +50,16 @@ public class GameManager : MonoBehaviour
         {
             player.movingAllowed = false;
             playerStartPoint = player.curIndex - 1;
+            //정답 5번이면 주사위 한번 더 굴리기
+            if (correctCount == 5)
+            {
+                correctCount = 0;
+                StartCoroutine(RollDiceAgain());
+            }
             if (isLadder && !player.movingAllowed)
                 player.moveLadder = true;
             else if (isTransport && !player.movingAllowed)
-                player.moveTransport = true;
+                player.Transport();
             else
                 finishRound = true;
         }
@@ -61,6 +70,10 @@ public class GameManager : MonoBehaviour
 
     public void RoundStart()
     {
+        //수정..?
+        if (correctCount != 5)
+            secondRoll = false;
+        player.moveLadder = false;
         finishRound = false;
         diceImg.SetActive(true);
         diceTimer.gameObject.SetActive(true);
@@ -75,7 +88,7 @@ public class GameManager : MonoBehaviour
         problemCanvas.gameObject.SetActive(true);
     }
 
-    //추가
+    //check
     public int getPlayerNextPosition()
     {
         return player.curIndex + newDiceSide;
@@ -91,12 +104,9 @@ public class GameManager : MonoBehaviour
         switch (diceNum)
         {
             //test
-            /*case 1:
-            case 2:
-            case 4:
             case 5:
-            case 6:
-            */
+            case 10:
+            
             //test
             case 3:
             case 8:
@@ -161,4 +171,37 @@ public class GameManager : MonoBehaviour
         spaceAction.DoAction(spaceCategory);
     }
 
+    public void UpdateGaugeImg()
+    {
+        for (int i = 0; i < correctCount; i++)
+        {
+            gaugeImg[i].color = new Color(1, 1, 1, 1);
+        }
+    }
+
+    IEnumerator RollDiceAgain()
+    {
+        secondRoll = true;
+        spaceText.text = "..설명추가...? 주사위를 한번 더 굴릴 수 있습니다!";
+        space.SetActive(true);
+
+        yield return new WaitForSeconds(1.5f);
+        space.SetActive(false);
+        ResetGaugeImg();
+
+        yield return new WaitForSeconds(2f);
+        diceImg.SetActive(true);
+        diceTimer.gameObject.SetActive(true);
+        timerOn = true;
+    }
+
+    void ResetGaugeImg()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            gaugeImg[i].color = new Color(1, 1, 1, 0.3f);
+        }
+        
+    }
+    
 }
