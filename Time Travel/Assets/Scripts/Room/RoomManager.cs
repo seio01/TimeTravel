@@ -11,13 +11,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
 {
     public Image[] playerList;
     public GameObject readyText;
+    public Button leaveButton;
     public int readyCounts;
+    public int localPlayerIndex;
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("maxplayer" + PhotonNetwork.CurrentRoom.MaxPlayers);
-        Debug.Log("nickname" + PhotonNetwork.LocalPlayer.NickName);
 
         foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
         {
@@ -28,7 +28,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
             playerList[i].gameObject.SetActive(true);
         }
 
-        playerList[0].GetComponentInChildren<TMP_Text>().text = PhotonNetwork.LocalPlayer.NickName;
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            Debug.Log("playerList" + i + PhotonNetwork.PlayerList[i].NickName);
+            playerList[i].GetComponentInChildren<TMP_Text>().text = PhotonNetwork.PlayerList[i].NickName;
+                
+        }
     }
 
 
@@ -39,6 +44,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             if(readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)
                 StartGame();
         }
+        Debug.Log(newPlayer.NickName);
 
         for(int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
@@ -52,15 +58,23 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
-        
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        {
+            if (playerList[i].GetComponentInChildren<TMP_Text>().text == otherPlayer.NickName)
+            {
+                playerList[i].GetComponentInChildren<TMP_Text>().text = "";
+                break;
+            }
+        }
     }
 
     public void PickItems()
     {
         //아이템 뽑기
         //아이템 뽑기 완료하면 자동 레디되게
-        readyText.SetActive(true);
+        //playerList[localPlayerIndex].transform.transform.Find("Ready Text").gameObject.SetActive(true);
         readyCounts++;
+        //leaveButton.interactable = false;
     }
 
     public void StartGame()

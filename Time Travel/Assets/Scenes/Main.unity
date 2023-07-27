@@ -332,7 +332,11 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls: [{m_Target: {fileID: 185951251}, m_TargetAssemblyTypeName: 'networkManager,
+            Assembly-CSharp', m_MethodName: EnterPassword, m_Mode: 1, m_Arguments: {
+            m_ObjectArgument: {fileID: 0}, m_ObjectArgumentAssemblyTypeName: 'UnityEngine.Object,
+              UnityEngine', m_IntArgument: 0, m_FloatArgument: 0, m_StringArgument: '',
+            m_BoolArgument: 0}, m_CallState: 2}]
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -468,7 +472,8 @@ MonoBehaviour:
   m_text: "\uBC29 \uC785\uC7A5\uD558\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -624,7 +629,8 @@ MonoBehaviour:
   m_text: "\uBE44\uBC00\uBC88\uD638"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -780,7 +786,8 @@ MonoBehaviour:
   m_text: Enter text...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -962,7 +969,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 185951249}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -982,6 +989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16e05ea9bb9842e4b9bc796b6a7a4c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxPlayer: 0
   connectionInfoText: {fileID: 2122641700}
   nickNameInput: {fileID: 362422073}
   joinButton:
@@ -992,7 +1000,8 @@ MonoBehaviour:
   - {fileID: 2022355588}
   roomMakePanel: {fileID: 1980807693}
   selectPlayerNum: {fileID: 1770630622}
-  roomPasswordInput: {fileID: 1268866333}
+  setRoomPasswordInput: {fileID: 1268866333}
+  enterRoomPasswordInput: {fileID: 73944754}
   roomEnterPanel: {fileID: 993705710}
 --- !u!1 &208423125
 GameObject:
@@ -1055,7 +1064,8 @@ MonoBehaviour:
   m_text: "\uCE5C\uAD6C\uC640 \uD50C\uB808\uC774 \uD558\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fe4221a4f42822349b0d189d645a584d, type: 2}
-  m_sharedMaterial: {fileID: 3884357027817348187, guid: fe4221a4f42822349b0d189d645a584d, type: 2}
+  m_sharedMaterial: {fileID: 3884357027817348187, guid: fe4221a4f42822349b0d189d645a584d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1190,7 +1200,8 @@ MonoBehaviour:
   m_text: "\uB2C9\uB124\uC784"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fe4221a4f42822349b0d189d645a584d, type: 2}
-  m_sharedMaterial: {fileID: 3884357027817348187, guid: fe4221a4f42822349b0d189d645a584d, type: 2}
+  m_sharedMaterial: {fileID: 3884357027817348187, guid: fe4221a4f42822349b0d189d645a584d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1325,7 +1336,8 @@ MonoBehaviour:
   m_text: "\uCDE8\uC18C\uD558\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1838,7 +1850,8 @@ MonoBehaviour:
   m_text: "\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2013,19 +2026,15 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 185951251}
-        m_TargetAssemblyTypeName: networkManager, Assembly-CSharp
-        m_MethodName: setPlayerNickName
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: [{m_Target: {fileID: 185951251}, m_TargetAssemblyTypeName: 'networkManager,
+            Assembly-CSharp', m_MethodName: setNickName, m_Mode: 1, m_Arguments: {
+            m_ObjectArgument: {fileID: 0}, m_ObjectArgumentAssemblyTypeName: 'UnityEngine.Object,
+              UnityEngine', m_IntArgument: 0, m_FloatArgument: 0, m_StringArgument: '',
+            m_BoolArgument: 0}, m_CallState: 2}, {m_Target: {fileID: 185951251}, m_TargetAssemblyTypeName: 'networkManager,
+            Assembly-CSharp', m_MethodName: setPlayerNickName, m_Mode: 1, m_Arguments: {
+            m_ObjectArgument: {fileID: 0}, m_ObjectArgumentAssemblyTypeName: 'UnityEngine.Object,
+              UnityEngine', m_IntArgument: 0, m_FloatArgument: 0, m_StringArgument: '',
+            m_BoolArgument: 0}, m_CallState: 2}]
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -2274,7 +2283,8 @@ MonoBehaviour:
   m_text: "\uC778\uC6D0 \uC218"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2409,7 +2419,8 @@ MonoBehaviour:
   m_text: "\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2544,7 +2555,8 @@ MonoBehaviour:
   m_text: "\uBC29 \uB9CC\uB4E4\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2679,7 +2691,8 @@ MonoBehaviour:
   m_text: "\uBC29 \uB9CC\uB4E4\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2890,7 +2903,8 @@ MonoBehaviour:
   m_text: Time Travel
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e2f9bc14bda828742b0138f02816abb2, type: 2}
-  m_sharedMaterial: {fileID: -3097710842360043048, guid: e2f9bc14bda828742b0138f02816abb2, type: 2}
+  m_sharedMaterial: {fileID: -3097710842360043048, guid: e2f9bc14bda828742b0138f02816abb2,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3358,7 +3372,8 @@ MonoBehaviour:
   m_text: "\uCDE8\uC18C\uD558\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3546,7 +3561,8 @@ MonoBehaviour:
   m_text: "\uCC38\uAC00 \uBE44\uBC00\uBC88\uD638"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3814,7 +3830,8 @@ MonoBehaviour:
   m_text: "\uCC38\uAC00 \uBE44\uBC00\uBC88\uD638"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3989,7 +4006,11 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls: [{m_Target: {fileID: 185951251}, m_TargetAssemblyTypeName: 'networkManager,
+            Assembly-CSharp', m_MethodName: SetPassword, m_Mode: 1, m_Arguments: {
+            m_ObjectArgument: {fileID: 0}, m_ObjectArgumentAssemblyTypeName: 'UnityEngine.Object,
+              UnityEngine', m_IntArgument: 0, m_FloatArgument: 0, m_StringArgument: '',
+            m_BoolArgument: 0}, m_CallState: 2}]
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -4125,7 +4146,8 @@ MonoBehaviour:
   m_text: "\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4260,7 +4282,8 @@ MonoBehaviour:
   m_text: "\uB79C\uB364\uC73C\uB85C \uD50C\uB808\uC774 \uD558\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fe4221a4f42822349b0d189d645a584d, type: 2}
-  m_sharedMaterial: {fileID: 3884357027817348187, guid: fe4221a4f42822349b0d189d645a584d, type: 2}
+  m_sharedMaterial: {fileID: 3884357027817348187, guid: fe4221a4f42822349b0d189d645a584d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4395,7 +4418,8 @@ MonoBehaviour:
   m_text: "4\uC778"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4583,7 +4607,8 @@ MonoBehaviour:
   m_text: "3\uC778"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4786,7 +4811,8 @@ MonoBehaviour:
   m_text: "2\uC778"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5405,7 +5431,8 @@ MonoBehaviour:
   m_text: "\uBE44\uBC00\uBC88\uD638"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5680,7 +5707,8 @@ MonoBehaviour:
   m_text: "\uBC29 \uC785\uC7A5\uD558\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5815,7 +5843,8 @@ MonoBehaviour:
   m_text: "2\uC778"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fe4221a4f42822349b0d189d645a584d, type: 2}
-  m_sharedMaterial: {fileID: 3884357027817348187, guid: fe4221a4f42822349b0d189d645a584d, type: 2}
+  m_sharedMaterial: {fileID: 3884357027817348187, guid: fe4221a4f42822349b0d189d645a584d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6335,7 +6364,8 @@ MonoBehaviour:
   m_text: "2\uC778"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
-  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07, type: 2}
+  m_sharedMaterial: {fileID: 13392251049364351, guid: 6deb1dceedbed7746b8af1c1e88fac07,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6690,7 +6720,7 @@ GameObject:
   - component: {fileID: 2070288880}
   - component: {fileID: 2070288879}
   m_Layer: 5
-  m_Name: "\uBC29 \uB9CC\uB4E4\uAE30"
+  m_Name: "\uBC29 \uC785\uC7A5\uD558\uAE30"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7075,7 +7105,8 @@ MonoBehaviour:
   m_text: Connection Info...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e2f9bc14bda828742b0138f02816abb2, type: 2}
-  m_sharedMaterial: {fileID: -3097710842360043048, guid: e2f9bc14bda828742b0138f02816abb2, type: 2}
+  m_sharedMaterial: {fileID: -3097710842360043048, guid: e2f9bc14bda828742b0138f02816abb2,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

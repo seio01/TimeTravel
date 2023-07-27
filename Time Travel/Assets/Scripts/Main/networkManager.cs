@@ -10,7 +10,7 @@ using Photon.Realtime;
 public class networkManager : MonoBehaviourPunCallbacks
 {
     // Start is called before the first frame update
-    int maxPlayer;
+    public int maxPlayer;
     int playerNums;
 
     public TMP_Text connectionInfoText;    //접속 정보 표시 텍스트
@@ -19,8 +19,10 @@ public class networkManager : MonoBehaviourPunCallbacks
 
     public Image roomMakePanel;
     public TMP_Dropdown selectPlayerNum;
-    public TMP_InputField roomPasswordInput;
+    public TMP_InputField setRoomPasswordInput;
+    public TMP_InputField enterRoomPasswordInput;
     string roomPassword;
+    string enterRoomPassword;
 
     public Image roomEnterPanel;
 
@@ -31,8 +33,8 @@ public class networkManager : MonoBehaviourPunCallbacks
         for(int i = 0; i < joinButton.Length;i++)
             joinButton[i].interactable = false; //접속 시도시 버튼 클릭 못하게
         connectionInfoText.text = "마스터 서버에 접속 중...";
-        PhotonNetwork.LocalPlayer.NickName = nickNameInput.text; //닉네임 입력
-        maxPlayer = 4;
+        maxPlayer = 2;
+        selectPlayerNum.onValueChanged.AddListener(delegate { setMaxPlayer(selectPlayerNum.value + 2); });
     }
 
     void Update()
@@ -53,6 +55,12 @@ public class networkManager : MonoBehaviourPunCallbacks
     public void setMaxPlayer(int num)
     {
         maxPlayer = num;
+    }
+
+    public void setNickName()
+    {
+        PhotonNetwork.LocalPlayer.NickName = nickNameInput.text; //닉네임 입력
+        Debug.Log("닉네임" + nickNameInput.text);
     }
 
     public override void OnConnectedToMaster()
@@ -99,9 +107,19 @@ public class networkManager : MonoBehaviourPunCallbacks
     public void ClickCreateRoom()
     {
         roomMakePanel.gameObject.SetActive(true);
-        setMaxPlayer(selectPlayerNum.value); //드롭다운으로 선택한 값으로 maxplayer 설정
-        roomPassword = roomPasswordInput.GetComponent<TMP_InputField>().text;
+        
     }
+
+    public void SetPassword()
+    {
+        roomPassword = setRoomPasswordInput.GetComponent<TMP_InputField>().text;
+    }
+
+    public void EnterPassword()
+    {
+        enterRoomPassword = enterRoomPasswordInput.GetComponent<TMP_InputField>().text;
+    }
+
 
     //방 만들기 버튼
     public void CreateRoom()
@@ -121,13 +139,13 @@ public class networkManager : MonoBehaviourPunCallbacks
     public void ClickEnterRoom()
     {
         roomEnterPanel.gameObject.SetActive(true);
-        roomPassword = roomPasswordInput.GetComponent<TMP_InputField>().text;
     }
+
 
     //방 입장하기 버튼
     public void EnterRoom()
     {
-        PhotonNetwork.JoinRoom(roomPassword);
+        PhotonNetwork.JoinRoom(enterRoomPassword);
     }
 
     public override void OnJoinedRoom()
