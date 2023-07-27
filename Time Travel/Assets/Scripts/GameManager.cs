@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
+using Photon.Realtime;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,6 +23,7 @@ public class GameManager : MonoBehaviour
     public int correctCount;
 
     [Header("UI")]
+    public GameObject canvas;
     public Canvas problemCanvas;
     public Dice dice;
     public Space spaceAction;
@@ -28,6 +32,7 @@ public class GameManager : MonoBehaviour
     public GameObject space;
     public GameObject diceImg;
     public Image[] gaugeImg;
+    public List<GameObject> playerInformationUIs;
 
     void Awake()
     {
@@ -35,6 +40,8 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
+        playerInformationUIs = new List<GameObject>();
+        setPlayerInformationUI();
     }
     // Start is called before the first frame update
     void Start()
@@ -66,6 +73,51 @@ public class GameManager : MonoBehaviour
 
         if (finishRound)
             Invoke("RoundStart", 1);
+    }
+
+    public void setPlayerInformationUI()
+    {
+        GameObject prefab, playerInfoUI;
+        canvas = GameObject.Find("Canvas");
+        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        if (playerCount >= 1)
+        {
+            prefab = Resources.Load<GameObject>("Prefabs/Player1");
+            playerInfoUI = PhotonNetwork.Instantiate("Prefabs/Player1", new Vector3(0, 0, 0), Quaternion.identity, 0);
+            setPlayerInfoUI(prefab, playerInfoUI, 0);
+            playerInformationUIs.Add(playerInfoUI);
+        }
+        if (playerCount >= 2)
+        {
+            prefab = Resources.Load<GameObject>("Prefabs/Player2");
+            playerInfoUI = PhotonNetwork.Instantiate("Prefabs/Player2", new Vector3(0, 0, 0), Quaternion.identity);
+            setPlayerInfoUI(prefab, playerInfoUI, 1);
+            playerInformationUIs.Add(playerInfoUI);
+        }
+        if (playerCount >= 3)
+        {
+            prefab = Resources.Load<GameObject>("Prefabs/Player3");
+            playerInfoUI = PhotonNetwork.Instantiate("Prefabs/Player2", new Vector3(0, 0, 0), Quaternion.identity);
+            setPlayerInfoUI(prefab, playerInfoUI, 2);
+            playerInformationUIs.Add(playerInfoUI);
+        }
+        if (playerCount == 4)
+        {
+            prefab = Resources.Load<GameObject>("Prefabs/Player4");
+            playerInfoUI = PhotonNetwork.Instantiate("Prefabs/Player2", new Vector3(0, 0, 0), Quaternion.identity);
+            setPlayerInfoUI(prefab, playerInfoUI, 3);
+            playerInformationUIs.Add(playerInfoUI);
+        }
+    }
+
+    public void setPlayerInfoUI(GameObject prefab, GameObject playerInfoUI, int index)
+    {
+        Vector3 pos = prefab.GetComponent<RectTransform>().anchoredPosition;
+        playerInfoUI.transform.GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[index].NickName;
+        playerInfoUI.transform.GetChild(2).GetComponent<TMP_Text>().text = "0 ĭ";
+        playerInfoUI.transform.SetParent(canvas.transform);
+        playerInfoUI.transform.localScale = new Vector3(1, 1, 1);
+        playerInfoUI.GetComponent<RectTransform>().anchoredPosition = pos;
     }
 
     public void RoundStart()

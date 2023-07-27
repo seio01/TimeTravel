@@ -19,6 +19,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Debug.Log("maxplayer" + PhotonNetwork.CurrentRoom.MaxPlayers);
         Debug.Log("nickname" + PhotonNetwork.LocalPlayer.NickName);
 
+        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        {
+            Debug.Log(player.NickName);
+        }
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
             playerList[i].gameObject.SetActive(true);

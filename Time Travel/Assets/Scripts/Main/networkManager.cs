@@ -137,5 +137,8 @@ public class networkManager : MonoBehaviourPunCallbacks
 
     }
 
-
+    public void setPlayerNickName()
+    {
+        PhotonNetwork.LocalPlayer.NickName = nickNameInput.text;
+    }
 }
