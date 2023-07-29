@@ -1178,7 +1178,6 @@ MonoBehaviour:
   speed: 15
   movingAllowed: 0
   moveLadder: 0
-  moveTransport: 0
   curIndex: 0
   ran: 0
   itemCards: 
@@ -1494,9 +1493,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 1339857779}
-  diceTime: 3
   diceTimeText: {fileID: 794302226}
   dice: {fileID: 195150733}
+  diceTime: 3
 --- !u!4 &829629399 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3659135490994546159, guid: 3c76f969d44411f469ddeff13788f8d3, type: 3}
@@ -2138,19 +2137,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 666202851}
-  dice: {fileID: 195150733}
-  spaceAction: {fileID: 2053641747}
   newDiceSide: 0
   timerOn: 0
   isLadder: 0
   isTransport: 0
   finishRound: 0
+  secondRoll: 0
   spaceCategory: 
+  correctCount: 0
+  canvas: {fileID: 0}
   problemCanvas: {fileID: 0}
+  dice: {fileID: 195150733}
+  spaceAction: {fileID: 2053641747}
   diceTimer: {fileID: 794302226}
   spaceText: {fileID: 1297615890}
   space: {fileID: 1598449821}
   diceImg: {fileID: 195150731}
+  gaugeImg: []
+  playerInformationUIs: []
 --- !u!4 &1349618374 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3659135492588539134, guid: 3c76f969d44411f469ddeff13788f8d3, type: 3}

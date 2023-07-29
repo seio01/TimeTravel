@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviour
     public Image[] gaugeImg;
     public List<GameObject> playerInformationUIs;
 
+    public Photon.Realtime.Player controlPlayer; //문제 푸는 사람. 현재 차례인 플레이어.
+
+    public TMP_Text testTMP;
     void Awake()
     {
         if (instance == null)
@@ -123,6 +126,7 @@ public class GameManager : MonoBehaviour
     public void RoundStart()
     {
         //수정..?
+        controlPlayer = PhotonNetwork.PlayerList[0];
         if (correctCount != 5)
             secondRoll = false;
         player.moveLadder = false;
@@ -149,6 +153,11 @@ public class GameManager : MonoBehaviour
     public void useItemCard(items itemName)
     {
         player.itemCards.Remove(itemName);
+    }
+
+    public void RpcCheck()
+    {
+        testTMP.text = "RPC check";
     }
 
     public void CheckCurPoint(int diceNum)

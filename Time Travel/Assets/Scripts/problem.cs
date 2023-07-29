@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
+using Photon.Realtime;
+using Photon.Pun.UtilityScripts;
 
 public class problem : MonoBehaviour
 {
@@ -17,6 +20,7 @@ public class problem : MonoBehaviour
     public GameObject resultPanel;
     public GameObject hintPanel;
     public GameObject problemPassButton;
+    public GameObject selectionEraseButton;
     List<Dictionary<string, object>> problemData;
     List<Dictionary<string, object>> answerData;
 
@@ -32,6 +36,8 @@ public class problem : MonoBehaviour
 
     int playerPosition;
     bool isPlayerCorrect;
+
+    public PhotonView PV;
     // Start is called before the first frame update
     void Awake()
     {
@@ -79,36 +85,43 @@ public class problem : MonoBehaviour
 
         }
         else
-            GameManager.instance.finishRound = true; 
+            GameManager.instance.finishRound = true;
     }
 
     void setProblemID()
     {
         Debug.Log(playerPosition);
-        if (playerPosition >= 1 && playerPosition <= 8)
+        if (PhotonNetwork.LocalPlayer == GameManager.instance.controlPlayer)
         {
-            problemID = Random.Range(1, 30);
-            prevDynasty = 0;
-        }
-        else if (playerPosition >= 9 && playerPosition <= 20)
-        {
-            problemID = Random.Range(1, 65) + 30;
-            prevDynasty = 30;
-        }
-        else if (playerPosition >= 21 && playerPosition <= 40)
-        {
-            problemID = Random.Range(1, 80) + 95;
-            prevDynasty = 95;
-        }
-        else if (playerPosition >= 41 && playerPosition <= 70)
-        {
-            //problemID = Random.Range(1, 조선시대 문제 수) + 95+고려시대문제 수;
-            //prevDynasty = 95+고려시대 문제 수 ;
+            if (playerPosition >= 1 && playerPosition <= 8)
+            {
+                problemID = Random.Range(1, 30);
+                prevDynasty = 0;
+            }
+            else if (playerPosition >= 9 && playerPosition <= 20)
+            {
+                problemID = Random.Range(1, 65) + 30;
+                prevDynasty = 30;
+            }
+            else if (playerPosition >= 21 && playerPosition <= 40)
+            {
+                problemID = Random.Range(1, 80) + 95;
+                prevDynasty = 95;
+            }
+            else if (playerPosition >= 41 && playerPosition <= 70)
+            {
+                //problemID = Random.Range(1, 조선시대 문제 수) + 95+고려시대문제 수;
+                //prevDynasty = 95+고려시대 문제 수 ;
+            }
+            else
+            {
+                //problemID = Random.Range(1, 근현대 문제 수) + 95+고려시대문제 수+조선시대 문제 수;
+                //prevDynasty = 95+고려시대 문제 수+조선시대 문제 수;
+            }
         }
         else
         {
-            //problemID = Random.Range(1, 근현대 문제 수) + 95+고려시대문제 수+조선시대 문제 수;
-            //prevDynasty = 95+고려시대 문제 수+조선시대 문제 수;
+            return;
         }
     }
 
@@ -164,6 +177,8 @@ public class problem : MonoBehaviour
 
     void controlButtons()
     {
+        selection1.gameObject.SetActive(true);
+        selection2.gameObject.SetActive(true);
         if (problemType == "ox")
         {
             selection3.gameObject.SetActive(false);
@@ -229,6 +244,19 @@ public class problem : MonoBehaviour
         }
     }
 
+    public void showSelectionEraseButton()
+    {
+        List<GameManager.items> playerCards = GameManager.instance.player.itemCards;
+        if (playerCards.Contains(GameManager.items.erase) && problemType == "4지선다")
+        {
+            selectionEraseButton.SetActive(true);
+        }
+        else
+        {
+            selectionEraseButton.gameObject.SetActive(false);
+        }
+    }
+
     public void showHint()
     {
         List<GameManager.items> playerCards = GameManager.instance.player.itemCards;
@@ -238,6 +266,36 @@ public class problem : MonoBehaviour
             hintText.text = hintString;
             hintPanel.SetActive(true);
             GameManager.instance.useItemCard(GameManager.items.hint);
+        }
+    }
+
+    public void eraseWrongSelection()
+    {
+        int correctAnswer = int.Parse(answerData[problemID - 1]["답"].ToString());
+        int eraseSelection;
+        while (true)
+        {
+            eraseSelection = Random.Range(1, 5);
+            if (eraseSelection != correctAnswer)
+            {
+                break;
+            }
+        }
+        if (eraseSelection == 1)
+        {
+            selection1.gameObject.SetActive(false);
+        }
+        else if (eraseSelection == 2)
+        {
+            selection2.gameObject.SetActive(false);
+        }
+        else if (eraseSelection == 3)
+        {
+            selection3.gameObject.SetActive(false);
+        }
+        else
+        {
+            selection4.gameObject.SetActive(false);
         }
     }
 
