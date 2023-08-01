@@ -44,6 +44,7 @@ MonoBehaviour:
   - decideDiceSide
   - decideDiceSide1
   - setProblemIDToOthers
+  - UpdateList
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
