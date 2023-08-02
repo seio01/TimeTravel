@@ -22,13 +22,21 @@ public class LoadingManager : MonoBehaviour
 
         while (!operation.isDone)
         {
-            time += Time.time;
-            slider.value = time / 10f; //10초 후에 씬 로드
-            if(time > 10)
-            {
-                operation.allowSceneActivation = true;
-            }
             yield return null;
+            time += Time.deltaTime;
+            if(operation.progress < 0.9f)
+            {
+                slider.value = Mathf.Lerp(operation.progress, 1f, time);
+                if (slider.value >= operation.progress)
+                    time = 0f;
+            }
+            else
+            {
+                slider.value = Mathf.Lerp(slider.value, 1f, time);
+                if (slider.value >= 0.99f)
+                    operation.allowSceneActivation = true;
+            }
+
         }
     }
 }

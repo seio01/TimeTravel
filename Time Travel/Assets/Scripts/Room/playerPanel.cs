@@ -12,6 +12,7 @@ public class playerPanel : MonoBehaviourPunCallbacks
     public RoomManager roomManagerScript;
     public TMP_Text playerName;
     public TMP_Text MeTextObject;
+
     // Start is called before the first frame update
 
     void Start()
@@ -36,7 +37,7 @@ public class playerPanel : MonoBehaviourPunCallbacks
     [PunRPC]
     void setReady(int index)
     {
-        roomManagerScript.playerList[index].transform.transform.Find("Ready Text").gameObject.SetActive(true);
+        roomManagerScript.playerListImg[index].transform.transform.Find("Ready Text").gameObject.SetActive(true);
         roomManagerScript.readyCounts++;
         if (roomManagerScript.readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)  //나중에 masterClient만 start하도록 수정.
         {

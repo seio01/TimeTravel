@@ -10,19 +10,24 @@ using TMPro;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
-    public Image[] playerList;
+    public Image[] playerListImg;
     public Image[] orderList;
+    public bool isReady;
+
     public GameObject readyText;
     public GameObject infoText;
     public GameObject timeText;
     public GameObject setOrderPanel;
+    public GameObject gameStartText;
 
     public Button pickCardBtn;
+    public Button leaveRoomBtn;
 
     public Sprite[] itemImg;
     public Image[] items;
 
     public List<int> itemList = new List<int>();
+
     public List<int> playerOrderList = new List<int>();
 
     public int readyCounts;
@@ -42,18 +47,27 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Debug.Log(PhotonNetwork.CurrentRoom.MaxPlayers);
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
-            playerList[i].gameObject.SetActive(true);
+            playerListImg[i].gameObject.SetActive(true);
         }
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             Debug.Log("playerList" + i + PhotonNetwork.PlayerList[i].NickName);
-            playerList[i].transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[i].NickName;
+            playerListImg[i].transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[i].NickName;
+
         }
 
         //timer기능
         Timer();
+        if (PhotonNetwork.IsMasterClient) //master만 리스트 생성
+        {
+            for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+            {
+                playerOrderList.Add(i);
+            }
+        }
         
+
     }
 
     public void Timer()
@@ -71,25 +85,26 @@ public class RoomManager : MonoBehaviourPunCallbacks
             if(readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)
                 StartGame();
         }
-        Debug.Log(newPlayer.NickName);
+        //Debug.Log(newPlayer.NickName);
 
         for(int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
-            if(playerList[i].GetComponentInChildren<TMP_Text>().text == "")
+            if(playerListImg[i].GetComponentInChildren<TMP_Text>().text == "")
             {
-                playerList[i].GetComponentInChildren<TMP_Text>().text = newPlayer.NickName;
+                playerListImg[i].GetComponentInChildren<TMP_Text>().text = newPlayer.NickName;
                 break;
             }
         }
+
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
-            if (playerList[i].GetComponentInChildren<TMP_Text>().text == otherPlayer.NickName)
+            if (playerListImg[i].GetComponentInChildren<TMP_Text>().text == otherPlayer.NickName)
             {
-                playerList[i].GetComponentInChildren<TMP_Text>().text = "";
+                playerListImg[i].GetComponentInChildren<TMP_Text>().text = "";
                 break;
             }
         }
@@ -117,12 +132,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
             Debug.Log(itemList[i]);
         }
 
-        Invoke("ChangeToReady", 1f);
-        
-    }
-
-    public void ChangeToReady()
-    {
         //아이템 뽑기 완료하면 자동 레디되게
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
@@ -132,10 +141,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
             }
         }
-        playerList[localPlayerIndex].transform.transform.Find("Ready Text").gameObject.SetActive(true);
-        playerList[localPlayerIndex].GetComponent<playerPanel>().setReadyToOther(localPlayerIndex);
+        playerListImg[localPlayerIndex].transform.transform.Find("Ready Text").gameObject.SetActive(true);
+        playerListImg[localPlayerIndex].GetComponent<playerPanel>().setReadyToOther(localPlayerIndex);
         //leaveButton.interactable = false;
+        
     }
+
 
     public List<int> ShuffleOrder(List<int> list)
     {
@@ -151,32 +162,56 @@ public class RoomManager : MonoBehaviourPunCallbacks
         return list;
     }
 
-    public void StartGame()
+    public void UpdateListToOthers()
     {
-        if (!PhotonNetwork.IsMasterClient)
-            return;
+        PV.RPC("UpdateList", RpcTarget.All, playerOrderList.ToArray());
+    }
 
+    [PunRPC]
+    void UpdateList(int[] updatedList)
+    {
+        List<int> updatedPlayerList = new List<int>(updatedList);
 
-        PhotonNetwork.CurrentRoom.IsOpen = false;
-        //순서 정하기
         setOrderPanel.SetActive(true);
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        //leaveRoomBtn.interactable = false;
+
+        for (int i = 0; i < updatedPlayerList.Count; i++)
         {
-            playerOrderList.Add(i);
+            orderList[i].transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "" + (i + 1) + ". " + PhotonNetwork.PlayerList[updatedPlayerList[i]].NickName;
+            orderList[i].gameObject.SetActive(true);
         }
 
-        playerOrderList = ShuffleOrder(playerOrderList);
-        setOrderPanel.GetComponent<PlayerOrderPanel>().UpdateListToOthers(playerOrderList);
-        
-        
 
+    }
 
-        //PhotonNetwork.LoadLevel("Loading");
+    public void StartGame()
+    {
+        StartCoroutine(StartGameRoutine());
+    }
+
+    IEnumerator StartGameRoutine()
+    {
+        /*if (!PhotonNetwork.IsMasterClient)
+            return;*/
+        //순서 정하기
+        if (PhotonNetwork.IsMasterClient)
+        {
+            playerOrderList = ShuffleOrder(playerOrderList);
+            UpdateListToOthers();
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        gameStartText.SetActive(true);
+        PhotonNetwork.LoadLevel("Loading");//일단은 모든 클라이언트에서 씬 로드 하는걸로 하는데 이걸 나중에 master에서만 로드하고 동기화할지 결정해야할듯
+
     }
 
     public void LeaveRoom()
     {
         pickCardBtn.interactable = true;
+        leaveRoomBtn.interactable = true;
         for (int i = 0; i < 4; i++)
         {
             items[i].gameObject.SetActive(false);
