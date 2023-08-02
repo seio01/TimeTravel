@@ -56,8 +56,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
             playerListImg[i].transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[i].NickName;
 
         }
+<<<<<<< HEAD
+        getLocalPlayerIndex();
+=======
 
-        setLocalPlayerIndex();
         //timer기능
         Timer();
         if (PhotonNetwork.IsMasterClient) //master만 리스트 생성
@@ -76,6 +78,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         setTimer = true;
         timeText.SetActive(true);
         infoText.SetActive(true);
+>>>>>>> seio
     }
 
 
@@ -96,11 +99,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
             }
         }
-
-        if (playerListImg[localPlayerIndex].transform.GetChild(2).gameObject.activeSelf == true)
+<<<<<<< HEAD
+        if (playerList[localPlayerIndex].gameObject.transform.GetChild(2).gameObject.activeSelf == true)
         {
-            playerListImg[localPlayerIndex].GetComponent<playerPanel>().setNewPlayerToReadyMe();
+            playerList[localPlayerIndex].GetComponent<playerPanel>().setNewPlayerToReadyMe();
         }
+=======
+
+>>>>>>> seio
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
@@ -138,8 +144,21 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
 
         //아이템 뽑기 완료하면 자동 레디되게
+<<<<<<< HEAD
+        playerList[localPlayerIndex].transform.transform.Find("Ready Text").gameObject.SetActive(true);
+        playerList[localPlayerIndex].GetComponent<playerPanel>().setReadyToOther(localPlayerIndex);
+=======
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        {
+            if (PhotonNetwork.PlayerList[i].NickName == PhotonNetwork.LocalPlayer.NickName)
+            {
+                localPlayerIndex = i;
+                break;
+            }
+        }
         playerListImg[localPlayerIndex].transform.transform.Find("Ready Text").gameObject.SetActive(true);
         playerListImg[localPlayerIndex].GetComponent<playerPanel>().setReadyToOther(localPlayerIndex);
+>>>>>>> seio
         //leaveButton.interactable = false;
         
     }
@@ -198,10 +217,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         gameStartText.SetActive(true);
-        yield return new WaitForSeconds(1.5f);
         PhotonNetwork.LoadLevel("Loading");//일단은 모든 클라이언트에서 씬 로드 하는걸로 하는데 이걸 나중에 master에서만 로드하고 동기화할지 결정해야할듯
 
     }
@@ -218,7 +236,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         SceneManager.LoadScene("Main");
     }
 
-    void setLocalPlayerIndex()
+
+    void getLocalPlayerIndex()
     {
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {

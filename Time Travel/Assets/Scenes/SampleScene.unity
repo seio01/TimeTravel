@@ -5640,6 +5640,7 @@ MonoBehaviour:
   - {fileID: 1713363935}
   - {fileID: 1096378115}
   - {fileID: 562419773}
+  itemUsePanel: {fileID: 2078662016}
   testTMP: {fileID: 1949348353}
 --- !u!1 &1466658739
 GameObject:
@@ -7812,7 +7813,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2051968882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8131,7 +8132,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2078662017
 RectTransform:
   m_ObjectHideFlags: 0

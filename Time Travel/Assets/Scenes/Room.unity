@@ -929,7 +929,7 @@ GameObject:
   - component: {fileID: 318640433}
   - component: {fileID: 318640434}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: Player 2 Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1287,7 +1287,7 @@ GameObject:
   - component: {fileID: 408704520}
   - component: {fileID: 408704521}
   m_Layer: 5
-  m_Name: Image (2)
+  m_Name: Player 3 Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1810,7 +1810,7 @@ GameObject:
   - component: {fileID: 694866853}
   - component: {fileID: 694866855}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Player List Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2363,7 +2363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.122641504, g: 0.11299987, b: 0.11299987, a: 1}
+  m_Color: {r: 0.2583976, g: 0.251602, b: 0.31132078, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3224,7 +3224,7 @@ GameObject:
   - component: {fileID: 1131748169}
   - component: {fileID: 1131748170}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Player 1 Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4027,7 +4027,7 @@ GameObject:
   - component: {fileID: 1528722569}
   - component: {fileID: 1528722570}
   m_Layer: 5
-  m_Name: Image (3)
+  m_Name: Player 4 Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

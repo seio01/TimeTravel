@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     public GameObject diceImg;
     public Image[] gaugeImg;
     public GameObject[] playerInformationUIs;
-
+    public GameObject itemUsePanel;
     public Photon.Realtime.Player controlPlayer; //문제 푸는 사람. 현재 차례인 플레이어.
 
     public TMP_Text testTMP;
@@ -242,4 +242,11 @@ public class GameManager : MonoBehaviour
         }
         playerInformationUIs[controlPlayerIndex].GetComponent<playerInformationUI>().updatePlayerBoardNum(player.curIndex - 1);
     }
+
+    /*
+    public void activeItemUsePanel()
+    {
+        itemUsePanel.SetActive(true);
+    }
+    */
 }
