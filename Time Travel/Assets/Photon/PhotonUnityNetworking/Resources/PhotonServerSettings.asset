@@ -36,14 +36,15 @@ MonoBehaviour:
   RpcList:
   - ClickRpc
   - DestroyRpc
-  - Fire
-  - setReady
-  - setProblemIDToOthers
-  - updatePlayerBoardNumToOther
   - DestroySpaceship
+  - Fire
   - RespawnSpaceship
-  - testRPC
-  - update
+  - HitTower
+  - setReady
+  - decideDiceSide
+  - decideDiceSide1
+  - setProblemIDToOthers
+  - UpdateList
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
