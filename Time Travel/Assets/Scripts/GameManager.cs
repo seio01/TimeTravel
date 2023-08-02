@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
-
+using Photon.Pun.UtilityScripts;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     public GameObject space;
     public GameObject diceImg;
     public Image[] gaugeImg;
-    public List<GameObject> playerInformationUIs;
+    public GameObject[] playerInformationUIs;
 
     public Photon.Realtime.Player controlPlayer; //문제 푸는 사람. 현재 차례인 플레이어.
 
@@ -43,8 +43,7 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
-        playerInformationUIs = new List<GameObject>();
-        setPlayerInformationUI();
+        setPlayerInformationUIs();
     }
     // Start is called before the first frame update
     void Start()
@@ -60,6 +59,7 @@ public class GameManager : MonoBehaviour
         {
             player.movingAllowed = false;
             playerStartPoint = player.curIndex - 1;
+            player.moveFinished = true;
             //정답 5번이면 주사위 한번 더 굴리기
             if (correctCount == 5)
             {
@@ -78,49 +78,14 @@ public class GameManager : MonoBehaviour
             Invoke("RoundStart", 1);
     }
 
-    public void setPlayerInformationUI()
+    public void setPlayerInformationUIs()
     {
-        GameObject prefab, playerInfoUI;
-        canvas = GameObject.Find("Canvas");
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-        if (playerCount >= 1)
+        for (int i = 0; i < playerCount; i++)
         {
-            prefab = Resources.Load<GameObject>("Prefabs/Player1");
-            playerInfoUI = PhotonNetwork.Instantiate("Prefabs/Player1", new Vector3(0, 0, 0), Quaternion.identity, 0);
-            setPlayerInfoUI(prefab, playerInfoUI, 0);
-            playerInformationUIs.Add(playerInfoUI);
+            playerInformationUIs[i].transform.GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[i].NickName;
+            playerInformationUIs[i].SetActive(true);
         }
-        if (playerCount >= 2)
-        {
-            prefab = Resources.Load<GameObject>("Prefabs/Player2");
-            playerInfoUI = PhotonNetwork.Instantiate("Prefabs/Player2", new Vector3(0, 0, 0), Quaternion.identity);
-            setPlayerInfoUI(prefab, playerInfoUI, 1);
-            playerInformationUIs.Add(playerInfoUI);
-        }
-        if (playerCount >= 3)
-        {
-            prefab = Resources.Load<GameObject>("Prefabs/Player3");
-            playerInfoUI = PhotonNetwork.Instantiate("Prefabs/Player2", new Vector3(0, 0, 0), Quaternion.identity);
-            setPlayerInfoUI(prefab, playerInfoUI, 2);
-            playerInformationUIs.Add(playerInfoUI);
-        }
-        if (playerCount == 4)
-        {
-            prefab = Resources.Load<GameObject>("Prefabs/Player4");
-            playerInfoUI = PhotonNetwork.Instantiate("Prefabs/Player2", new Vector3(0, 0, 0), Quaternion.identity);
-            setPlayerInfoUI(prefab, playerInfoUI, 3);
-            playerInformationUIs.Add(playerInfoUI);
-        }
-    }
-
-    public void setPlayerInfoUI(GameObject prefab, GameObject playerInfoUI, int index)
-    {
-        Vector3 pos = prefab.GetComponent<RectTransform>().anchoredPosition;
-        playerInfoUI.transform.GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[index].NickName;
-        playerInfoUI.transform.GetChild(2).GetComponent<TMP_Text>().text = "0 칸";
-        playerInfoUI.transform.SetParent(canvas.transform);
-        playerInfoUI.transform.localScale = new Vector3(1, 1, 1);
-        playerInfoUI.GetComponent<RectTransform>().anchoredPosition = pos;
     }
 
     public void RoundStart()
@@ -155,9 +120,9 @@ public class GameManager : MonoBehaviour
         player.itemCards.Remove(itemName);
     }
 
-    public void RpcCheck()
+    public void RpcCheck(string s)
     {
-        testTMP.text = "RPC check";
+        testTMP.text = s;
     }
 
     public void CheckCurPoint(int diceNum)
@@ -262,7 +227,19 @@ public class GameManager : MonoBehaviour
         {
             gaugeImg[i].color = new Color(1, 1, 1, 0.3f);
         }
-        
     }
-    
+
+    public void updatePlayerInformationUI()
+    {
+        int controlPlayerIndex = 0;
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        {
+            if (PhotonNetwork.PlayerList[i] == controlPlayer)
+            {
+                controlPlayerIndex = i;
+                break;
+            }
+        }
+        playerInformationUIs[controlPlayerIndex].GetComponent<playerInformationUI>().updatePlayerBoardNum(player.curIndex - 1);
+    }
 }

@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     public int ran;
 
     public List<GameManager.items> itemCards;
+    public bool moveFinished;
+
     void Start()
     {
         transform.position = points[curIndex].transform.position;
@@ -31,7 +33,11 @@ public class Player : MonoBehaviour
             MovePath();
         if (moveLadder)
             MoveLadder();
-
+        if (moveFinished)
+        {
+            moveFinished = false;
+            GameManager.instance.updatePlayerInformationUI();
+        }
     }
 
     public void MovePath()
@@ -44,10 +50,7 @@ public class Player : MonoBehaviour
                 curIndex++;
             }
         }
-
-        
     }
-
 
     //사다리칸 이동
     public void MoveLadder()
@@ -62,6 +65,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 36;
                     manager.isLadder = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 } 
                 break;
@@ -73,6 +77,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 48;
                     manager.isLadder = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -84,6 +89,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 60;
                     manager.isLadder = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -95,6 +101,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 73;
                     manager.isLadder = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -106,6 +113,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 84;
                     manager.isLadder = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -125,6 +133,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 31;
                     manager.isTransport = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -135,6 +144,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 39;
                     manager.isTransport = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -145,6 +155,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 16;
                     manager.isTransport = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -155,6 +166,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 81;
                     manager.isTransport = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -165,6 +177,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 27;
                     manager.isTransport = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -175,6 +188,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 47;
                     manager.isTransport = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -185,6 +199,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 63;
                     manager.isTransport = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -195,6 +210,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 68;
                     manager.isTransport = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -205,6 +221,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 81;
                     manager.isTransport = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;
@@ -215,6 +232,7 @@ public class Player : MonoBehaviour
                 {
                     curIndex = 91;
                     manager.isTransport = false;
+                    moveFinished = true;
                     manager.finishRound = true;
                 }
                 break;

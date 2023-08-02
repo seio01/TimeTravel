@@ -95,23 +95,23 @@ public class problem : MonoBehaviour
         {
             if (playerPosition >= 1 && playerPosition <= 8)
             {
-                problemID = Random.Range(1, 30);
+                problemID = Random.Range(1, 31);
                 prevDynasty = 0;
             }
             else if (playerPosition >= 9 && playerPosition <= 20)
             {
-                problemID = Random.Range(1, 65) + 30;
+                problemID = Random.Range(1, 66) + 30;
                 prevDynasty = 30;
             }
             else if (playerPosition >= 21 && playerPosition <= 40)
             {
-                problemID = Random.Range(1, 80) + 95;
+                problemID = Random.Range(1, 81) + 95;
                 prevDynasty = 95;
             }
             else if (playerPosition >= 41 && playerPosition <= 70)
             {
-                //problemID = Random.Range(1, 조선시대 문제 수) + 95+고려시대문제 수;
-                //prevDynasty = 95+고려시대 문제 수 ;
+                problemID = Random.Range(1, 110) + 175;
+                prevDynasty = 175;
             }
             else
             {

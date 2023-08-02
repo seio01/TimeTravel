@@ -35,7 +35,7 @@ public class Dice : MonoBehaviour
     IEnumerator RollDiceRoutine()
     {
         int ranSide = 0;
-        for(int i = 0; i <=10; i++)
+        for (int i = 0; i <= 10; i++)
         {
             ranSide = Random.Range(0, 6);
             curSide.sprite = diceSides[ranSide];
@@ -45,7 +45,6 @@ public class Dice : MonoBehaviour
         //manager.newDiceSide = ranSide + 1;
         manager.newDiceSide = ranSide + 1;
         yield return new WaitForSeconds(1f);
-
         if (!manager.secondRoll)
         {
             manager.diceImg.SetActive(false);
@@ -57,5 +56,11 @@ public class Dice : MonoBehaviour
             manager.MovePlayer();
         }
         yield return null;
+    }
+
+    [PunRPC]
+    void testRPC()
+    {
+        GameManager.instance.RpcCheck("rpc complete");
     }
 }

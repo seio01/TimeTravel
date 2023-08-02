@@ -36,6 +36,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             playerList[i].transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[i].NickName;
                 
         }
+        getLocalPlayerIndex();
     }
 
 
@@ -56,6 +57,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
             }
         }
+        if (playerList[localPlayerIndex].gameObject.transform.GetChild(2).gameObject.activeSelf == true)
+        {
+            playerList[localPlayerIndex].GetComponent<playerPanel>().setNewPlayerToReadyMe();
+        }
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
@@ -74,14 +79,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         //아이템 뽑기
         //아이템 뽑기 완료하면 자동 레디되게
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
-        {
-            if (PhotonNetwork.PlayerList[i].NickName == PhotonNetwork.LocalPlayer.NickName)
-            {
-                localPlayerIndex = i;
-                break;
-            }
-        }
         playerList[localPlayerIndex].transform.transform.Find("Ready Text").gameObject.SetActive(true);
         playerList[localPlayerIndex].GetComponent<playerPanel>().setReadyToOther(localPlayerIndex);
         //leaveButton.interactable = false;
@@ -103,4 +100,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
         SceneManager.LoadScene("Main");
     }
 
+
+    void getLocalPlayerIndex()
+    {
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        {
+            if (PhotonNetwork.PlayerList[i].NickName == PhotonNetwork.LocalPlayer.NickName)
+            {
+                localPlayerIndex = i;
+                break;
+            }
+        }
+    }
 }
