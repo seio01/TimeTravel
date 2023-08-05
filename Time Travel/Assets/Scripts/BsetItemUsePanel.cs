@@ -11,8 +11,8 @@ public class BsetItemUsePanel : MonoBehaviour
     int time;
     public TMP_Text TimeText;
     public TMP_Text useOrNotText;
-    public Button yesButton;
-    public Button noButton;
+    public Sprite[] itemCardImages;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,35 +28,44 @@ public class BsetItemUsePanel : MonoBehaviour
     void OnEnable()
     {
         //모두 B세트 카드가 없을 시, 바로 문제 풀이로 넘어가는 코드 추가할 것.
-        //카드 빼앗아서 B세트 2개 이상 가지고 있을 경우의 코드 추가할 것.
         if (GameManager.instance.controlPlayer == PhotonNetwork.LocalPlayer)
         {
             useOrNotText.text = "문제를 푸는 플레이어는 B세트 카드를 쓸 수 없습니다.\n 다른 사람의 선택을 기다립니다...";
         }
         else
         {
-            List<GameManager.items> playerCards = GameManager.instance.player.itemCards;
-            if (playerCards.Contains(GameManager.items.cardSteal))
+            List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.localPlayerIndexWithOrder];
+
+            if (playerCards.Contains(DontDestroyObjects.items.cardSteal) || playerCards.Contains(DontDestroyObjects.items.timeSteal) || playerCards.Contains(DontDestroyObjects.items.bind))
             {
-                useOrNotText.text = "카드 빼앗기 카드를 사용하시겠습니까?";
-                yesButton.gameObject.SetActive(true);
-                noButton.gameObject.SetActive(true);
-            }
-            else if (playerCards.Contains(GameManager.items.timeSteal))
-            {
-                useOrNotText.text = "시간 빼앗기 카드를 사용하시겠습니까?";
-                yesButton.gameObject.SetActive(true);
-                noButton.gameObject.SetActive(true);
-            }
-            else if (playerCards.Contains(GameManager.items.bind))
-            {
-                useOrNotText.text = "공동운명체 카드를 사용하시겠습니까?";
-                yesButton.gameObject.SetActive(true);
-                noButton.gameObject.SetActive(true);
+                GameObject itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
+                transform.GetChild(2).gameObject.SetActive(true);
+                if (playerCards.Contains(DontDestroyObjects.items.cardSteal))
+                {
+                    itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
+                    GameObject obj = Instantiate(itemCardPrefab);
+                    obj.GetComponent<Image>().sprite = itemCardImages[0];
+                    obj.transform.parent = transform.GetChild(2);
+                }
+                if (playerCards.Contains(DontDestroyObjects.items.timeSteal))
+                {
+                    itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
+                    GameObject obj = Instantiate(itemCardPrefab);
+                    obj.GetComponent<Image>().sprite = itemCardImages[1];
+                    obj.transform.parent = transform.GetChild(2);
+                }
+                if (playerCards.Contains(DontDestroyObjects.items.bind))
+                {
+                    itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
+                    GameObject obj = Instantiate(itemCardPrefab);
+                    obj.GetComponent<Image>().sprite = itemCardImages[2];
+                    obj.transform.parent = transform.GetChild(2);
+                }
+                useOrNotText.text = "사용할 카드를 선택해주세요. \n (시간 내 선택되지 않을 시 카드는 사용되지 않습니다.)";
             }
             else
             {
-                useOrNotText.text = "쓸 수 있는 아이템이 없습니다. \n 다른 사람의 선택을 기다립니다...";
+                useOrNotText.text = "쓸 수 있는 카드가 없습니다. \n 다른 사람의 선택을 기다립니다...";
             }
         }
         time = 5;
@@ -65,8 +74,7 @@ public class BsetItemUsePanel : MonoBehaviour
 
     void OnDisable()
     {
-        yesButton.gameObject.SetActive(false);
-        noButton.gameObject.SetActive(false);
+        transform.GetChild(2).gameObject.SetActive(false);
     }
 
     IEnumerator setTimer()

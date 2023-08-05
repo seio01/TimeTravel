@@ -37,6 +37,8 @@ public class problem : MonoBehaviour
     int playerPosition;
     bool isPlayerCorrect;
 
+    bool isOtherPlayerUseTimeSteal;
+
     public PhotonView PV;
     // Start is called before the first frame update
     void Awake()
@@ -65,17 +67,32 @@ public class problem : MonoBehaviour
         controlButtons();
         if (problemType == "ox")
         {
-            StartCoroutine("setTimer", 15);
+            if (GameManager.instance.isThisTurnTimeSteal == true)
+            {
+                StartCoroutine("setTimer", 8);
+            }
+            else
+            {
+                StartCoroutine("setTimer", 15);
+            }
         }
         else
         {
-            StartCoroutine("setTimer", 30);
+            if (GameManager.instance.isThisTurnTimeSteal == true)
+            {
+                StartCoroutine("setTimer", 15);
+            }
+            else
+            {
+                StartCoroutine("setTimer", 30);
+            }
         }
     }
 
     void OnDisable()
     {
         hintPanel.SetActive(false);
+        GameManager.instance.isThisTurnTimeSteal = false;
         if (isPlayerCorrect == true)
         {
             GameManager.instance.MovePlayer();
@@ -91,8 +108,6 @@ public class problem : MonoBehaviour
     void setProblemID()
     {
         Debug.Log(playerPosition);
-        if (PhotonNetwork.LocalPlayer == GameManager.instance.controlPlayer)
-        {
             if (playerPosition >= 1 && playerPosition <= 8)
             {
                 problemID = Random.Range(1, 31);
@@ -118,11 +133,6 @@ public class problem : MonoBehaviour
                 //problemID = Random.Range(1, 근현대 문제 수) + 95+고려시대문제 수+조선시대 문제 수;
                 //prevDynasty = 95+고려시대 문제 수+조선시대 문제 수;
             }
-        }
-        else
-        {
-            return;
-        }
     }
 
     IEnumerator setTimer(int time)
@@ -206,6 +216,7 @@ public class problem : MonoBehaviour
             hintButton.gameObject.SetActive(false);
         }
         showPassButton();
+        showSelectionEraseButton();
     }
 
     void setSelectionText(Button button, string selectionName)
@@ -233,8 +244,8 @@ public class problem : MonoBehaviour
 
     public void showPassButton()
     {
-        List<GameManager.items> playerCards = GameManager.instance.player.itemCards;
-        if (playerCards.Contains(GameManager.items.pass))
+        List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
+        if (playerCards.Contains(DontDestroyObjects.items.pass))
         {
             problemPassButton.SetActive(true);
         }
@@ -246,8 +257,8 @@ public class problem : MonoBehaviour
 
     public void showSelectionEraseButton()
     {
-        List<GameManager.items> playerCards = GameManager.instance.player.itemCards;
-        if (playerCards.Contains(GameManager.items.erase) && problemType == "4지선다")
+        List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
+        if (playerCards.Contains(DontDestroyObjects.items.erase) && problemType == "4지선다")
         {
             selectionEraseButton.SetActive(true);
         }
@@ -259,18 +270,27 @@ public class problem : MonoBehaviour
 
     public void showHint()
     {
-        List<GameManager.items> playerCards = GameManager.instance.player.itemCards;
-        if (playerCards.Contains(GameManager.items.hint))
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
+        {
+            return;
+        }
+        List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
+        if (playerCards.Contains(DontDestroyObjects.items.hint))
         {
             TMP_Text hintText = hintPanel.transform.GetChild(0).GetComponent<TMP_Text>();
             hintText.text = hintString;
             hintPanel.SetActive(true);
-            GameManager.instance.useItemCard(GameManager.items.hint);
+            RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.hint);
         }
     }
 
     public void eraseWrongSelection()
     {
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
+        {
+            return;
+        }
+        RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.erase);
         int correctAnswer = int.Parse(answerData[problemID - 1]["답"].ToString());
         int eraseSelection;
         while (true)
@@ -301,7 +321,11 @@ public class problem : MonoBehaviour
 
     public void passProblem()
     {
-        GameManager.instance.useItemCard(GameManager.items.pass);
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
+        {
+            return;
+        }
+        RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.pass);
         StopCoroutine("setTimer");
         resultPanel.SetActive(true);
         resultText.text = "문제를 패스했습니다. \n";

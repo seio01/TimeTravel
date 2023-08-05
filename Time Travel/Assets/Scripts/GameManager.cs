@@ -9,7 +9,7 @@ using Photon.Pun.UtilityScripts;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public enum items { hint, erase, pass, cardSteal, timeSteal, bind };
+    //public enum items { hint, erase, pass, cardSteal, timeSteal, bind };
     public static int playerStartPoint = 0;
 
     public Player player;
@@ -34,9 +34,14 @@ public class GameManager : MonoBehaviour
     public Image[] gaugeImg;
     public GameObject[] playerInformationUIs;
     public GameObject itemUsePanel;
+    public GameObject itemUseResultPanel;
     public Photon.Realtime.Player controlPlayer; //¹®Á¦ Çª´Â »ç¶÷. ÇöÀç Â÷·ÊÀÎ ÇÃ·¹ÀÌ¾î.
+    public Sprite[] itemSmallSprites;
 
     public TMP_Text testTMP;
+    public int controlPlayerIndexWithOrder;
+    public int localPlayerIndexWithOrder;
+    public bool isThisTurnTimeSteal;
     void Awake()
     {
         if (instance == null)
@@ -44,6 +49,9 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
         setPlayerInformationUIs();
+        setLocalPlayerIndexWithOrder();
+        isThisTurnTimeSteal = false;
+
     }
     // Start is called before the first frame update
     void Start()
@@ -83,15 +91,45 @@ public class GameManager : MonoBehaviour
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         for (int i = 0; i < playerCount; i++)
         {
-            playerInformationUIs[i].transform.GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[i].NickName;
-            playerInformationUIs[i].SetActive(true);
+            DontDestroyObjects.items[] arr = DontDestroyObjects.instance.playerItems[i].ToArray();
+            for (int j = 0; j< 4; j++)
+            {
+                if (arr[j] == DontDestroyObjects.items.hint)
+                {
+                    playerInformationUIs[i].transform.GetChild(1).GetChild(j).GetComponent<Image>().sprite = itemSmallSprites[0];
+                }
+                else if (arr[j] == DontDestroyObjects.items.erase)
+                {
+                    playerInformationUIs[i].transform.GetChild(1).GetChild(j).GetComponent<Image>().sprite = itemSmallSprites[1];
+                }
+                else if (arr[j] == DontDestroyObjects.items.pass)
+                {
+                    playerInformationUIs[i].transform.GetChild(1).GetChild(j).GetComponent<Image>().sprite = itemSmallSprites[2];
+                }
+                else if (arr[j] == DontDestroyObjects.items.cardSteal)
+                {
+                    playerInformationUIs[i].transform.GetChild(1).GetChild(j).GetComponent<Image>().sprite = itemSmallSprites[3];
+                }
+                else if (arr[j] == DontDestroyObjects.items.timeSteal)
+                {
+                    playerInformationUIs[i].transform.GetChild(1).GetChild(j).GetComponent<Image>().sprite = itemSmallSprites[4];
+                }
+                else
+                {
+                    playerInformationUIs[i].transform.GetChild(1).GetChild(j).GetComponent<Image>().sprite = itemSmallSprites[5];
+                }
+            }
+            playerInformationUIs[i].transform.GetChild(0).GetComponent<TMP_Text>().text = DontDestroyObjects.instance.playerListWithOrder[i].NickName;
+
+           playerInformationUIs[i].SetActive(true);
         }
     }
 
     public void RoundStart()
     {
         //¼öÁ¤..?
-        controlPlayer = PhotonNetwork.PlayerList[0];
+        controlPlayerIndexWithOrder = 0;
+        controlPlayer = DontDestroyObjects.instance.playerListWithOrder[0];
         if (correctCount != 5)
             secondRoll = false;
         player.moveLadder = false;
@@ -115,10 +153,19 @@ public class GameManager : MonoBehaviour
         return player.curIndex + newDiceSide;
     }
 
-    public void useItemCard(items itemName)
+    public void useItemCard(DontDestroyObjects.items itemName)
     {
-        player.itemCards.Remove(itemName);
+        DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Remove(itemName);
+        RpcManager.instance.eraseItem(controlPlayerIndexWithOrder, itemName);
     }
+
+    /*
+    public void useItemCardLocalPlayer(DontDestroyObjects.items itemName)
+    {
+        DontDestroyObjects.instance.playerItems[localPlayerIndexWithOrder].Remove(itemName);
+        RpcManager.instance.eraseItem(localPlayerIndexWithOrder, itemName);
+    }
+    */
 
     public void RpcCheck(string s)
     {
@@ -193,7 +240,10 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         space.SetActive(false);
 
-        yield return new WaitForSeconds(0.5f);
+        activeItemUsePanel();
+        yield return new WaitForSeconds(5.5f);
+        activeItemUseResultPanel();
+        yield return new WaitForSeconds(3.5f);
         spaceAction.DoAction(spaceCategory);
     }
 
@@ -243,10 +293,124 @@ public class GameManager : MonoBehaviour
         playerInformationUIs[controlPlayerIndex].GetComponent<playerInformationUI>().updatePlayerBoardNum(player.curIndex - 1);
     }
 
-    /*
+
+    void setLocalPlayerIndexWithOrder()
+    {
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        {
+            if (DontDestroyObjects.instance.playerListWithOrder[i] == PhotonNetwork.LocalPlayer)
+            {
+                localPlayerIndexWithOrder = i;
+                break;
+            }
+        }
+    }
+
     public void activeItemUsePanel()
     {
         itemUsePanel.SetActive(true);
     }
-    */
+
+    public void activeItemUseResultPanel()
+    {
+        itemUseResultPanel.SetActive(true);
+    }
+
+
+    public void eraseItemUI(int playerIndex, int cardIndex)
+    {
+        GameObject itemPanel = playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(1).gameObject;
+        GameObject stolenCard = itemPanel.transform.GetChild(cardIndex).gameObject;
+        string itemName = stolenCard.GetComponent<Image>().sprite.name;
+        GameObject itemUIPrefab = Resources.Load<GameObject>("Prefabs/itemImageUI");
+        testTMP.text = itemName;
+        Destroy(stolenCard);
+        if (itemName == "¿î¸í°øµ¿Ã¼ UI")
+        {
+            DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Remove(DontDestroyObjects.items.bind);
+            DontDestroyObjects.instance.playerItems[playerIndex].Add(DontDestroyObjects.items.bind);
+            GameObject createdItem = Instantiate(itemUIPrefab);
+            createdItem.transform.SetParent(playerInformationUIs[playerIndex].transform.GetChild(1), false);
+            createdItem.GetComponent<Image>().sprite = itemSmallSprites[5];
+        }
+        else if (itemName == "Ä«µå»©¾Ñ±â")
+        {
+            DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Remove(DontDestroyObjects.items.cardSteal);
+            DontDestroyObjects.instance.playerItems[playerIndex].Add(DontDestroyObjects.items.cardSteal);
+            GameObject createdItem = Instantiate(itemUIPrefab);
+            createdItem.transform.SetParent(playerInformationUIs[playerIndex].transform.GetChild(1), false);
+            createdItem.GetComponent<Image>().sprite = itemSmallSprites[3];
+        }
+        else if (itemName == "½Ã°£»©¾Ñ±â UI")
+        {
+            DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Remove(DontDestroyObjects.items.timeSteal);
+            DontDestroyObjects.instance.playerItems[playerIndex].Add(DontDestroyObjects.items.timeSteal);
+            GameObject createdItem = Instantiate(itemUIPrefab);
+            createdItem.transform.SetParent(playerInformationUIs[playerIndex].transform.GetChild(1), false);
+            createdItem.GetComponent<Image>().sprite = itemSmallSprites[4];
+        }
+        else if (itemName == "ÈùÆ® UI")
+        {
+            DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Remove(DontDestroyObjects.items.hint);
+            DontDestroyObjects.instance.playerItems[playerIndex].Add(DontDestroyObjects.items.hint);
+            GameObject createdItem = Instantiate(itemUIPrefab);
+            createdItem.transform.SetParent(playerInformationUIs[playerIndex].transform.GetChild(1), false);
+            createdItem.GetComponent<Image>().sprite = itemSmallSprites[0];
+        }
+        else if (itemName == "¼±ÅÃÁö Áö¿ì±â UI")
+        {
+            DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Remove(DontDestroyObjects.items.erase);
+            DontDestroyObjects.instance.playerItems[playerIndex].Add(DontDestroyObjects.items.bind);
+            GameObject createdItem = Instantiate(itemUIPrefab);
+            createdItem.transform.SetParent(playerInformationUIs[playerIndex].transform.GetChild(1), false);
+            createdItem.GetComponent<Image>().sprite = itemSmallSprites[1];
+        }
+        else
+        {
+            DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Remove(DontDestroyObjects.items.pass);
+            DontDestroyObjects.instance.playerItems[playerIndex].Add(DontDestroyObjects.items.pass);
+            GameObject createdItem = Instantiate(itemUIPrefab);
+            createdItem.transform.SetParent(playerInformationUIs[playerIndex].transform.GetChild(1), false);
+            createdItem.GetComponent<Image>().sprite = itemSmallSprites[2];
+        }
+
+    }
+
+    public void eraseItemUI(int index, string itemName)
+    {
+        GameObject itemPanel = playerInformationUIs[index].transform.GetChild(1).gameObject;
+        string itemNameToSpirteName = "";
+        if (itemName == "¿î¸í°øµ¿Ã¼")
+        {
+            itemNameToSpirteName = "¿î¸í°øµ¿Ã¼ UI";
+        }
+        else if (itemName == "Ä«µå»©¾Ñ±â")
+        {
+            itemNameToSpirteName = "Ä«µå »©¾Ñ±â";
+        }
+        else if (itemName == "½Ã°£»©¾Ñ±â")
+        {
+            itemNameToSpirteName = "½Ã°£ »©¾Ñ±â UI";
+        }
+        else if (itemName == "ÈùÆ®" || itemName=="hint" )
+        {
+            itemNameToSpirteName = "ÈùÆ® UI";
+        }
+        else if (itemName == "¼±ÅÃÁöÁ¦°Å" || itemName == "erase" )
+        {
+            itemNameToSpirteName = "¼±ÅÃÁö Áö¿ì±â UI";
+        }
+        else
+        {
+            itemNameToSpirteName = "¹®Á¦ ½ºÅµ UI";
+        }
+        foreach (Transform child in itemPanel.transform)
+        {
+            if (child.gameObject.GetComponent<Image>().sprite.name == itemNameToSpirteName)
+            {
+                Destroy(child.gameObject);
+                break;
+            }
+        }
+    }
 }

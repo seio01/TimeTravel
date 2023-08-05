@@ -16,14 +16,11 @@ public class Player : MonoBehaviour
     public int curIndex;
     public int ran;
 
-    public List<GameManager.items> itemCards;
     public bool moveFinished;
 
     void Start()
     {
         transform.position = points[curIndex].transform.position;
-        itemCards = new List<GameManager.items>();
-        itemCards.Add(GameManager.items.pass);
     }
 
     // Update is called once per frame

@@ -31,11 +31,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public List<int> playerOrderList = new List<int>();
 
     public int readyCounts;
-    public int localPlayerIndex;
+    public int localPlayerIndex; //플레이어가 몇 번째로 들어왔는지
+    public int playerIndexWithOrder; //순서 섞은 후 플레이어가 몇번째 순서인지
 
     public bool setTimer;
 
     public PhotonView PV;
+
+    public TMP_Text test;
     // Start is called before the first frame update
     void Awake()
     {
@@ -125,9 +128,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             ran = Random.Range(0, 3);
             items[i].sprite = itemImg[ran];
-            itemList.Add(ran); //item 인덱스 저장 -->각자 개인의 list로 저장해야하는데...
+            itemList.Add(ran); //item 인덱스 저장 -->각자 개인의 list로 저장해야하는데...  ---> 게임 스타트 할 때 dontDesoryObjects 스크립트에 저장.
         }
-        ran = Random.Range(3, 6);
+        ran = Random.Range(5, 6);
         items[3].sprite = itemImg[ran];
         itemList.Add(ran);
 
@@ -168,7 +171,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     void UpdateList(int[] updatedList)
     {
         List<int> updatedPlayerList = new List<int>(updatedList);
-
         setOrderPanel.SetActive(true);
         //leaveRoomBtn.interactable = false;
 
@@ -178,12 +180,32 @@ public class RoomManager : MonoBehaviourPunCallbacks
             orderList[i].gameObject.SetActive(true);
         }
 
-
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            for (int i = 0; i < updatedList.Length; i++)
+            {
+                playerOrderList.Add(updatedList[i]);
+            }
+        }
+        DontDestroyObjects.instance.setPlayerListWithOrder(updatedPlayerList);
     }
 
     public void StartGame()
     {
         StartCoroutine(StartGameRoutine());
+    }
+
+    public void UpdateItemListToOthers()
+    {
+        setPlayerIndexWithOrder();
+        
+        PV.RPC("UpdateItemList", RpcTarget.AllBuffered, playerIndexWithOrder, itemList.ToArray() );
+    }
+
+    [PunRPC]
+    void UpdateItemList(int playerIndexWithOrder, int[] updatedList)
+    {
+        DontDestroyObjects.instance.fillItemList(playerIndexWithOrder, updatedList);
     }
 
     IEnumerator StartGameRoutine()
@@ -197,9 +219,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
             UpdateListToOthers();
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
-
+        
         yield return new WaitForSeconds(2f);
 
+        //아이템 뽑은 것 다른 사람들에게 전송.
+        UpdateItemListToOthers();
         gameStartText.SetActive(true);
         yield return new WaitForSeconds(1.5f);
         PhotonNetwork.LoadLevel("Loading");//일단은 모든 클라이언트에서 씬 로드 하는걸로 하는데 이걸 나중에 master에서만 로드하고 동기화할지 결정해야할듯
@@ -228,5 +252,19 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
             }
         }
+    }
+
+    void setPlayerIndexWithOrder()
+    {
+        List<Photon.Realtime.Player> playerListWithOrder = DontDestroyObjects.instance.playerListWithOrder;
+        for (int i = 0; i <playerListWithOrder.Count ; i++)
+        {
+            if (playerListWithOrder[i].NickName == PhotonNetwork.LocalPlayer.NickName)
+            {
+                playerIndexWithOrder = i;
+                break;
+            }
+        }
+        
     }
 }

@@ -49,7 +49,6 @@ public class Dice : MonoBehaviour
         {
             manager.diceImg.SetActive(false);
             manager.CheckCurPoint(GameManager.playerStartPoint + ranSide + 1);
-            //manager.activeItemUsePanel();
         }
         else
         {
