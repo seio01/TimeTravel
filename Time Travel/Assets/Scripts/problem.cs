@@ -21,18 +21,18 @@ public class problem : MonoBehaviour
     public GameObject hintPanel;
     public GameObject problemPassButton;
     public GameObject selectionEraseButton;
-    List<Dictionary<string, object>> problemData;
-    List<Dictionary<string, object>> answerData;
+    public List<Dictionary<string, object>> problemData;
+    public List<Dictionary<string, object>> answerData;
 
-    int problemID;
-    int prevDynasty;
+    public int problemID;
+    public int prevDynasty;
     string dynasty;
     string problemType;
     string isHaveHint;
     string hintString;
     TMP_Text resultText;
 
-    problemGraph problemScript;
+    public problemGraph problemScript;
 
     int playerPosition;
     bool isPlayerCorrect;
@@ -43,10 +43,9 @@ public class problem : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        problemData = CSVReader.Read("문제");
-        answerData = CSVReader.Read("답");
         resultText = resultPanel.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
-        problemScript = this.gameObject.GetComponent<problemGraph>();
+        problemID = 1;
+        prevDynasty = 0;
     }
 
     // Update is called once per frame
@@ -59,9 +58,38 @@ public class problem : MonoBehaviour
     void OnEnable()
     {
         getPlayerNextPosition();
+        resultText = resultPanel.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
         Debug.Log(playerPosition);
-        setProblemID();
-        Debug.Log("문제 번호: " + problemID);
+        if (GameManager.instance.controlPlayer == PhotonNetwork.LocalPlayer)
+        {
+            RpcManager.instance.setProblemID(playerPosition);
+        }
+    }
+
+    void OnDisable()
+    {
+        hintPanel.SetActive(false);
+        GameManager.instance.isThisTurnTimeSteal = false;
+        if (isPlayerCorrect == true)
+        {
+            if (GameManager.instance.isUsedBind == true)
+            {
+                GameManager.instance.isMovableWithBind = true;
+            }
+            GameManager.instance.MovePlayer();
+            //추가
+            GameManager.instance.correctCount++;
+            GameManager.instance.UpdateGaugeImg();
+
+        }
+        else
+            GameManager.instance.finishRound = true;
+    }
+
+    public void setProblemPanel(int problemID, int prevDynasty)
+    {
+        this.problemID = problemID;
+        this.prevDynasty = prevDynasty;
         getInfoFromCSV();
         setImage();
         controlButtons();
@@ -87,52 +115,6 @@ public class problem : MonoBehaviour
                 StartCoroutine("setTimer", 30);
             }
         }
-    }
-
-    void OnDisable()
-    {
-        hintPanel.SetActive(false);
-        GameManager.instance.isThisTurnTimeSteal = false;
-        if (isPlayerCorrect == true)
-        {
-            GameManager.instance.MovePlayer();
-            //추가
-            GameManager.instance.correctCount++;
-            GameManager.instance.UpdateGaugeImg();
-
-        }
-        else
-            GameManager.instance.finishRound = true;
-    }
-
-    void setProblemID()
-    {
-        Debug.Log(playerPosition);
-            if (playerPosition >= 1 && playerPosition <= 8)
-            {
-                problemID = Random.Range(1, 31);
-                prevDynasty = 0;
-            }
-            else if (playerPosition >= 9 && playerPosition <= 20)
-            {
-                problemID = Random.Range(1, 66) + 30;
-                prevDynasty = 30;
-            }
-            else if (playerPosition >= 21 && playerPosition <= 40)
-            {
-                problemID = Random.Range(1, 81) + 95;
-                prevDynasty = 95;
-            }
-            else if (playerPosition >= 41 && playerPosition <= 70)
-            {
-                problemID = Random.Range(1, 110) + 175;
-                prevDynasty = 175;
-            }
-            else
-            {
-                //problemID = Random.Range(1, 근현대 문제 수) + 95+고려시대문제 수+조선시대 문제 수;
-                //prevDynasty = 95+고려시대 문제 수+조선시대 문제 수;
-            }
     }
 
     IEnumerator setTimer(int time)
@@ -226,6 +208,16 @@ public class problem : MonoBehaviour
     }
 
     public void selectAnswer(int selectionNum)
+    {
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
+        {
+            return;
+        }
+        PV.RPC("selectAnswerToOthers", RpcTarget.AllViaServer, selectionNum);
+    }
+
+    [PunRPC]
+    public void selectAnswerToOthers(int selectionNum)
     {
         StopCoroutine("setTimer");
         resultPanel.SetActive(true);
@@ -326,6 +318,12 @@ public class problem : MonoBehaviour
             return;
         }
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.pass);
+        PV.RPC("passProblemToOthers", RpcTarget.AllViaServer);
+    }
+
+    [PunRPC]
+    void passProblemToOthers()
+    {
         StopCoroutine("setTimer");
         resultPanel.SetActive(true);
         resultText.text = "문제를 패스했습니다. \n";

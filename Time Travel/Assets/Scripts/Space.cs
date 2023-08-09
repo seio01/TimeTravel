@@ -39,7 +39,7 @@ public class Space : MonoBehaviour
                 break;
             case "Problem":
                 //문제 푸는 부분
-                manager.showProblem();
+                RpcManager.instance.showProblem();
                 break;
         }
 

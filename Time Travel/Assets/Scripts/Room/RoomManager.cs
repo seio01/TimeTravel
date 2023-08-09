@@ -130,7 +130,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             items[i].sprite = itemImg[ran];
             itemList.Add(ran); //item 인덱스 저장 -->각자 개인의 list로 저장해야하는데...  ---> 게임 스타트 할 때 dontDesoryObjects 스크립트에 저장.
         }
-        ran = Random.Range(5, 6);
+        ran = Random.Range(3, 6);
         items[3].sprite = itemImg[ran];
         itemList.Add(ran);
 

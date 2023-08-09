@@ -11,7 +11,6 @@ public class BsetItemResultPanel : MonoBehaviour
 {
     public TMP_Text resultText;
     public PhotonView PV;
-    public TMP_Text test;
 
     // Start is called before the first frame update
     void Start()

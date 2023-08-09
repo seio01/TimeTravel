@@ -9,10 +9,9 @@ using Photon.Pun.UtilityScripts;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    //public enum items { hint, erase, pass, cardSteal, timeSteal, bind };
-    public static int playerStartPoint = 0;
+    public int[] playerStartPoint;
 
-    public Player player;
+    public Player[] player;
     public int newDiceSide;
     public bool timerOn;
     public bool isLadder;
@@ -37,53 +36,100 @@ public class GameManager : MonoBehaviour
     public GameObject itemUseResultPanel;
     public Photon.Realtime.Player controlPlayer; //문제 푸는 사람. 현재 차례인 플레이어.
     public Sprite[] itemSmallSprites;
+    public problem problemMaker;
 
     public TMP_Text testTMP;
     public int controlPlayerIndexWithOrder;
     public int localPlayerIndexWithOrder;
     public bool isThisTurnTimeSteal;
+    public bool isUsedBind = false;
+    public bool isMovableWithBind = false;
+    public int bindPlayerIndex;
     void Awake()
     {
         if (instance == null)
         {
             instance = this;
         }
+        problemMaker.problemData= CSVReader.Read("문제");
+        problemMaker.answerData = CSVReader.Read("답");
+        problemMaker.problemScript = problemMaker.gameObject.GetComponent<problemGraph>();
+        playerStartPoint = new int[PhotonNetwork.CurrentRoom.PlayerCount];
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            playerStartPoint[i] = 0;
+        }
         setPlayerInformationUIs();
+        setPlayerPieces();
         setLocalPlayerIndexWithOrder();
         isThisTurnTimeSteal = false;
+        isUsedBind = false;
+        isMovableWithBind = false;
+        controlPlayerIndexWithOrder = 0;
+        controlPlayer = DontDestroyObjects.instance.playerListWithOrder[0];
 
     }
     // Start is called before the first frame update
     void Start()
     {
-        RoundStart();
+        Invoke("RoundStart", 1.5f);
     }
 
     // Update is called once per frame
     void Update()
     {
         //when to stop moving
-        if(player.curIndex > playerStartPoint + newDiceSide)
+        if (player[controlPlayerIndexWithOrder].curIndex > playerStartPoint[controlPlayerIndexWithOrder] + newDiceSide)
         {
-            player.movingAllowed = false;
-            playerStartPoint = player.curIndex - 1;
-            player.moveFinished = true;
+            player[controlPlayerIndexWithOrder].movingAllowed = false;
+            playerStartPoint[controlPlayerIndexWithOrder] = player[controlPlayerIndexWithOrder].curIndex - 1;
             //정답 5번이면 주사위 한번 더 굴리기
             if (correctCount == 5)
             {
                 correctCount = 0;
                 StartCoroutine(RollDiceAgain());
             }
-            if (isLadder && !player.movingAllowed)
-                player.moveLadder = true;
-            else if (isTransport && !player.movingAllowed)
-                player.Transport();
+            if (isLadder && !player[controlPlayerIndexWithOrder].movingAllowed)
+            {
+                player[controlPlayerIndexWithOrder].moveLadder = true;
+            }
+            else if (isTransport && !player[controlPlayerIndexWithOrder].movingAllowed)
+            {
+                player[controlPlayerIndexWithOrder].Transport();
+            }
             else
-                finishRound = true;
+            {
+                if (isMovableWithBind == true)
+                {
+                    updatePlayerInformationUI(controlPlayerIndexWithOrder);
+                    RpcManager.instance.isMovableWithBind = true;
+                    moveBindPlayer(RpcManager.instance.bindPlayerIndex);
+                }
+                else
+                {
+                    finishRound = true;
+                }
+            }
+
         }
 
         if (finishRound)
+        {
+            finishRound = false;
+            isMovableWithBind = false;
+            isUsedBind = false;
+            if (controlPlayer == PhotonNetwork.LocalPlayer)
+            {   
+                updatePlayerInformationUI(controlPlayerIndexWithOrder);
+            }
+            controlPlayerIndexWithOrder++;
+            if (controlPlayerIndexWithOrder == PhotonNetwork.CurrentRoom.PlayerCount)
+            {
+                controlPlayerIndexWithOrder = 0;
+            }
+            controlPlayer = DontDestroyObjects.instance.playerListWithOrder[controlPlayerIndexWithOrder];
             Invoke("RoundStart", 1);
+        }
     }
 
     public void setPlayerInformationUIs()
@@ -125,32 +171,41 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void setPlayerPieces()
+    {
+        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        for (int i = 0; i < playerCount; i++)
+        {
+            player[i].gameObject.SetActive(true);
+        }
+    }
+
     public void RoundStart()
     {
         //수정..?
-        controlPlayerIndexWithOrder = 0;
-        controlPlayer = DontDestroyObjects.instance.playerListWithOrder[0];
         if (correctCount != 5)
             secondRoll = false;
-        player.moveLadder = false;
+        player[controlPlayerIndexWithOrder].moveLadder = false;
         finishRound = false;
-        diceImg.SetActive(true);
-        diceTimer.gameObject.SetActive(true);
+        RpcManager.instance.setDiceTrue();
+
         timerOn = true;
     }
+
     public void MovePlayer()
     {
-        player.movingAllowed = true;
-    }
-    public void showProblem()
-    {
-        problemCanvas.gameObject.SetActive(true);
+        player[controlPlayerIndexWithOrder].movingAllowed = true;
     }
 
+    public void moveBindPlayer(int bindPlayerIndex)
+    {
+        player[bindPlayerIndex].movingAllowed = true;
+    }
+        
     //check
     public int getPlayerNextPosition()
     {
-        return player.curIndex + newDiceSide;
+        return player[controlPlayerIndexWithOrder].curIndex + newDiceSide;
     }
 
     public void useItemCard(DontDestroyObjects.items itemName)
@@ -158,14 +213,6 @@ public class GameManager : MonoBehaviour
         DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Remove(itemName);
         RpcManager.instance.eraseItem(controlPlayerIndexWithOrder, itemName);
     }
-
-    /*
-    public void useItemCardLocalPlayer(DontDestroyObjects.items itemName)
-    {
-        DontDestroyObjects.instance.playerItems[localPlayerIndexWithOrder].Remove(itemName);
-        RpcManager.instance.eraseItem(localPlayerIndexWithOrder, itemName);
-    }
-    */
 
     public void RpcCheck(string s)
     {
@@ -241,7 +288,7 @@ public class GameManager : MonoBehaviour
         space.SetActive(false);
 
         activeItemUsePanel();
-        yield return new WaitForSeconds(5.5f);
+        yield return new WaitForSeconds(6.0f);
         activeItemUseResultPanel();
         yield return new WaitForSeconds(3.5f);
         spaceAction.DoAction(spaceCategory);
@@ -279,18 +326,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void updatePlayerInformationUI()
+    public void updatePlayerInformationUI(int controlPlayerIndex)
     {
-        int controlPlayerIndex = 0;
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
-        {
-            if (PhotonNetwork.PlayerList[i] == controlPlayer)
-            {
-                controlPlayerIndex = i;
-                break;
-            }
-        }
-        playerInformationUIs[controlPlayerIndex].GetComponent<playerInformationUI>().updatePlayerBoardNum(player.curIndex - 1);
+        playerInformationUIs[controlPlayerIndex].GetComponent<playerInformationUI>().updatePlayerBoardNum(player[controlPlayerIndex].curIndex - 1);
     }
 
 
@@ -323,7 +361,6 @@ public class GameManager : MonoBehaviour
         GameObject stolenCard = itemPanel.transform.GetChild(cardIndex).gameObject;
         string itemName = stolenCard.GetComponent<Image>().sprite.name;
         GameObject itemUIPrefab = Resources.Load<GameObject>("Prefabs/itemImageUI");
-        testTMP.text = itemName;
         Destroy(stolenCard);
         if (itemName == "운명공동체 UI")
         {

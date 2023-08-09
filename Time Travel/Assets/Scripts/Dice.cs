@@ -27,28 +27,27 @@ public class Dice : MonoBehaviour
         curSide.sprite = diceSides[0];
     }
 
-    public void RollDice()
+    public void rollDice(int[] diceSpriteIndex)
     {
-        StartCoroutine(RollDiceRoutine());
+        StartCoroutine("RollDiceRoutine", diceSpriteIndex);
     }
 
-    IEnumerator RollDiceRoutine()
+    public IEnumerator RollDiceRoutine(int[] diceSpriteIndex)
     {
         int ranSide = 0;
         for (int i = 0; i <= 10; i++)
         {
-            ranSide = Random.Range(0, 6);
+            ranSide = diceSpriteIndex[i];
             curSide.sprite = diceSides[ranSide];
             yield return new WaitForSeconds(0.05f);
         }
         //ranSide + 1--> test용으로 바꾸기 checkcurPoint랑;
-        //manager.newDiceSide = ranSide + 1;
         manager.newDiceSide = ranSide + 1;
         yield return new WaitForSeconds(1f);
         if (!manager.secondRoll)
         {
             manager.diceImg.SetActive(false);
-            manager.CheckCurPoint(GameManager.playerStartPoint + ranSide + 1);
+            manager.CheckCurPoint(GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] + ranSide + 1);
         }
         else
         {
@@ -58,9 +57,4 @@ public class Dice : MonoBehaviour
         yield return null;
     }
 
-    [PunRPC]
-    void testRPC()
-    {
-        GameManager.instance.RpcCheck("rpc complete");
-    }
 }

@@ -53,6 +53,18 @@ MonoBehaviour:
   - cardStealToOthers
   - setIsThisTurnTimeStealTrueToOthers
   - useAsetItemCardToOthers
+  - diceRPC
+  - setDiceTrueToOthers
+  - rollDiceRPC
+  - setProblemIDToOThers
+  - passProblemToOthers
+  - selectAnswerToOthers
+  - showProblemToOthers
+  - useBindToOthers
+  - moveWithBindToOthers
+  - makeIsUsedBindTrueToOthers
+  - moveToNextScene
+  - setReadyToMasterClient
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

@@ -21,10 +21,7 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler
 
     void OnDisable()
     {
-        if (isUsed == true)
-        {
-            Destroy(this.gameObject);
-        }
+        Destroy(this.gameObject);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -41,7 +38,7 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler
         if (spriteName == "운명공동체")
         {
             RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.bind);
-            //인원 수대로 플레이어 말이 추가되면  코드 추가.
+            RpcManager.instance.makeIsUsedBindTrue(GameManager.instance.localPlayerIndexWithOrder);
         }
         else if (spriteName == "카드빼앗기")  //클릭하자마자 빼앗은 플레이어 UI에서 사라지는데 resultPanel 뜨면 사라지도록 수정 필요. 새로 추가된 아이템 UI 크기 조정 필요.
         {

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class DiceTimer : MonoBehaviour
 {
@@ -28,7 +30,10 @@ public class DiceTimer : MonoBehaviour
         else if (diceTime <= 0)
         {
             diceTimeText.gameObject.SetActive(false);
-            dice.RollDice();
+            if (GameManager.instance.controlPlayer == PhotonNetwork.LocalPlayer)
+            {
+                RpcManager.instance.rollDice();
+            }
             diceTime = 3;
             manager.timerOn = false;
         }

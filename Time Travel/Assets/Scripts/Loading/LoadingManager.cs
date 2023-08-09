@@ -34,9 +34,12 @@ public class LoadingManager : MonoBehaviour
             {
                 slider.value = Mathf.Lerp(slider.value, 1f, time);
                 if (slider.value >= 0.99f)
+                {
                     operation.allowSceneActivation = true;
+                }
             }
-
         }
+
     }
+
 }
