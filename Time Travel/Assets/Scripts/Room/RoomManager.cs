@@ -10,6 +10,7 @@ using TMPro;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
+    public static RoomManager instance;
     public Image[] playerListImg;
     public Image[] orderList;
     public bool isReady;
@@ -42,6 +43,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Awake()
     {
+
+        if (instance == null)
+        {
+            instance = this;
+        }
+
         //readyCounts = 1;
         foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
         {
@@ -172,7 +179,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         List<int> updatedPlayerList = new List<int>(updatedList);
         setOrderPanel.SetActive(true);
-        //leaveRoomBtn.interactable = false;
+        leaveRoomBtn.interactable = false;
 
         for (int i = 0; i < updatedPlayerList.Count; i++)
         {

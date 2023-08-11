@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Main : MonoBehaviour
 {
+    public GameObject explanationPanel;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +17,10 @@ public class Main : MonoBehaviour
         
     }
 
+    public void ShowExplanation()
+    {
+        explanationPanel.SetActive(true);
+    }
     public void gameExit()
     {
         Application.Quit();
