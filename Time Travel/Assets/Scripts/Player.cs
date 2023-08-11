@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     public bool moveLadder;
     public int curIndex;
     public int ran;
-
+    public int correctCount;
 
     void Start()
     {

@@ -43,7 +43,9 @@ public class Dice : MonoBehaviour
         }
         //ranSide + 1--> test용으로 바꾸기 checkcurPoint랑;
         manager.newDiceSide = ranSide + 1;
+
         yield return new WaitForSeconds(1f);
+
         if (!manager.secondRoll)
         {
             manager.diceImg.SetActive(false);

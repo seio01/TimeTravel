@@ -32,7 +32,8 @@ public class GameManager : MonoBehaviour
     public Space spaceAction;
     public Text diceTimer;
     public Text spaceText;
-    public TMP_Text finishRoundText;
+    public TMP_Text startRoundText;
+    public GameObject startRoundPanel;
     public GameObject space;
     public GameObject diceImg;
     public Image[] gaugeImg;
@@ -91,16 +92,21 @@ public class GameManager : MonoBehaviour
         if (isOver)
             return;
         //when to stop moving
-        if (!finishRound && (player[controlPlayerIndexWithOrder].curIndex > playerStartPoint[controlPlayerIndexWithOrder] + newDiceSide))
+        if (player[controlPlayerIndexWithOrder].curIndex > playerStartPoint[controlPlayerIndexWithOrder] + newDiceSide)
         {
             player[controlPlayerIndexWithOrder].movingAllowed = false;
             playerStartPoint[controlPlayerIndexWithOrder] = player[controlPlayerIndexWithOrder].curIndex - 1;
 
-
-            //정답 5번이면 주사위 한번 더 굴리기
-            if (correctCount == 5)
+            if (secondRoll)
             {
-                correctCount = 0;
+                secondRoll = false;
+                finishRound = true;
+            }
+                
+            //정답 5번이면 주사위 한번 더 굴리기
+            if (player[GameManager.instance.controlPlayerIndexWithOrder].correctCount == 5)
+            {
+                player[GameManager.instance.controlPlayerIndexWithOrder].correctCount = 0;
                 StartCoroutine(RollDiceAgain());
             }
             if (isLadder && !player[controlPlayerIndexWithOrder].movingAllowed)
@@ -119,7 +125,7 @@ public class GameManager : MonoBehaviour
                     RpcManager.instance.isMovableWithBind = true;
                     moveBindPlayer(RpcManager.instance.bindPlayerIndex);
                 }
-                else
+                else if(!secondRoll)
                 {
                     finishRound = true;
                 }
@@ -129,8 +135,6 @@ public class GameManager : MonoBehaviour
 
         if (finishRound)
         {
-            finishRoundText.text = "턴 종료. " + playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(0) + "차례로 넘어갑니다.";
-            finishRoundText.gameObject.SetActive(true);
 
             finishRound = false;
             isMovableWithBind = false;
@@ -146,6 +150,7 @@ public class GameManager : MonoBehaviour
             }
             controlPlayer = DontDestroyObjects.instance.playerListWithOrder[controlPlayerIndexWithOrder];
             Invoke("RoundStart", 1);
+            
         }
     }
 
@@ -204,10 +209,27 @@ public class GameManager : MonoBehaviour
             secondRoll = false;
         player[controlPlayerIndexWithOrder].moveLadder = false;
         finishRound = false;
-        RpcManager.instance.setDiceTrue();
+        StartCoroutine(RoundStartRoutine());
+        /*RpcManager.instance.setDiceTrue();
+        timerOn = true;*/
+    }
 
+    IEnumerator RoundStartRoutine()
+    {
+        startRoundText.text = controlPlayer.NickName + " 플레이를 시작합니다."; //문구 수정
+        startRoundPanel.SetActive(true);
+
+        yield return new WaitForSeconds(1.5f);
+
+        startRoundPanel.SetActive(false);
+
+        yield return new WaitForSeconds(1f);
+
+        RpcManager.instance.setDiceTrue();
         timerOn = true;
     }
+
+
 
     public void MovePlayer()
     {
@@ -313,11 +335,10 @@ public class GameManager : MonoBehaviour
 
     public void UpdateGaugeImg()
     {
-        for (int i = 0; i < correctCount; i++)
+        for (int i = 0; i < player[GameManager.instance.controlPlayerIndexWithOrder].correctCount; i++)
         {
             playerInformationUIs[controlPlayerIndexWithOrder].transform.Find("Gauge Bar").GetChild(i).GetComponent<Image>().color = new Color(1, 1, 1, 1);
 
-            //gaugeImg[i].color = new Color(1, 1, 1, 1);
         }
     }
 
@@ -326,7 +347,6 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             playerInformationUIs[controlPlayerIndexWithOrder].transform.Find("Gauge Bar").GetChild(i).GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
-            //gaugeImg[i].color = new Color(1, 1, 1, 0.3f);
         }
     }
 

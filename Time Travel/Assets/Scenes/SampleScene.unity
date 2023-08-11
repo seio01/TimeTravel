@@ -586,6 +586,7 @@ MonoBehaviour:
   moveLadder: 0
   curIndex: 0
   ran: 0
+  correctCount: 0
 --- !u!212 &70664438
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1337,6 +1338,7 @@ MonoBehaviour:
   moveLadder: 0
   curIndex: 0
   ran: 0
+  correctCount: 0
 --- !u!212 &262027273
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3345,6 +3347,7 @@ MonoBehaviour:
   moveLadder: 0
   curIndex: 0
   ran: 0
+  correctCount: 4
 --- !u!114 &666202852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4204,7 +4207,7 @@ GameObject:
   - component: {fileID: 989222018}
   - component: {fileID: 989222017}
   m_Layer: 5
-  m_Name: FinishRoundText
+  m_Name: StartRoundPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4922,6 +4925,7 @@ MonoBehaviour:
   moveLadder: 0
   curIndex: 0
   ran: 0
+  correctCount: 4
 --- !u!212 &1177020314
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5001,7 +5005,7 @@ GameObject:
   - component: {fileID: 1180534464}
   - component: {fileID: 1180534463}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: StartRoundText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6035,7 +6039,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31708
+  m_Name: pb_Mesh106070
   serializedVersion: 10
   m_SubMeshes: []
   m_Shapes:
@@ -6392,9 +6396,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1339857777}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.0000076293945, z: 0}
+  m_LocalScale: {x: 1, y: 1.0000001, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -6434,7 +6438,8 @@ MonoBehaviour:
   spaceAction: {fileID: 493624325}
   diceTimer: {fileID: 794302226}
   spaceText: {fileID: 429777916}
-  finishRoundText: {fileID: 1180534463}
+  startRoundText: {fileID: 1180534463}
+  startRoundPanel: {fileID: 989222015}
   space: {fileID: 1176336833}
   diceImg: {fileID: 195150731}
   gaugeImg:
