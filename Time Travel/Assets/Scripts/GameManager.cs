@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     public bool secondRoll;//정답 5번일때 
     public bool isOver;
 
+
+
     [Header("UI")]
     public GameObject canvas;
     public Canvas problemCanvas;
@@ -47,6 +49,7 @@ public class GameManager : MonoBehaviour
     public GameObject endGameText;
     public string winner;
     public TMP_Text winnerName;
+    public bool nextTurn;
 
     public TMP_Text testTMP;
     public int controlPlayerIndexWithOrder;
@@ -101,6 +104,7 @@ public class GameManager : MonoBehaviour
             {
                 secondRoll = false;
                 finishRound = true;
+                StartCoroutine(UISmallerRoutine(true));
             }
                 
             //정답 5번이면 주사위 한번 더 굴리기
@@ -128,14 +132,14 @@ public class GameManager : MonoBehaviour
                 else if(!secondRoll)
                 {
                     finishRound = true;
+                    StartCoroutine(UISmallerRoutine(true));
                 }
             }
 
         }
 
-        if (finishRound)
+        if (finishRound && nextTurn)
         {
-
             finishRound = false;
             isMovableWithBind = false;
             isUsedBind = false;
@@ -150,8 +154,45 @@ public class GameManager : MonoBehaviour
             }
             controlPlayer = DontDestroyObjects.instance.playerListWithOrder[controlPlayerIndexWithOrder];
             Invoke("RoundStart", 1);
-            
+
+
         }
+    }
+
+    IEnumerator UIBiggerRoutine(bool bigger)
+    {
+        float time = 0f;
+
+        while (bigger)
+        {
+            playerInformationUIs[controlPlayerIndexWithOrder].transform.localScale = Vector3.one * (1 + time);
+            time += Time.deltaTime;
+            if (time > 0.3f)
+            {
+                bigger = false;
+            }
+            yield return null;
+        }
+    }
+
+    IEnumerator UISmallerRoutine(bool smaller)
+    {
+        float time = 0f;
+        while (smaller)
+        {
+            playerInformationUIs[controlPlayerIndexWithOrder].transform.localScale = Vector3.one * (1.3f - time);
+            time += Time.deltaTime;
+            if (time > 0.3f)
+            {
+                smaller = false;
+            }
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        nextTurn = true;
+
     }
 
     public void setPlayerInformationUIs()
@@ -204,6 +245,8 @@ public class GameManager : MonoBehaviour
 
     public void RoundStart()
     {
+        nextTurn = false;
+        StartCoroutine(UIBiggerRoutine(true));
         //수정..?
         if (correctCount != 5)
             secondRoll = false;
@@ -216,7 +259,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator RoundStartRoutine()
     {
-        startRoundText.text = controlPlayer.NickName + " 플레이를 시작합니다."; //문구 수정
+        startRoundText.text = controlPlayer.NickName + "님 플레이를 시작합니다."; //문구 수정
         startRoundPanel.SetActive(true);
 
         yield return new WaitForSeconds(1.5f);
