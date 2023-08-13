@@ -78,7 +78,7 @@ public class problem : MonoBehaviour
             }
             GameManager.instance.MovePlayer();
             //Ãß°¡
-            GameManager.instance.correctCount++;
+            GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].correctCount++;
             GameManager.instance.UpdateGaugeImg();
 
         }

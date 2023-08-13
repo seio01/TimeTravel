@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
@@ -11,15 +12,20 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public int[] playerStartPoint;
 
+    public int playerOrder;
+
     public Player[] player;
     public int newDiceSide;
     public bool timerOn;
     public bool isLadder;
     public bool isTransport;
     public bool finishRound;
-    public bool secondRoll;//정답 5번일때 
     public string spaceCategory;
     public int correctCount;
+    public bool secondRoll;//정답 5번일때 
+    public bool isOver;
+
+
 
     [Header("UI")]
     public GameObject canvas;
@@ -28,6 +34,8 @@ public class GameManager : MonoBehaviour
     public Space spaceAction;
     public Text diceTimer;
     public Text spaceText;
+    public TMP_Text startRoundText;
+    public GameObject startRoundPanel;
     public GameObject space;
     public GameObject diceImg;
     public Image[] gaugeImg;
@@ -37,6 +45,11 @@ public class GameManager : MonoBehaviour
     public Photon.Realtime.Player controlPlayer; //문제 푸는 사람. 현재 차례인 플레이어.
     public Sprite[] itemSmallSprites;
     public problem problemMaker;
+    public GameObject endPanel;
+    public GameObject endGameText;
+    public string winner;
+    public TMP_Text winnerName;
+    public bool nextTurn;
 
     public TMP_Text testTMP;
     public int controlPlayerIndexWithOrder;
@@ -78,15 +91,26 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //게임 종료
+        if (isOver)
+            return;
         //when to stop moving
         if (player[controlPlayerIndexWithOrder].curIndex > playerStartPoint[controlPlayerIndexWithOrder] + newDiceSide)
         {
             player[controlPlayerIndexWithOrder].movingAllowed = false;
             playerStartPoint[controlPlayerIndexWithOrder] = player[controlPlayerIndexWithOrder].curIndex - 1;
-            //정답 5번이면 주사위 한번 더 굴리기
-            if (correctCount == 5)
+
+            if (secondRoll)
             {
-                correctCount = 0;
+                secondRoll = false;
+                finishRound = true;
+                StartCoroutine(UISmallerRoutine(true));
+            }
+                
+            //정답 5번이면 주사위 한번 더 굴리기
+            if (player[GameManager.instance.controlPlayerIndexWithOrder].correctCount == 5)
+            {
+                player[GameManager.instance.controlPlayerIndexWithOrder].correctCount = 0;
                 StartCoroutine(RollDiceAgain());
             }
             if (isLadder && !player[controlPlayerIndexWithOrder].movingAllowed)
@@ -105,21 +129,22 @@ public class GameManager : MonoBehaviour
                     RpcManager.instance.isMovableWithBind = true;
                     moveBindPlayer(RpcManager.instance.bindPlayerIndex);
                 }
-                else
+                else if(!secondRoll)
                 {
                     finishRound = true;
+                    StartCoroutine(UISmallerRoutine(true));
                 }
             }
 
         }
 
-        if (finishRound)
+        if (finishRound && nextTurn)
         {
             finishRound = false;
             isMovableWithBind = false;
             isUsedBind = false;
             if (controlPlayer == PhotonNetwork.LocalPlayer)
-            {   
+            {
                 updatePlayerInformationUI(controlPlayerIndexWithOrder);
             }
             controlPlayerIndexWithOrder++;
@@ -129,7 +154,45 @@ public class GameManager : MonoBehaviour
             }
             controlPlayer = DontDestroyObjects.instance.playerListWithOrder[controlPlayerIndexWithOrder];
             Invoke("RoundStart", 1);
+
+
         }
+    }
+
+    IEnumerator UIBiggerRoutine(bool bigger)
+    {
+        float time = 0f;
+
+        while (bigger)
+        {
+            playerInformationUIs[controlPlayerIndexWithOrder].transform.localScale = Vector3.one * (1 + time);
+            time += Time.deltaTime;
+            if (time > 0.3f)
+            {
+                bigger = false;
+            }
+            yield return null;
+        }
+    }
+
+    IEnumerator UISmallerRoutine(bool smaller)
+    {
+        float time = 0f;
+        while (smaller)
+        {
+            playerInformationUIs[controlPlayerIndexWithOrder].transform.localScale = Vector3.one * (1.3f - time);
+            time += Time.deltaTime;
+            if (time > 0.3f)
+            {
+                smaller = false;
+            }
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        nextTurn = true;
+
     }
 
     public void setPlayerInformationUIs()
@@ -182,15 +245,34 @@ public class GameManager : MonoBehaviour
 
     public void RoundStart()
     {
+        nextTurn = false;
+        StartCoroutine(UIBiggerRoutine(true));
         //수정..?
         if (correctCount != 5)
             secondRoll = false;
         player[controlPlayerIndexWithOrder].moveLadder = false;
         finishRound = false;
-        RpcManager.instance.setDiceTrue();
+        StartCoroutine(RoundStartRoutine());
+        /*RpcManager.instance.setDiceTrue();
+        timerOn = true;*/
+    }
 
+    IEnumerator RoundStartRoutine()
+    {
+        startRoundText.text = controlPlayer.NickName + "님 플레이를 시작합니다."; //문구 수정
+        startRoundPanel.SetActive(true);
+
+        yield return new WaitForSeconds(1.5f);
+
+        startRoundPanel.SetActive(false);
+
+        yield return new WaitForSeconds(1f);
+
+        RpcManager.instance.setDiceTrue();
         timerOn = true;
     }
+
+
 
     public void MovePlayer()
     {
@@ -223,11 +305,6 @@ public class GameManager : MonoBehaviour
     {
         switch (diceNum)
         {
-            //test
-            case 5:
-            case 10:
-            
-            //test
             case 3:
             case 8:
             case 11:
@@ -287,20 +364,36 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         space.SetActive(false);
 
-        activeItemUsePanel();
-        yield return new WaitForSeconds(6.0f);
-        activeItemUseResultPanel();
-        yield return new WaitForSeconds(3.5f);
+        if(spaceCategory == "Problem")
+        {
+            activeItemUsePanel();
+            yield return new WaitForSeconds(6.0f);
+            activeItemUseResultPanel();
+            yield return new WaitForSeconds(3.5f);
+        }
+        else
+            yield return new WaitForSeconds(1.5f);
         spaceAction.DoAction(spaceCategory);
     }
 
     public void UpdateGaugeImg()
     {
-        for (int i = 0; i < correctCount; i++)
+        for (int i = 0; i < player[GameManager.instance.controlPlayerIndexWithOrder].correctCount; i++)
         {
-            gaugeImg[i].color = new Color(1, 1, 1, 1);
+            playerInformationUIs[controlPlayerIndexWithOrder].transform.Find("Gauge Bar").GetChild(i).GetComponent<Image>().color = new Color(1, 1, 1, 1);
+
         }
     }
+
+    void ResetGaugeImg()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            playerInformationUIs[controlPlayerIndexWithOrder].transform.Find("Gauge Bar").GetChild(i).GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
+        }
+    }
+
+
 
     IEnumerator RollDiceAgain()
     {
@@ -318,13 +411,29 @@ public class GameManager : MonoBehaviour
         timerOn = true;
     }
 
-    void ResetGaugeImg()
+    public void EndGame()
     {
-        for (int i = 0; i < 5; i++)
-        {
-            gaugeImg[i].color = new Color(1, 1, 1, 0.3f);
-        }
+        winner = PhotonNetwork.LocalPlayer.ToString();
+        isOver = true;
+        StartCoroutine(EndGameRoutine());
     }
+
+    IEnumerator EndGameRoutine()
+    {
+        endGameText.SetActive(true);
+
+        yield return new WaitForSeconds(0.5f);
+
+        endGameText.SetActive(false);
+        RpcManager.instance.ShowEndPanel();
+
+    }
+
+    public void ReturnToLobby()
+    {
+        SceneManager.LoadScene("Main");
+    }
+
 
     public void updatePlayerInformationUI(int controlPlayerIndex)
     {
@@ -451,3 +560,4 @@ public class GameManager : MonoBehaviour
         }
     }
 }
+

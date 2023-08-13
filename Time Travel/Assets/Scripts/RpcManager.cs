@@ -309,4 +309,19 @@ public class RpcManager : MonoBehaviour
         problemScript.prevDynasty = prevDynasty;
         problemScript.setProblemPanel(problemID, prevDynasty);
     }
+
+    //endgame
+    public void ShowEndPanel()
+    {
+        PV.RPC("ShowEndPanelToOthers", RpcTarget.All, GameManager.instance.winner, GameManager.instance.isOver);
+    }
+
+    [PunRPC]
+    public void ShowEndPanelToOthers(string winner, bool isOver)
+    {
+        GameManager.instance.endPanel.SetActive(true);
+        GameManager.instance.isOver = isOver;
+        GameManager.instance.winnerName.text = winner + " ´Ô ½Â¸®¸¦ ÃàÇÏÇÕ´Ï´Ù!";
+    }
+
 }

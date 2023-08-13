@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     public bool moveLadder;
     public int curIndex;
     public int ran;
+    public int correctCount;
 
     void Start()
     {
@@ -32,14 +33,24 @@ public class Player : MonoBehaviour
 
     public void MovePath()
     {
-        if(curIndex <= points.Length - 1)
+        
+
+        if (curIndex <= points.Length - 1)
         {
             transform.position = Vector2.MoveTowards(transform.position, points[curIndex].transform.position, speed * Time.deltaTime);
             if (transform.position == points[curIndex].transform.position)
             {
                 curIndex++;
             }
+
+            //도착지점 도달시
+            if (curIndex == points.Length - 1)
+            {
+                movingAllowed = false;
+                GameManager.instance.EndGame();
+            }
         }
+
     }
 
     //사다리칸 이동
@@ -106,7 +117,6 @@ public class Player : MonoBehaviour
 
     }
 
-    //포털칸 이동 수정필요
     public void Transport()
     {
         switch (curIndex - 1)
