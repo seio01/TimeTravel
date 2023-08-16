@@ -27,54 +27,82 @@ public class BsetItemUsePanel : MonoBehaviour
 
     void OnEnable()
     {
-        //모두 B세트 카드가 없을 시, 바로 문제 풀이로 넘어가는 코드 추가할 것.
-        if (GameManager.instance.controlPlayer == PhotonNetwork.LocalPlayer)
+        if (checkIfAllDoesntHaveBsetCard() == true)
         {
-            useOrNotText.text = "문제를 푸는 플레이어는 B세트 카드를 쓸 수 없습니다.\n 다른 사람의 선택을 기다립니다...";
+            useOrNotText.text = "모든 플레이어가 B 세트 카드가 없습니다. \n 3초 후 다음 화면으로 전환됩니다.";
+            time = 3;
+            StartCoroutine("setTimer");
         }
         else
         {
-            List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.localPlayerIndexWithOrder];
-
-            if (playerCards.Contains(DontDestroyObjects.items.cardSteal) || playerCards.Contains(DontDestroyObjects.items.timeSteal) || playerCards.Contains(DontDestroyObjects.items.bind))
+            if (GameManager.instance.controlPlayer == PhotonNetwork.LocalPlayer)
             {
-                GameObject itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
-                transform.GetChild(2).gameObject.SetActive(true);
-                if (playerCards.Contains(DontDestroyObjects.items.cardSteal))
-                {
-                    itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
-                    GameObject obj = Instantiate(itemCardPrefab);
-                    obj.GetComponent<Image>().sprite = itemCardImages[0];
-                    obj.transform.parent = transform.GetChild(2);
-                }
-                if (playerCards.Contains(DontDestroyObjects.items.timeSteal))
-                {
-                    itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
-                    GameObject obj = Instantiate(itemCardPrefab);
-                    obj.GetComponent<Image>().sprite = itemCardImages[1];
-                    obj.transform.parent = transform.GetChild(2);
-                }
-                if (playerCards.Contains(DontDestroyObjects.items.bind))
-                {
-                    itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
-                    GameObject obj = Instantiate(itemCardPrefab);
-                    obj.GetComponent<Image>().sprite = itemCardImages[2];
-                    obj.transform.parent = transform.GetChild(2);
-                }
-                useOrNotText.text = "사용할 카드를 선택해주세요. \n (시간 내 선택되지 않을 시 카드는 사용되지 않습니다.)";
+                useOrNotText.text = "문제를 푸는 플레이어는 B세트 카드를 쓸 수 없습니다.\n 다른 사람의 선택을 기다립니다...";
             }
             else
             {
-                useOrNotText.text = "쓸 수 있는 카드가 없습니다. \n 다른 사람의 선택을 기다립니다...";
+                List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.localPlayerIndexWithOrder];
+
+                if (playerCards.Contains(DontDestroyObjects.items.cardSteal) || playerCards.Contains(DontDestroyObjects.items.timeSteal) || playerCards.Contains(DontDestroyObjects.items.bind))
+                {
+                    GameObject itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
+                    transform.GetChild(2).gameObject.SetActive(true);
+                    if (playerCards.Contains(DontDestroyObjects.items.cardSteal))
+                    {
+                        itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
+                        GameObject obj = Instantiate(itemCardPrefab);
+                        obj.GetComponent<Image>().sprite = itemCardImages[0];
+                        obj.transform.parent = transform.GetChild(2);
+                    }
+                    if (playerCards.Contains(DontDestroyObjects.items.timeSteal))
+                    {
+                        itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
+                        GameObject obj = Instantiate(itemCardPrefab);
+                        obj.GetComponent<Image>().sprite = itemCardImages[1];
+                        obj.transform.parent = transform.GetChild(2);
+                    }
+                    if (playerCards.Contains(DontDestroyObjects.items.bind))
+                    {
+                        itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
+                        GameObject obj = Instantiate(itemCardPrefab);
+                        obj.GetComponent<Image>().sprite = itemCardImages[2];
+                        obj.transform.parent = transform.GetChild(2);
+                    }
+                    useOrNotText.text = "사용할 카드를 선택해주세요. \n (시간 내 선택되지 않을 시 카드는 사용되지 않습니다.)";
+                }
+                else
+                {
+                    useOrNotText.text = "쓸 수 있는 카드가 없습니다. \n 다른 사람의 선택을 기다립니다...";
+                }
             }
+            time = 5;
+            StartCoroutine("setTimer");
         }
-        time = 5;
-        StartCoroutine("setTimer");
     }
 
     void OnDisable()
     {
         transform.GetChild(2).gameObject.SetActive(false);
+    }
+
+    bool checkIfAllDoesntHaveBsetCard()
+    {
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            if (DontDestroyObjects.instance.playerItems[i].Contains(DontDestroyObjects.items.timeSteal) == true)
+            {
+                return false;
+            }
+            else if (DontDestroyObjects.instance.playerItems[i].Contains(DontDestroyObjects.items.bind) == true)
+            {
+                return false;
+            }
+            else if (DontDestroyObjects.instance.playerItems[i].Contains(DontDestroyObjects.items.cardSteal) == true)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     IEnumerator setTimer()

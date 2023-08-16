@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     public bool isUsedBind = false;
     public bool isMovableWithBind = false;
     public int bindPlayerIndex;
+    
     void Awake()
     {
         if (instance == null)
@@ -154,8 +155,6 @@ public class GameManager : MonoBehaviour
             }
             controlPlayer = DontDestroyObjects.instance.playerListWithOrder[controlPlayerIndexWithOrder];
             Invoke("RoundStart", 1);
-
-
         }
     }
 

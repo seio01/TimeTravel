@@ -189,7 +189,21 @@ public class RpcManager : MonoBehaviour
     [PunRPC]
     void useAsetItemCardToOthers(string itemName)
     {
-        GameManager.instance.eraseItemUI(GameManager.instance.controlPlayerIndexWithOrder, itemName);
+        int playerIndex = GameManager.instance.controlPlayerIndexWithOrder;
+        if (itemName == "erase")
+        {
+            DontDestroyObjects.instance.playerItems[playerIndex].Remove(DontDestroyObjects.items.erase);
+        }
+        else if (itemName == "hint")
+        {
+            DontDestroyObjects.instance.playerItems[playerIndex].Remove(DontDestroyObjects.items.hint);
+        }
+        else
+        {
+            DontDestroyObjects.instance.playerItems[playerIndex].Remove(DontDestroyObjects.items.pass);
+        }
+        testTMP.text = DontDestroyObjects.instance.playerItems[playerIndex].Count.ToString();
+        GameManager.instance.eraseItemUI(playerIndex, itemName);
     }
 
     [PunRPC]
@@ -223,7 +237,7 @@ public class RpcManager : MonoBehaviour
     void setIsThisTurnTimeStealTrueToOthers()
     {
        GameManager.instance.isThisTurnTimeSteal = true;
-       GameManager.instance. player[bindPlayerIndex].movingAllowed = true;
+       //GameManager.instance. player[bindPlayerIndex].movingAllowed = true;
     }
 
     public void setDiceTrue()
