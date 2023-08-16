@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
             if (player[GameManager.instance.controlPlayerIndexWithOrder].correctCount == 5)
             {
                 player[GameManager.instance.controlPlayerIndexWithOrder].correctCount = 0;
-                StartCoroutine(RollDiceAgain());
+                StartCoroutine(RollDiceAndGetItem());
             }
             if (isLadder && !player[controlPlayerIndexWithOrder].movingAllowed)
             {
@@ -395,8 +395,38 @@ public class GameManager : MonoBehaviour
 
 
 
-    IEnumerator RollDiceAgain()
+    IEnumerator RollDiceAndGetItem()
     {
+
+        Debug.Log("아이템 개수" + DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Count);
+        if (DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Count < 4) //가지고있는 아이템 개수가 3개이하일때
+        {
+            spaceText.text = "BSet 아이템 하나를 추가로 획득합니다!";
+            space.SetActive(true);
+
+            int ran = Random.Range(3, 6);
+
+            if (ran == 3)
+            {
+                DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Add(DontDestroyObjects.items.cardSteal);
+                playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(1).GetChild(3).GetComponent<Image>().sprite = itemSmallSprites[3];
+            }
+            else if (ran == 4)
+            {
+                DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Add(DontDestroyObjects.items.bind);
+                playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(1).GetChild(3).GetComponent<Image>().sprite = itemSmallSprites[4];
+            }
+            else
+            {
+                DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Add(DontDestroyObjects.items.timeSteal);
+                playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(1).GetChild(3).GetComponent<Image>().sprite = itemSmallSprites[5];
+            }
+
+            yield return new WaitForSeconds(1f);
+
+        }
+            
+
         secondRoll = true;
         spaceText.text = "..설명추가...? 주사위를 한번 더 굴릴 수 있습니다!";
         space.SetActive(true);
@@ -463,7 +493,7 @@ public class GameManager : MonoBehaviour
         itemUseResultPanel.SetActive(true);
     }
 
-
+    
     public void eraseItemUI(int playerIndex, int cardIndex)
     {
         GameObject itemPanel = playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(1).gameObject;

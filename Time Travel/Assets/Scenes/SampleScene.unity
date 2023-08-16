@@ -3347,7 +3347,7 @@ MonoBehaviour:
   moveLadder: 0
   curIndex: 0
   ran: 0
-  correctCount: 0
+  correctCount: 4
 --- !u!114 &666202852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4925,7 +4925,7 @@ MonoBehaviour:
   moveLadder: 0
   curIndex: 0
   ran: 0
-  correctCount: 0
+  correctCount: 4
 --- !u!212 &1177020314
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6467,6 +6467,7 @@ MonoBehaviour:
   endGameText: {fileID: 869182881}
   winner: 
   winnerName: {fileID: 808775134}
+  nextTurn: 0
   testTMP: {fileID: 1949348353}
   controlPlayerIndexWithOrder: 0
   localPlayerIndexWithOrder: 0
