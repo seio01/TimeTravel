@@ -83,7 +83,11 @@ public class problem : MonoBehaviour
 
         }
         else
+        {
             GameManager.instance.finishRound = true;
+            GameManager.instance.UISmaller();
+        }
+            
     }
 
     public void setProblemPanel(int problemID, int prevDynasty)
