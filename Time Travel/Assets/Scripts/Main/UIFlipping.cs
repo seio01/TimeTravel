@@ -38,9 +38,14 @@ public class UIFlipping : MonoBehaviour
         if (currentPage == 0)
         {
             leftBtn.interactable = false;
+            rightBtn.interactable = true;
         }
         else
+        {
+            rightBtn.interactable = true;
             leftBtn.interactable = true;
+        }
+            
     }
 
     public void NextPage()
@@ -55,9 +60,13 @@ public class UIFlipping : MonoBehaviour
         if (currentPage == totalPage-1)
         {
             rightBtn.interactable = false;
+            leftBtn.interactable = true;
         }
         else
+        {
             rightBtn.interactable = true;
+            leftBtn.interactable = true;
+        }
 
     }
 }

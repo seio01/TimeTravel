@@ -9705,9 +9705,8 @@ MonoBehaviour:
   m_text: "\uAC8C\uC774\uC9C0\uAC00 \uB2E4 \uCC28\uBA74 \uB79C\uB364\uD558\uAC8C
     \uC544\uC774\uD15C \uD558\uB098\uB97C \uD68D\uB4DD\uD558\uACE0 \uC8FC\uC0AC\uC704\uB97C
     \uCD94\uAC00\uB85C \uAD74\uB9B4 \uC218 \uC788\uB2E4.\n\n\n\uC774\uB54C\uB294
-    \uBB38\uC81C\uB97C \uC548\uD480\uACE0 \uBC14\uB85C \uC774\uB3D9\uAC00\uB2A5\uD558\uBA70\n\n
-    \uC0AC\uB2E4\uB9AC/\uD3EC\uD138\uCE78\uC5D0 \uB3C4\uCC29\uD558\uB354\uB77C\uB3C4
-    \uCD94\uAC00 \uC774\uB3D9\uC740 \uC5C6\uB2E4."
+    \uBB38\uC81C\uB97C \uC548\uD480\uACE0 \uBC14\uB85C \uC774\uB3D9\uAC00\uB2A5\uD558\uBA70\n\n\uC0AC\uB2E4\uB9AC/\uD3EC\uD138\uCE78\uC5D0
+    \uB3C4\uCC29\uD558\uB354\uB77C\uB3C4 \uCD94\uAC00 \uC774\uB3D9\uC740 \uC5C6\uB2E4."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e2f9bc14bda828742b0138f02816abb2, type: 2}
   m_sharedMaterial: {fileID: -3097710842360043048, guid: e2f9bc14bda828742b0138f02816abb2, type: 2}
@@ -11501,7 +11500,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1948748164}
   m_OnClick:
     m_PersistentCalls:
