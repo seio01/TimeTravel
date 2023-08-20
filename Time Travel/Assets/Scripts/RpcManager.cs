@@ -153,7 +153,19 @@ public class RpcManager : MonoBehaviour
     {
         for (int i = 0; i < players.Length; i++)
         {
-            resultText.text += players[i] + "님이 " + items[i] + "를 사용했습니다.";
+            resultText.text += players[i] + "님이 ";
+            if (items[i] == "cardSteal")
+            {
+                resultText.text+= "카드 빼앗기를 사용했습니다.\n";
+            }
+            else if (items[i] == "timeSteal")
+            {
+                resultText.text += "시간 빼앗기를 사용했습니다.\n";
+            }
+            else
+            {
+                resultText.text += "운명공동체를 사용했습니다.\n";
+            }
         }
     }
 
@@ -299,13 +311,13 @@ public class RpcManager : MonoBehaviour
         }
         else if (playerPosition >= 41 && playerPosition <= 70)
         {
-            problemID = Random.Range(1, 110) + 175;
+            problemID = Random.Range(1, 111) + 175;
             prevDynasty = 175;
         }
         else
         {
-            //problemID = Random.Range(1, 근현대 문제 수) + 95+고려시대문제 수+조선시대 문제 수;
-            //prevDynasty = 95+고려시대 문제 수+조선시대 문제 수;
+            problemID = Random.Range(1, 121) + 285;
+            prevDynasty =285;
         }
         PV.RPC("setProblemIDToOThers", RpcTarget.AllViaServer, problemID, prevDynasty);
     }

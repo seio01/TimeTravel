@@ -42,6 +42,12 @@ public class BsetItemResultPanel : MonoBehaviour
         {
             RpcManager.instance.useItemOfLocalPlayer();
         }
+        if (RpcManager.instance.currentTurnUsedItemOfLocalPlayer == "Ä«µå»©¾Ñ±â")
+        {
+            int controlPlayerCardNum = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder].Count;
+            int stealCardIndex = Random.Range(0, controlPlayerCardNum);
+            RpcManager.instance.cardSteal(GameManager.instance.localPlayerIndexWithOrder, stealCardIndex);
+        }
     }
 
     IEnumerator WaitFor3Seconds()

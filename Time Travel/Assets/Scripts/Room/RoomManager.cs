@@ -43,13 +43,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Awake()
     {
-
         if (instance == null)
         {
             instance = this;
         }
-
-        //readyCounts = 1;
         foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
         {
             Debug.Log(player.NickName);
@@ -135,7 +132,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             ran = Random.Range(0, 3);
             items[i].sprite = itemImg[ran];
-            itemList.Add(ran); //item 인덱스 저장 -->각자 개인의 list로 저장해야하는데...  ---> 게임 스타트 할 때 dontDesoryObjects 스크립트에 저장.
+            itemList.Add(ran); 
         }
         ran = Random.Range(3, 6);
         items[3].sprite = itemImg[ran];
@@ -217,8 +214,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     IEnumerator StartGameRoutine()
     {
-        /*if (!PhotonNetwork.IsMasterClient)
-            return;*/
         //순서 정하기
         if (PhotonNetwork.IsMasterClient)
         {

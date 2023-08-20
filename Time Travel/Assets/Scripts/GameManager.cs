@@ -58,7 +58,11 @@ public class GameManager : MonoBehaviour
     public bool isUsedBind = false;
     public bool isMovableWithBind = false;
     public int bindPlayerIndex;
-    
+
+    public int currentTurnASetItem;
+    public int currentTurnBSetItem;
+    public bool AllDoesntHaveBsetCard;
+
     void Awake()
     {
         if (instance == null)
@@ -76,13 +80,21 @@ public class GameManager : MonoBehaviour
         setPlayerInformationUIs();
         setPlayerPieces();
         setLocalPlayerIndexWithOrder();
+        initVariables();
+    }
+
+    void initVariables()
+    {
+        currentTurnASetItem = 0;
+        currentTurnBSetItem = 0;
         isThisTurnTimeSteal = false;
         isUsedBind = false;
         isMovableWithBind = false;
+        AllDoesntHaveBsetCard = false;
         controlPlayerIndexWithOrder = 0;
         controlPlayer = DontDestroyObjects.instance.playerListWithOrder[0];
-
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -157,6 +169,8 @@ public class GameManager : MonoBehaviour
             Invoke("RoundStart", 1);
         }
     }
+
+
 
     IEnumerator UIBiggerRoutine(bool bigger)
     {
@@ -247,13 +261,14 @@ public class GameManager : MonoBehaviour
         nextTurn = false;
         StartCoroutine(UIBiggerRoutine(true));
         //¼öÁ¤..?
+        currentTurnASetItem = 0;
+        currentTurnBSetItem = 0;
+        AllDoesntHaveBsetCard = false;
         if (correctCount != 5)
             secondRoll = false;
         player[controlPlayerIndexWithOrder].moveLadder = false;
         finishRound = false;
         StartCoroutine(RoundStartRoutine());
-        /*RpcManager.instance.setDiceTrue();
-        timerOn = true;*/
     }
 
     IEnumerator RoundStartRoutine()
@@ -366,9 +381,13 @@ public class GameManager : MonoBehaviour
         if(spaceCategory == "Problem")
         {
             activeItemUsePanel();
-            yield return new WaitForSeconds(6.0f);
-            activeItemUseResultPanel();
-            yield return new WaitForSeconds(3.5f);
+            yield return new WaitForSeconds(3.0f);
+            if (AllDoesntHaveBsetCard == false)
+            {
+                yield return new WaitForSeconds(3.0f);
+                activeItemUseResultPanel();
+                yield return new WaitForSeconds(3.5f);
+            }
         }
         else
             yield return new WaitForSeconds(1.5f);

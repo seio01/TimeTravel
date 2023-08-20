@@ -29,8 +29,9 @@ public class BsetItemUsePanel : MonoBehaviour
     {
         if (checkIfAllDoesntHaveBsetCard() == true)
         {
-            useOrNotText.text = "모든 플레이어가 B 세트 카드가 없습니다. \n 3초 후 다음 화면으로 전환됩니다.";
-            time = 3;
+            useOrNotText.text = "모든 플레이어가 쓸 수 있는 카드가 없습니다.. \n 3초 후 다음 화면으로 전환됩니다."; //카드 4개 있을 때 카드 스틸 있는 경우도 포함하기.
+            time = 2;
+            GameManager.instance.AllDoesntHaveBsetCard = true;
             StartCoroutine("setTimer");
         }
         else
@@ -87,8 +88,21 @@ public class BsetItemUsePanel : MonoBehaviour
 
     bool checkIfAllDoesntHaveBsetCard()
     {
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        int controlPlayer = -1;
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
+            if (PhotonNetwork.PlayerList[i] == GameManager.instance.controlPlayer)
+            {
+                controlPlayer = i;
+                break;
+            }
+        }
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        {
+            if (PhotonNetwork.PlayerList[i] == GameManager.instance.controlPlayer)
+            {
+                continue;
+            }
             if (DontDestroyObjects.instance.playerItems[i].Contains(DontDestroyObjects.items.timeSteal) == true)
             {
                 return false;
@@ -99,7 +113,14 @@ public class BsetItemUsePanel : MonoBehaviour
             }
             else if (DontDestroyObjects.instance.playerItems[i].Contains(DontDestroyObjects.items.cardSteal) == true)
             {
-                return false;
+                if (DontDestroyObjects.instance.playerItems[i].Count == 4 || DontDestroyObjects.instance.playerItems[controlPlayer].Count == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
         return true;

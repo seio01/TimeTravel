@@ -93,6 +93,7 @@ public class problem : MonoBehaviour
         getInfoFromCSV();
         setImage();
         controlButtons();
+        GameManager.instance.testTMP.text = answerData[problemID - 1]["´ä"].ToString();
         if (problemType == "ox")
         {
             if (GameManager.instance.isThisTurnTimeSteal == true)
@@ -266,6 +267,10 @@ public class problem : MonoBehaviour
         {
             return;
         }
+        if (GameManager.instance.currentTurnASetItem == 1)
+        {
+            return;
+        }
         List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
         if (playerCards.Contains(DontDestroyObjects.items.hint))
         {
@@ -273,6 +278,7 @@ public class problem : MonoBehaviour
             hintText.text = hintString;
             hintPanel.SetActive(true);
             RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.hint);
+            GameManager.instance.currentTurnASetItem = 1;
         }
     }
 
@@ -283,6 +289,8 @@ public class problem : MonoBehaviour
             return;
         }
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.erase);
+        selectionEraseButton.gameObject.SetActive(false);
+        GameManager.instance.currentTurnASetItem = 1;
         int correctAnswer = int.Parse(answerData[problemID - 1]["´ä"].ToString());
         int eraseSelection;
         while (true)
@@ -317,7 +325,12 @@ public class problem : MonoBehaviour
         {
             return;
         }
+        if (GameManager.instance.currentTurnASetItem == 1)
+        {
+            return;
+        }
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.pass);
+        GameManager.instance.currentTurnASetItem = 1;
         PV.RPC("passProblemToOthers", RpcTarget.AllViaServer);
     }
 

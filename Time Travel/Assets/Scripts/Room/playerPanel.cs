@@ -31,13 +31,15 @@ public class playerPanel : MonoBehaviourPunCallbacks
 
     public void setReadyToOther(int index)
     {
-        PV.RPC("setReady", RpcTarget.All, index);
+        PV.RPC("setReady", RpcTarget.AllBuffered, index);
     }
+
 
     public void setNewPlayerToReadyMe()
     {
-        PV.RPC("setReady", RpcTarget.Others, roomManagerScript.localPlayerIndex);
+        PV.RPC("setReady", RpcTarget.OthersBuffered, roomManagerScript.localPlayerIndex);
     }
+
 
     [PunRPC]
     void setReady(int index)

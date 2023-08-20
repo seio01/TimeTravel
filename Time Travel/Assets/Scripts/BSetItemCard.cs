@@ -7,16 +7,31 @@ using UnityEngine.UI;
 public class BSetItemCard : MonoBehaviour, IPointerClickHandler
 {
     bool isUsed;
+    bool canNotUse;
     // Start is called before the first frame update
     void Start()
     {
-        isUsed = false;
+        string spriteName = this.gameObject.GetComponent<Image>().sprite.name;
+        if (spriteName == "카드빼앗기" && canStealCard() == false)
+        {
+            changeColorBlack();
+            canNotUse = true;
+        }
+        else
+        {
+            isUsed = false;
+            canNotUse = false;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (GameManager.instance.currentTurnBSetItem > 0)
+        {
+            canNotUse = true;
+            changeColorBlack();
+        }
     }
 
     void OnDisable()
@@ -26,13 +41,12 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (isUsed == true)
+        if (isUsed == true || canNotUse==true || GameManager.instance.currentTurnBSetItem > 0)
         {
             return;
         }
         string spriteName = this.gameObject.GetComponent<Image>().sprite.name;
-        Color usedColor = new Color(100 / 255f, 100 / 255f, 100 / 255f);
-        this.gameObject.GetComponent<Image>().color = usedColor;
+        changeColorBlack();
         isUsed = true;
         RpcManager.instance.currentTurnUsedItemOfLocalPlayer = spriteName;
         if (spriteName == "운명공동체")
@@ -40,17 +54,33 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler
             RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.bind);
             RpcManager.instance.makeIsUsedBindTrue(GameManager.instance.localPlayerIndexWithOrder);
         }
-        else if (spriteName == "카드빼앗기")  //클릭하자마자 빼앗은 플레이어 UI에서 사라지는데 resultPanel 뜨면 사라지도록 수정 필요. 새로 추가된 아이템 UI 크기 조정 필요.
+        else if (spriteName == "카드빼앗기")
         {
-            int controlPlayerCardNum = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder].Count;
-            int stealCardIndex = Random.Range(0, controlPlayerCardNum);
-            RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.cardSteal); 
-            RpcManager.instance.cardSteal(GameManager.instance.localPlayerIndexWithOrder, stealCardIndex);
+            RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.cardSteal);
         }
         else
         {
             RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.timeSteal);
             RpcManager.instance.setIsThisTurnTimeStealTrue();
         }
+        GameManager.instance.currentTurnBSetItem++;
+    }
+
+    bool canStealCard()
+    {
+        if (DontDestroyObjects.instance.playerItems[GameManager.instance.localPlayerIndexWithOrder].Count == 4 || DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder].Count == 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    void changeColorBlack()
+    {
+        Color usedColor = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+        this.gameObject.GetComponent<Image>().color = usedColor;
     }
 }
