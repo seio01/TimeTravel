@@ -67,6 +67,7 @@ public class Player : MonoBehaviour
                     curIndex = 36;
                     manager.isLadder = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 } 
                 break;
             case 22:
@@ -78,6 +79,7 @@ public class Player : MonoBehaviour
                     curIndex = 48;
                     manager.isLadder = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
             case 53:
@@ -89,6 +91,7 @@ public class Player : MonoBehaviour
                     curIndex = 60;
                     manager.isLadder = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
             case 64:
@@ -100,6 +103,7 @@ public class Player : MonoBehaviour
                     curIndex = 73;
                     manager.isLadder = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
             case 76:
@@ -111,6 +115,7 @@ public class Player : MonoBehaviour
                     curIndex = 84;
                     manager.isLadder = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
         }
@@ -129,6 +134,7 @@ public class Player : MonoBehaviour
                     curIndex = 31;
                     manager.isTransport = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
             case 26:
@@ -139,6 +145,7 @@ public class Player : MonoBehaviour
                     curIndex = 39;
                     manager.isTransport = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
             case 30:
@@ -149,6 +156,7 @@ public class Player : MonoBehaviour
                     curIndex = 16;
                     manager.isTransport = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
             case 32:
@@ -159,6 +167,7 @@ public class Player : MonoBehaviour
                     curIndex = 81;
                     manager.isTransport = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
             case 38:
@@ -169,6 +178,7 @@ public class Player : MonoBehaviour
                     curIndex = 27;
                     manager.isTransport = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
             case 46:
@@ -179,6 +189,7 @@ public class Player : MonoBehaviour
                     curIndex = 47;
                     manager.isTransport = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
             case 62:
@@ -189,6 +200,7 @@ public class Player : MonoBehaviour
                     curIndex = 63;
                     manager.isTransport = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
             case 67:
@@ -199,6 +211,7 @@ public class Player : MonoBehaviour
                     curIndex = 68;
                     manager.isTransport = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
             case 80:
@@ -209,6 +222,7 @@ public class Player : MonoBehaviour
                     curIndex = 81;
                     manager.isTransport = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
             case 90:
@@ -219,6 +233,7 @@ public class Player : MonoBehaviour
                     curIndex = 91;
                     manager.isTransport = false;
                     manager.finishRound = true;
+                    GameManager.instance.UISmaller();
                 }
                 break;
            

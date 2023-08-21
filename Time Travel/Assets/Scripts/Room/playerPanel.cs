@@ -12,6 +12,7 @@ public class playerPanel : MonoBehaviourPunCallbacks
     public RoomManager roomManagerScript;
     public TMP_Text playerName;
     public TMP_Text MeTextObject;
+    public GameObject edge;
 
     // Start is called before the first frame update
 
@@ -20,6 +21,7 @@ public class playerPanel : MonoBehaviourPunCallbacks
         if (playerName.text == PhotonNetwork.LocalPlayer.NickName)
         {
             MeTextObject.gameObject.SetActive(true);
+            edge.SetActive(true);
         }
     }
 
