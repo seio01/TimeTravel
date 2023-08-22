@@ -43,12 +43,57 @@ public class Player : MonoBehaviour
                 curIndex++;
             }
 
-            //도착지점 도달시
+
+            if(curIndex == 10)
+            {
+                GameManager.instance.ChangeClothes("삼국시대");
+            }
+            else if (curIndex == 21)
+            {
+                GameManager.instance.Flip(true);
+            }
+            else if(curIndex == 22)
+            {
+                GameManager.instance.ChangeClothes("고려시대");
+                
+            }
+            else if(curIndex == 33)
+            {
+                GameManager.instance.Flip(false);
+            }
+            else if (curIndex == 42)
+            {
+                GameManager.instance.ChangeClothes("조선시대");
+            }
+            else if (curIndex == 45)
+            {
+                GameManager.instance.Flip(true);
+            }
+            else if (curIndex == 57)
+            {
+                GameManager.instance.Flip(false);
+            }
+            else if (curIndex == 69)
+            {
+                GameManager.instance.Flip(true);
+            }
+            else if (curIndex == 72)
+            {
+                GameManager.instance.ChangeClothes("근현대");
+            }
+            else if (curIndex == 81)
+            {
+                GameManager.instance.Flip(false);
+            }
+
+            //도착지점 도달시 게임 종료 
             if (curIndex == points.Length - 1)
             {
                 movingAllowed = false;
-                GameManager.instance.EndGame();
+                GameManager.instance.EndGame(PhotonNetwork.LocalPlayer.ToString());
             }
+
+
         }
 
     }
@@ -64,7 +109,8 @@ public class Player : MonoBehaviour
                 GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 36;
                 if(transform.position == points[36].transform.position)
                 {
-                    curIndex = 36;
+                    GameManager.instance.ChangeClothes("고려시대");
+                    curIndex = 37;
                     manager.isLadder = false;
                     manager.finishRound = true;
                     GameManager.instance.UISmaller();
@@ -76,7 +122,8 @@ public class Player : MonoBehaviour
 
                 if (transform.position == points[48].transform.position)
                 {
-                    curIndex = 48;
+                    GameManager.instance.ChangeClothes("조선시대");
+                    curIndex = 49;
                     manager.isLadder = false;
                     manager.finishRound = true;
                     GameManager.instance.UISmaller();
@@ -88,7 +135,8 @@ public class Player : MonoBehaviour
 
                 if (transform.position == points[60].transform.position)
                 {
-                    curIndex = 60;
+                    GameManager.instance.Flip(false);
+                    curIndex = 61;
                     manager.isLadder = false;
                     manager.finishRound = true;
                     GameManager.instance.UISmaller();
@@ -100,7 +148,9 @@ public class Player : MonoBehaviour
 
                 if (transform.position == points[73].transform.position)
                 {
-                    curIndex = 73;
+                    GameManager.instance.ChangeClothes("근현대");
+                    GameManager.instance.Flip(true);
+                    curIndex = 74;
                     manager.isLadder = false;
                     manager.finishRound = true;
                     GameManager.instance.UISmaller();
@@ -112,7 +162,8 @@ public class Player : MonoBehaviour
 
                 if (transform.position == points[84].transform.position)
                 {
-                    curIndex = 84;
+                    GameManager.instance.Flip(false);
+                    curIndex = 85;
                     manager.isLadder = false;
                     manager.finishRound = true;
                     GameManager.instance.UISmaller();
@@ -131,6 +182,8 @@ public class Player : MonoBehaviour
                 GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 30;
                 if (transform.position == points[30].transform.position)
                 {
+                    GameManager.instance.ChangeClothes("고려시대");
+                    GameManager.instance.Flip(true);
                     curIndex = 31;
                     manager.isTransport = false;
                     manager.finishRound = true;
@@ -142,6 +195,7 @@ public class Player : MonoBehaviour
                 GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 38;
                 if (transform.position == points[38].transform.position)
                 {
+                    GameManager.instance.Flip(false);
                     curIndex = 39;
                     manager.isTransport = false;
                     manager.finishRound = true;
@@ -153,6 +207,8 @@ public class Player : MonoBehaviour
                 GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 15;
                 if (transform.position == points[15].transform.position)
                 {
+                    GameManager.instance.ChangeClothes("삼국시대");
+                    GameManager.instance.Flip(false);
                     curIndex = 16;
                     manager.isTransport = false;
                     manager.finishRound = true;
@@ -164,6 +220,8 @@ public class Player : MonoBehaviour
                 GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 80;
                 if (transform.position == points[80].transform.position)
                 {
+                    GameManager.instance.ChangeClothes("근현대");
+                    GameManager.instance.Flip(false);
                     curIndex = 81;
                     manager.isTransport = false;
                     manager.finishRound = true;
@@ -175,6 +233,7 @@ public class Player : MonoBehaviour
                 GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 26;
                 if (transform.position == points[26].transform.position)
                 {
+                    GameManager.instance.Flip(true);
                     curIndex = 27;
                     manager.isTransport = false;
                     manager.finishRound = true;
@@ -182,55 +241,61 @@ public class Player : MonoBehaviour
                 }
                 break;
             case 46:
-                transform.position = points[46].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 46;
-                if (transform.position == points[46].transform.position)
+                transform.position = points[67].transform.position;
+                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 67;
+                if (transform.position == points[67].transform.position)
                 {
-                    curIndex = 47;
+                    GameManager.instance.Flip(false);
+                    curIndex = 48;
                     manager.isTransport = false;
                     manager.finishRound = true;
                     GameManager.instance.UISmaller();
                 }
                 break;
             case 62:
-                transform.position = points[62].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 62;
-                if (transform.position == points[62].transform.position)
+                transform.position = points[90].transform.position;
+                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 90;
+                if (transform.position == points[90].transform.position)
                 {
-                    curIndex = 63;
+                    GameManager.instance.ChangeClothes("근현대");
+                    curIndex = 91;
                     manager.isTransport = false;
                     manager.finishRound = true;
                     GameManager.instance.UISmaller();
                 }
                 break;
             case 67:
-                transform.position = points[67].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 67;
-                if (transform.position == points[67].transform.position)
+                transform.position = points[46].transform.position;
+                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 46;
+                if (transform.position == points[46].transform.position)
                 {
-                    curIndex = 68;
+                    GameManager.instance.Flip(true);
+                    curIndex = 47;
                     manager.isTransport = false;
                     manager.finishRound = true;
                     GameManager.instance.UISmaller();
                 }
                 break;
             case 80:
-                transform.position = points[80].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 80;
-                if (transform.position == points[80].transform.position)
+                transform.position = points[32].transform.position;
+                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 32;
+                if (transform.position == points[32].transform.position)
                 {
-                    curIndex = 81;
+                    GameManager.instance.ChangeClothes("고려시대");
+                    GameManager.instance.Flip(false);
+                    curIndex = 33;
                     manager.isTransport = false;
                     manager.finishRound = true;
                     GameManager.instance.UISmaller();
                 }
                 break;
             case 90:
-                transform.position = points[90].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 90;
-                if (transform.position == points[90].transform.position)
+                transform.position = points[62].transform.position;
+                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 62;
+                if (transform.position == points[62].transform.position)
                 {
-                    curIndex = 91;
+                    GameManager.instance.ChangeClothes("조선시대");
+                    curIndex = 63;
                     manager.isTransport = false;
                     manager.finishRound = true;
                     GameManager.instance.UISmaller();

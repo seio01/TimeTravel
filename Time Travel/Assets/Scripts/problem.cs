@@ -39,6 +39,8 @@ public class problem : MonoBehaviour
 
     bool isOtherPlayerUseTimeSteal;
 
+    bool usePassItem;
+
     public PhotonView PV;
     // Start is called before the first frame update
     void Awake()
@@ -57,6 +59,7 @@ public class problem : MonoBehaviour
 
     void OnEnable()
     {
+        usePassItem = false;
         getPlayerNextPosition();
         resultText = resultPanel.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
         Debug.Log(playerPosition);
@@ -77,9 +80,13 @@ public class problem : MonoBehaviour
                 GameManager.instance.isMovableWithBind = true;
             }
             GameManager.instance.MovePlayer();
-            //추가
-            GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].correctCount++;
-            GameManager.instance.UpdateGaugeImg();
+
+            if (!usePassItem) //패스했을땐 correctcount증가x
+            {
+                GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].correctCount++;
+                GameManager.instance.UpdateGaugeImg();
+            }
+            
 
         }
         else
@@ -361,6 +368,7 @@ public class problem : MonoBehaviour
             resultText.text += "정답은 " + correctAnswer + "번이었습니다.";
         }
         isPlayerCorrect = true;
+        usePassItem = true;
     }
 
     public void getPlayerNextPosition()

@@ -627,7 +627,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 08cbdc60e078ab248a27920f6ca19ad2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1244,7 +1244,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: eeea569fe682b61449bb574acca430a1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -5634,7 +5634,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b1de9694b15d3be40976192782586e51, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -7211,6 +7211,30 @@ MonoBehaviour:
   - {fileID: 1177020313}
   - {fileID: 70664437}
   - {fileID: 262027272}
+  player1Clothes:
+  - {fileID: 21300000, guid: b1f09d2cc6ae56c40b0668adcce61e9a, type: 3}
+  - {fileID: 21300000, guid: a7e2f1a4dcc19db4493f0822b742f927, type: 3}
+  - {fileID: 21300000, guid: c547d60e4bcddfd4b987a53d5502a17c, type: 3}
+  - {fileID: 21300000, guid: 34d7507de516ff84ba6d75518b65173b, type: 3}
+  - {fileID: 21300000, guid: b025219836871094984eb2e627ff1e78, type: 3}
+  player2Clothes:
+  - {fileID: 21300000, guid: b1de9694b15d3be40976192782586e51, type: 3}
+  - {fileID: 21300000, guid: fdbb16d0cbca0d042b0b4f8d20382729, type: 3}
+  - {fileID: 21300000, guid: c522eba64448d45498c5a87680f2555d, type: 3}
+  - {fileID: 21300000, guid: b07e3eaa221c41b418538faa296ced9d, type: 3}
+  - {fileID: 21300000, guid: a2a376c62b0f67c439cfd990971392ba, type: 3}
+  player3Clothes:
+  - {fileID: 21300000, guid: 08cbdc60e078ab248a27920f6ca19ad2, type: 3}
+  - {fileID: 21300000, guid: 86ac23b5dcf35ab4ebdb1ceb25e6d51d, type: 3}
+  - {fileID: 21300000, guid: 8de7eb68d82bb9e4e95de8f175eb0528, type: 3}
+  - {fileID: 21300000, guid: 9f702c64c067679478332d6099144a20, type: 3}
+  - {fileID: 21300000, guid: ed4e8ca200722ed4989b6fa0aa56ffb8, type: 3}
+  player4Clothes:
+  - {fileID: 21300000, guid: eeea569fe682b61449bb574acca430a1, type: 3}
+  - {fileID: 21300000, guid: b3fee6624b996bf44b0dcd19feb004b9, type: 3}
+  - {fileID: 21300000, guid: 600dc6f2cbc188e4d9639f25e6c3fb58, type: 3}
+  - {fileID: 21300000, guid: 387603bccf52e984895a80f10d401eb1, type: 3}
+  - {fileID: 21300000, guid: f5063f9764f8e7d4b9b2cb03d62dcc47, type: 3}
   newDiceSide: 0
   timerOn: 0
   isLadder: 0
@@ -7220,6 +7244,7 @@ MonoBehaviour:
   correctCount: 0
   secondRoll: 0
   isOver: 0
+  isFlip: 0
   canvas: {fileID: 0}
   problemCanvas: {fileID: 1323493764}
   dice: {fileID: 195150733}
