@@ -19,6 +19,8 @@ public class playerInformationUI : MonoBehaviourPunCallbacks
         if (PhotonNetwork.LocalPlayer.NickName == playerName)
         {
             transform.GetChild(5).gameObject.SetActive(true);
+            //outline¼³Á¤
+            transform.GetChild(6).gameObject.SetActive(true);
         }
     }
 
