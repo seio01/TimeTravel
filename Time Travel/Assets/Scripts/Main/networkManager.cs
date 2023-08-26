@@ -9,6 +9,7 @@ using Photon.Realtime;
 
 public class networkManager : MonoBehaviourPunCallbacks
 {
+    public static networkManager instance;
     // Start is called before the first frame update
     public int maxPlayer;
     int playerNums;
@@ -24,7 +25,17 @@ public class networkManager : MonoBehaviourPunCallbacks
     string roomPassword;
     string enterRoomPassword;
 
+    public GameObject changeNickName;
+    public bool sameNickName;
+
     public Image roomEnterPanel;
+
+
+    void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
 
     void Start()
     {
@@ -94,6 +105,7 @@ public class networkManager : MonoBehaviourPunCallbacks
         }
     }
 
+
     //랜덤 룸 입장 실패시 새로운 랜덤 룸 생성
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
@@ -150,9 +162,30 @@ public class networkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        connectionInfoText.text = "방 참가 성공.";
-        SceneManager.LoadScene("Room"); 
+        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.NickName == PhotonNetwork.LocalPlayer.NickName && player != PhotonNetwork.LocalPlayer)
+            {
+                sameNickName = true;
+                changeNickName.SetActive(true);
+                PhotonNetwork.LeaveRoom();
+                break;
+            }
+        }
 
+        if (!sameNickName)
+        {
+            connectionInfoText.text = "방 참가 성공.";
+            SceneManager.LoadScene("Room");
+        }
+        
+
+    }
+
+    public void ClickCancelBtn()
+    {
+        changeNickName.SetActive(false);
+        sameNickName = false;
     }
 
 }
