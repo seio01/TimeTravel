@@ -39,7 +39,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public PhotonView PV;
 
-    public TMP_Text test;
     // Start is called before the first frame update
     void Awake()
     {
@@ -134,7 +133,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             items[i].sprite = itemImg[ran];
             itemList.Add(ran); 
         }
-        ran = Random.Range(3, 6);
+        ran = Random.Range(4, 5);
         items[3].sprite = itemImg[ran];
         itemList.Add(ran);
 

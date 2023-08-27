@@ -88,18 +88,13 @@ public class BsetItemUsePanel : MonoBehaviour
 
     bool checkIfAllDoesntHaveBsetCard()
     {
-        int controlPlayer = -1;
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
-            if (PhotonNetwork.PlayerList[i] == GameManager.instance.controlPlayer)
+            if (i  == GameManager.instance.controlPlayerIndexWithOrder)
             {
-                controlPlayer = i;
-                break;
+                continue;
             }
-        }
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
-        {
-            if (PhotonNetwork.PlayerList[i] == GameManager.instance.controlPlayer)
+            if (quitInTheMiddle.instance.outPlayerIndex.Contains(i))
             {
                 continue;
             }
@@ -113,7 +108,7 @@ public class BsetItemUsePanel : MonoBehaviour
             }
             else if (DontDestroyObjects.instance.playerItems[i].Contains(DontDestroyObjects.items.cardSteal) == true)
             {
-                if (DontDestroyObjects.instance.playerItems[i].Count == 4 || DontDestroyObjects.instance.playerItems[controlPlayer].Count == 0)
+                if (DontDestroyObjects.instance.playerItems[i].Count == 4 || DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder].Count == 0)
                 {
                     continue;
                 }
