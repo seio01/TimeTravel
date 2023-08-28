@@ -68,8 +68,30 @@ public class RpcManager : MonoBehaviour
                     GameManager.instance.isMovableWithBind = false;
                     GameManager.instance.updatePlayerInformationUI(bindPlayerIndex);
                     GameManager.instance.finishRound = true;
+                    GameManager.instance.nextTurn = true;
                 }
             }
+        }
+    }
+
+
+    public void checkPositionAndMoveBindPlayer(int num)
+    {
+        isMovableWithBind = true;
+        testTMP.text = num.ToString();
+        if (num == 7 || num == 22 || num == 53 || num == 64 || num == 76)
+        {
+            GameManager.instance.moveBindPlayer(bindPlayerIndex);
+            GameManager.instance.isLadder = true;
+        }
+        else if (num == 15 || num == 30 || num == 26 || num == 38 || num == 32 || num == 80 || num == 46 || num == 67 || num == 62 || num == 90)
+        {
+            GameManager.instance.moveBindPlayer(bindPlayerIndex);
+            GameManager.instance.isTransport = true;
+        }
+        else
+        {
+            GameManager.instance.moveBindPlayer(bindPlayerIndex);
         }
     }
 
@@ -183,11 +205,11 @@ public class RpcManager : MonoBehaviour
     [PunRPC]
     void eraseItemToOthers(int index, string itemName)
     {
-        if (currentTurnUsedItemOfLocalPlayer == "bind")
+        if (itemName == "운명공동체" || itemName == "bind")
         {
             DontDestroyObjects.instance.playerItems[index].Remove(DontDestroyObjects.items.bind);
         }
-        else if (currentTurnUsedItemOfLocalPlayer == "cardSteal")
+        else if (itemName == "카드빼앗기" || itemName=="cardSteal")
         {
             DontDestroyObjects.instance.playerItems[index].Remove(DontDestroyObjects.items.cardSteal);
         }
@@ -256,9 +278,13 @@ public class RpcManager : MonoBehaviour
     {
         if (GameManager.instance.controlPlayer == PhotonNetwork.LocalPlayer)
         {
+            testTMP.text = "주사위 setTrue\n";
             PV.RPC("setDiceTrueToOthers", RpcTarget.AllViaServer);
         }
-
+        else
+        {
+            testTMP.text = "오류!\n";
+        }
     }
 
     [PunRPC]
