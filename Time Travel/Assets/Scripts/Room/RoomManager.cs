@@ -73,7 +73,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 playerOrderList.Add(i);
             }
         }
-        
+
+
 
     }
 
@@ -87,6 +88,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
+        //same nickname
+        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        {
+            if (newPlayer.NickName == player.NickName && player != newPlayer)
+            {
+                Debug.Log("same nickname");
+                return;
+            }
+        }
+
         if (PhotonNetwork.IsMasterClient)
         {
             if(readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)
@@ -111,6 +122,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
+        //same nickname
+        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        {
+            if (otherPlayer.NickName == player.NickName && player != otherPlayer)
+            {
+                Debug.Log("leave same nickname");
+                return;
+            }
+        }
+
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
             if (playerListImg[i].GetComponentInChildren<TMP_Text>().text == otherPlayer.NickName)
