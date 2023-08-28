@@ -30,7 +30,6 @@ public class networkManager : MonoBehaviourPunCallbacks
     public Image roomEnterPanel;
     public Main mainScript;
 
-    public Main mainScript;
     void Start()
     {
         Screen.SetResolution(1920, 1080, false);

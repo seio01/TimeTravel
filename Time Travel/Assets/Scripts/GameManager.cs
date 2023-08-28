@@ -266,7 +266,26 @@ public class GameManager : MonoBehaviour
 
     public void RoundStart()
     {
-
+        if (checkControlPlayerOut() == true)
+        {
+            controlPlayerIndexWithOrder++;
+            if (controlPlayerIndexWithOrder == PhotonNetwork.CurrentRoom.MaxPlayers)
+            {
+                controlPlayerIndexWithOrder = 0;
+                for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+                {
+                    if (checkControlPlayerOut() == true)
+                    {
+                        controlPlayerIndexWithOrder++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            controlPlayer = DontDestroyObjects.instance.playerListWithOrder[controlPlayerIndexWithOrder];
+        }
         nextTurn = false;
         StartCoroutine(UIBiggerRoutine(true));
         //¼öÁ¤..?
@@ -279,6 +298,19 @@ public class GameManager : MonoBehaviour
         finishRound = false;
         StartCoroutine(RoundStartRoutine());
     }
+
+    bool checkControlPlayerOut()
+    {
+        if (quitInTheMiddle.instance.outPlayerIndex.Contains(controlPlayerIndexWithOrder))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 
     IEnumerator RoundStartRoutine()
     {
