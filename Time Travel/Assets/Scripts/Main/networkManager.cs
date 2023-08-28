@@ -9,7 +9,6 @@ using Photon.Realtime;
 
 public class networkManager : MonoBehaviourPunCallbacks
 {
-    public static networkManager instance;
     // Start is called before the first frame update
     public int maxPlayer;
     int playerNums;
@@ -29,13 +28,7 @@ public class networkManager : MonoBehaviourPunCallbacks
     public bool sameNickName;
 
     public Image roomEnterPanel;
-
-
-    void Awake()
-    {
-        if (instance == null)
-            instance = this;
-    }
+    public Main mainScript;
 
     void Start()
     {
@@ -52,8 +45,16 @@ public class networkManager : MonoBehaviourPunCallbacks
     {
         if(nickNameInput.text != "")
         {
-            for (int i = 0; i < joinButton.Length; i++)
-                joinButton[i].interactable = true; //룸 접속 버튼 활성화
+            if (mainScript.isBanned == 1)
+            {
+                for (int i = 0; i < joinButton.Length; i++)
+                    joinButton[i].interactable = false;
+            }
+            else
+            {
+                for (int i = 0; i < joinButton.Length; i++)
+                    joinButton[i].interactable = true; //룸 접속 버튼 활성화
+            }
         }
 
         else if (nickNameInput.text == "")
