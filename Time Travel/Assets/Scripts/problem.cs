@@ -278,7 +278,7 @@ public class problem : MonoBehaviour
         List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
         if (playerCards.Contains(DontDestroyObjects.items.hint))
         {
-            TMP_Text hintText = hintPanel.transform.GetChild(0).GetComponent<TMP_Text>();
+           TMP_Text hintText = hintPanel.transform.GetChild(0).GetComponent<TMP_Text>();
             hintText.text = hintString;
             hintPanel.SetActive(true);
             RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.hint);
@@ -333,6 +333,7 @@ public class problem : MonoBehaviour
         {
             return;
         }
+        problemPassButton.gameObject.SetActive(false);
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.pass);
         GameManager.instance.currentTurnASetItem = 1;
         PV.RPC("passProblemToOthers", RpcTarget.AllViaServer);
