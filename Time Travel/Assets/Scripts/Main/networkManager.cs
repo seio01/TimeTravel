@@ -26,7 +26,6 @@ public class networkManager : MonoBehaviourPunCallbacks
 
     public Image roomEnterPanel;
 
-    public Main mainScript;
     void Start()
     {
         Screen.SetResolution(1920, 1080, false);
@@ -42,16 +41,8 @@ public class networkManager : MonoBehaviourPunCallbacks
     {
         if(nickNameInput.text != "")
         {
-            if (mainScript.isBanned == 1)
-            {
-                for (int i = 0; i < joinButton.Length; i++)
-                    joinButton[i].interactable = false;
-            }
-            else
-            {
-                for (int i = 0; i < joinButton.Length; i++)
-                    joinButton[i].interactable = true; //룸 접속 버튼 활성화
-            }
+            for (int i = 0; i < joinButton.Length; i++)
+                joinButton[i].interactable = true; //룸 접속 버튼 활성화
         }
 
         else if (nickNameInput.text == "")
