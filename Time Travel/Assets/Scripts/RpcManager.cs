@@ -68,7 +68,8 @@ public class RpcManager : MonoBehaviour
                     GameManager.instance.isMovableWithBind = false;
                     GameManager.instance.updatePlayerInformationUI(bindPlayerIndex);
                     GameManager.instance.finishRound = true;
-                    GameManager.instance.nextTurn = true;
+                    GameManager.instance.UISmaller();
+                    //GameManager.instance.nextTurn = true;
                 }
             }
         }
