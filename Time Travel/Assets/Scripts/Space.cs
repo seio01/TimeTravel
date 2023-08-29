@@ -25,6 +25,7 @@ public class Space : MonoBehaviour
         switch (category)
         {
             case "Nothing":
+            case "Finish":
                 manager.MovePlayer();
                 manager.isLadder = false;
                 manager.isTransport = false;

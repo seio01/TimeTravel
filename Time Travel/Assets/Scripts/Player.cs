@@ -89,8 +89,12 @@ public class Player : MonoBehaviour
             //도착지점 도달시 게임 종료 
             if (curIndex == points.Length - 1)
             {
-                movingAllowed = false;
-                GameManager.instance.EndGame(PhotonNetwork.LocalPlayer.ToString());
+                if(transform.position == points[points.Length - 1].transform.position)
+                {
+                    movingAllowed = false;
+                    GameManager.instance.EndGame(PhotonNetwork.LocalPlayer.ToString());
+                }
+                
             }
 
 

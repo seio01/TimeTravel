@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
         playerStartPoint = new int[PhotonNetwork.CurrentRoom.PlayerCount];
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
-            playerStartPoint[i] = 0;
+            playerStartPoint[i] = 0; 
         }
         setPlayerInformationUIs();
         setPlayerPieces();
@@ -469,6 +469,15 @@ public class GameManager : MonoBehaviour
             case 90:
                 spaceCategory = "Portal";
                 spaceText.text = "현재 칸은 포털 칸입니다.\n 같은 색깔의 포털로 이동합니다.";
+                break;
+            case 101:
+            case 102:
+            case 103:
+            case 104:
+            case 105:
+            case 106:
+                spaceCategory = "Finish";
+                spaceText.text = "도착지점에 도달했습니다.";
                 break;
             default:
                 spaceCategory = "Problem";
