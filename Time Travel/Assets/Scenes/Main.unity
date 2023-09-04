@@ -6347,7 +6347,8 @@ MonoBehaviour:
     \uD55C\uBC29\uD5A5(\uB0AE\uC740 \uCE78\uC5D0\uC11C \uB192\uC740 \uCE78)\uC73C\uB85C\uB9CC
     \uC774\uB3D9\uD560 \uC218 \uC788\uB2E4\n\n\uD3EC\uD138\uCE78 : \uAC19\uC740 \uC0C9\uC758
     \uD3EC\uD138\uC774 \uC788\uB294 \uCE78\uC73C\uB85C \uBC14\uB85C \uC774\uB3D9\uAC00\uB2A5\uD558\uB2E4\n-
-    \uC591\uBC29\uD5A5\uC73C\uB85C \uC774\uB3D9\uD560 \uC218 \uC788\uB2E4"
+    \uC591\uBC29\uD5A5\uC73C\uB85C \uC774\uB3D9\uD560 \uC218 \uC788\uB2E4\n\n\uBE48\uCE78
+    : \uC544\uBB34 \uC77C\uB3C4 \uC77C\uC5B4\uB098\uC9C0 \uC54A\uB294\uB2E4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e2f9bc14bda828742b0138f02816abb2, type: 2}
   m_sharedMaterial: {fileID: -3097710842360043048, guid: e2f9bc14bda828742b0138f02816abb2, type: 2}
@@ -12297,7 +12298,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC0C1\uB300 \uD50C\uB808\uC774\uC5B4\uAC00\n\uBB38\uC81C\uB97C \uB9DE\uD78C\uACBD\uC6B0\n\uAC19\uC774
+  m_text: "\uC0C1\uB300 \uD50C\uB808\uC774\uC5B4\uAC00 \uBB38\uC81C\uB97C \n\uB9DE\uD78C\uACBD\uC6B0
+    \uC0C1\uB300\uBC29\uC774 \n\uC774\uB3D9\uD558\uB294 \uB9CC\uD07C \uAC19\uC774
     \uC774\uB3D9"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e2f9bc14bda828742b0138f02816abb2, type: 2}
