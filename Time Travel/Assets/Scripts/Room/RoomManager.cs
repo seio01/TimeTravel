@@ -20,6 +20,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public GameObject timeText;
     public GameObject setOrderPanel;
     public GameObject gameStartText;
+    public GameObject forcedStartTimeText;
 
     public Button pickCardBtn;
     public Button leaveRoomBtn;
@@ -38,6 +39,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public bool setTimer;
 
     public PhotonView PV;
+    public forcedStartTimer timerScript;
 
     // Start is called before the first frame update
     void Awake()
@@ -74,9 +76,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
 
-
-
     }
+
 
     public void Timer()
     {
@@ -84,7 +85,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         timeText.SetActive(true);
         infoText.SetActive(true);
     }
-
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
@@ -145,6 +145,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void PickItems()
     {
         setTimer = false;
+        timeText.SetActive(false);
         pickCardBtn.interactable = false;
         int ran;
         //아이템 뽑기
@@ -167,8 +168,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
         //아이템 뽑기 완료하면 자동 레디되게
         playerListImg[localPlayerIndex].transform.transform.Find("Ready Text").gameObject.SetActive(true);
         playerListImg[localPlayerIndex].GetComponent<playerPanel>().setReadyToOther(localPlayerIndex);
-        //leaveButton.interactable = false;
-        
+        //leaveButton.interactable = false; 주석 풀기
+
+
+        // 레디했는데 인원이 max인원보다 적을 경우 60초 기다림. 새로운 사람이 들어왔을 때는 갱신 x, ready했을 때만 갱신.
+        //15초 이하 남기고 사람 들어왔을 때에는 갱신 없이 마지막 인원의 ready or 나가기 선택 기다리고 게임 시작.
+        if (PhotonNetwork.CurrentRoom.PlayerCount < PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            PV.RPC("checkTime", RpcTarget.AllViaServer);
+        }
     }
 
 
@@ -234,16 +242,26 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     IEnumerator StartGameRoutine()
     {
+        forcedStartTimeText.SetActive(false);
         //순서 정하기
         if (PhotonNetwork.IsMasterClient)
         {
+            //max 안원수와 맞지 않는다면 list를 인원 수에 맞추기.
+            if (RoomManager.instance.readyCounts != PhotonNetwork.CurrentRoom.MaxPlayers)
+            {
+                int diff = PhotonNetwork.CurrentRoom.MaxPlayers - RoomManager.instance.readyCounts;
+                for (int i = 1; i <= diff; i++)
+                {
+                    playerOrderList.RemoveAt(PhotonNetwork.CurrentRoom.MaxPlayers - i);
+                }
+            }
+
             playerOrderList = ShuffleOrder(playerOrderList);
             UpdateListToOthers();
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
         
         yield return new WaitForSeconds(2f);
-
         //아이템 뽑은 것 다른 사람들에게 전송.
         UpdateItemListToOthers();
         gameStartText.SetActive(true);
@@ -260,6 +278,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             items[i].gameObject.SetActive(false);
         }
+        Destroy(DontDestroyObjects.instance);
         PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene("Main");
     }
@@ -288,5 +307,39 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
         
+    }
+
+    [PunRPC]
+    void updateTimer()
+    {
+        forcedStartTimeText.SetActive(false);
+        forcedStartTimeText.SetActive(true);
+    }
+
+    [PunRPC]
+    void checkTime()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        else
+        {
+            if (timerScript.time > 15)
+            {
+                PV.RPC("updateTimer", RpcTarget.AllViaServer);
+            }
+            else
+            {
+                PV.RPC("syncTimer", RpcTarget.Others, timerScript.time);
+            }
+        }
+    }
+
+    [PunRPC]
+    void syncTimer(float masterClientTime)
+    {
+        forcedStartTimeText.SetActive(true);
+        timerScript.time = masterClientTime;
     }
 }

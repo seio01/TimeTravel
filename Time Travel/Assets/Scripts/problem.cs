@@ -288,6 +288,7 @@ public class problem : MonoBehaviour
            TMP_Text hintText = hintPanel.transform.GetChild(0).GetComponent<TMP_Text>();
             hintText.text = hintString;
             hintPanel.SetActive(true);
+            hintButton.gameObject.SetActive(false);
             RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.hint);
             GameManager.instance.currentTurnASetItem = 1;
         }

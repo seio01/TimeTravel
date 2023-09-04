@@ -67,6 +67,9 @@ MonoBehaviour:
   - setReadyToMasterClient
   - ShowEndPanelToOther
   - ShowEndPanelToOthers
+  - updateTimer
+  - checkTime
+  - syncTimer
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

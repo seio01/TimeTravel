@@ -117,7 +117,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     public void changeControlPlayerIndex()
     {
         GameManager.instance.controlPlayerIndexWithOrder++;
-        if (GameManager.instance.controlPlayerIndexWithOrder == PhotonNetwork.CurrentRoom.MaxPlayers)
+        if (GameManager.instance.controlPlayerIndexWithOrder == GameManager.instance.initialPlayerNum)
         {
             GameManager.instance.controlPlayerIndexWithOrder = 0;
         }

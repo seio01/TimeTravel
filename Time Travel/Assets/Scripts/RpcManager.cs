@@ -50,6 +50,7 @@ public class RpcManager : MonoBehaviour
     {
         if (isMovableWithBind == true)
         {
+            GameManager.instance.testTMP.text = bindPlayerIndex.ToString();
             if (GameManager.instance.player[bindPlayerIndex].curIndex > GameManager.instance.playerStartPoint[bindPlayerIndex] + GameManager.instance.newDiceSide)
             {
                 GameManager.instance.player[bindPlayerIndex].movingAllowed = false;

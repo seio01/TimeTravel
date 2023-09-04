@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
     public int currentTurnBSetItem;
     public bool AllDoesntHaveBsetCard;
 
+    public int initialPlayerNum;
     void Awake()
     {
         if (instance == null)
@@ -79,6 +80,7 @@ public class GameManager : MonoBehaviour
         {
             playerStartPoint[i] = 0;
         }
+        initialPlayerNum = PhotonNetwork.CurrentRoom.PlayerCount;
         setPlayerInformationUIs();
         setPlayerPieces();
         setLocalPlayerIndexWithOrder();
@@ -106,6 +108,18 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
+        testTMP.text = "";
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            List<DontDestroyObjects.items> test = DontDestroyObjects.instance. playerItems[i];
+            for (int j = 0; j < test.Count; j++)
+            {
+                testTMP.text += test[j].ToString()+" ";
+            }
+            testTMP.text += "\n";
+        }
+        */
         //게임 종료
         if (isOver)
             return;
@@ -269,10 +283,10 @@ public class GameManager : MonoBehaviour
         if (checkControlPlayerOut() == true)
         {
             controlPlayerIndexWithOrder++;
-            if (controlPlayerIndexWithOrder == PhotonNetwork.CurrentRoom.MaxPlayers)
+            if (controlPlayerIndexWithOrder == initialPlayerNum)
             {
                 controlPlayerIndexWithOrder = 0;
-                for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+                for (int i = 0; i < initialPlayerNum; i++)
                 {
                     if (checkControlPlayerOut() == true)
                     {
@@ -489,10 +503,10 @@ public class GameManager : MonoBehaviour
         if(spaceCategory == "Problem")
         {
             activeItemUsePanel();
-            yield return new WaitForSeconds(3.0f);
+            yield return new WaitForSeconds(1.0f);
             if (AllDoesntHaveBsetCard == false)
             {
-                yield return new WaitForSeconds(3.0f);
+                yield return new WaitForSeconds(5.0f);
                 activeItemUseResultPanel();
                 yield return new WaitForSeconds(3.5f);
             }
@@ -556,7 +570,7 @@ public class GameManager : MonoBehaviour
 
     void setLocalPlayerIndexWithOrder()
     {
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        for (int i = 0; i < initialPlayerNum; i++)
         {
             if (DontDestroyObjects.instance.playerListWithOrder[i] == PhotonNetwork.LocalPlayer)
             {

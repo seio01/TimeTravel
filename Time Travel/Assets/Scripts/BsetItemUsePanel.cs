@@ -29,10 +29,10 @@ public class BsetItemUsePanel : MonoBehaviour
     {
         if (checkIfAllDoesntHaveBsetCard() == true)
         {
-            useOrNotText.text = "모든 플레이어가 쓸 수 있는 카드가 없습니다.. \n 3초 후 다음 화면으로 전환됩니다."; //카드 4개 있을 때 카드 스틸 있는 경우도 포함하기.
-            time = 2;
+            useOrNotText.text = "모든 플레이어가 쓸 수 있는 카드가 없습니다.. \n";
             GameManager.instance.AllDoesntHaveBsetCard = true;
-            StartCoroutine("setTimer");
+            TimeText.text = "";
+            Invoke("setActiveFalse", 1.5f);
         }
         else
         {
@@ -88,7 +88,7 @@ public class BsetItemUsePanel : MonoBehaviour
 
     bool checkIfAllDoesntHaveBsetCard()
     {
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        for (int i = 0; i < GameManager.instance.initialPlayerNum; i++)
         {
             if (i  == GameManager.instance.controlPlayerIndexWithOrder)
             {
@@ -129,6 +129,11 @@ public class BsetItemUsePanel : MonoBehaviour
             time -= 1;
             yield return new WaitForSeconds(1.0f);
         }
+        this.gameObject.SetActive(false);
+    }
+
+    void setActiveFalse()
+    {
         this.gameObject.SetActive(false);
     }
 }

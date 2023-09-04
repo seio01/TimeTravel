@@ -33,7 +33,7 @@ public class playerPanel : MonoBehaviourPunCallbacks
 
     public void setReadyToOther(int index)
     {
-        PV.RPC("setReady", RpcTarget.AllBuffered, index);
+        PV.RPC("setReady", RpcTarget.AllViaServer, index);
     }
 
 
