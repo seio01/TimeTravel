@@ -104,7 +104,8 @@ public class problem : MonoBehaviour
         getInfoFromCSV();
         setImage();
         controlButtons();
-        GameManager.instance.testTMP.text = answerData[problemID - 1]["답"].ToString();
+        GameManager.instance.testTMP.text = "problemID: " + problemID.ToString() + "\n"+" 이전 세대 문제들: " + prevDynasty.ToString()+"\n";
+        GameManager.instance.testTMP.text += "시대에서 "+ problemData[problemID - 1 ]["ID"].ToString() + "답:  " +answerData[problemID - 1]["답"].ToString();
         if (problemType == "ox")
         {
             if (GameManager.instance.isThisTurnTimeSteal == true)

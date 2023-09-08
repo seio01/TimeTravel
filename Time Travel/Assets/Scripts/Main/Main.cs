@@ -23,6 +23,7 @@ public class Main : MonoBehaviour
 
     void Awake()
     {
+        Screen.SetResolution(1920, 1080, false);
         isSave = PlayerPrefs.HasKey("isBanned");
         if (isSave == false)
         {
