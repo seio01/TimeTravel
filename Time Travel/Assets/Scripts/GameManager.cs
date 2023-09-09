@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
     public Sprite[] player2Clothes;
     public Sprite[] player3Clothes;
     public Sprite[] player4Clothes;
+
+    public Sprite[] playerClothes;
+
     public int newDiceSide;
     public bool timerOn;
     public bool isLadder;
@@ -28,6 +31,8 @@ public class GameManager : MonoBehaviour
     public int correctCount;
     public bool secondRoll;//정답 5번일때 
     public bool isOver;
+    public int nowMovingPlayerIndex;
+
 
     [Header("UI")]
     public GameObject canvas;
@@ -52,6 +57,8 @@ public class GameManager : MonoBehaviour
     public string winner;
     public TMP_Text winnerName;
     public bool nextTurn;
+
+    public AudioClip newBGMClip;
 
     public TMP_Text testTMP;
     public int controlPlayerIndexWithOrder;
@@ -78,13 +85,17 @@ public class GameManager : MonoBehaviour
         playerStartPoint = new int[PhotonNetwork.CurrentRoom.PlayerCount];
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
-            playerStartPoint[i] = 0; 
+            playerStartPoint[i] = 0;  
         }
         initialPlayerNum = PhotonNetwork.CurrentRoom.PlayerCount;
         setPlayerInformationUIs();
         setPlayerPieces();
         setLocalPlayerIndexWithOrder();
         initVariables();
+        //SoundManager.instance.bgmPlayer.Stop();
+        SoundManager.instance.bgmPlayer.clip = newBGMClip;
+        //SoundManager.instance.bgmPlayer.volume = 0.3f;
+        SoundManager.instance.bgmPlayer.Play();
     }
 
     void initVariables()
@@ -127,7 +138,18 @@ public class GameManager : MonoBehaviour
         if (player[controlPlayerIndexWithOrder].curIndex > playerStartPoint[controlPlayerIndexWithOrder] + newDiceSide)
         {
             player[controlPlayerIndexWithOrder].movingAllowed = false;
+
+            for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+            {
+                if (i != nowMovingPlayerIndex && player[nowMovingPlayerIndex].transform == player[i].transform)
+                {
+                    //같은 자리일 경우
+                    Debug.Log("same position");
+                    player[nowMovingPlayerIndex].transform.position += new Vector3(0, 0.5f, 0);
+                }
+            }
             playerStartPoint[controlPlayerIndexWithOrder] = player[controlPlayerIndexWithOrder].curIndex - 1;
+
 
             if (secondRoll)
             {
@@ -329,8 +351,9 @@ public class GameManager : MonoBehaviour
     IEnumerator RoundStartRoutine()
     {
         startRoundText.text = controlPlayer.NickName + "님 플레이를 시작합니다."; //문구 수정
+        SoundManager.instance.SoundPlayer("ShowPanel1");
         startRoundPanel.SetActive(true);
-
+        
         yield return new WaitForSeconds(1.5f);
 
         startRoundPanel.SetActive(false);
@@ -341,6 +364,8 @@ public class GameManager : MonoBehaviour
         timerOn = true;
     }
 
+    
+
     IEnumerator RollDiceAndGetItem()
     {
         secondRoll = true;
@@ -348,6 +373,7 @@ public class GameManager : MonoBehaviour
         {
             int itemCount = DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Count;
             spaceText.text = "랜덤한 아이템 하나를 추가로 획득합니다!";
+            SoundManager.instance.SoundPlayer("ShowPanel1");
             space.SetActive(true);
 
             int ran = Random.Range(0, 6);
@@ -397,6 +423,7 @@ public class GameManager : MonoBehaviour
         }
         spaceText.text = "주사위를 한번 더 굴릴 수 있습니다!";
         space.SetActive(true);
+        SoundManager.instance.SoundPlayer("ShowPanel1");
 
         yield return new WaitForSeconds(1.5f);
         space.SetActive(false);
@@ -413,11 +440,13 @@ public class GameManager : MonoBehaviour
     public void MovePlayer()
     {
         player[controlPlayerIndexWithOrder].movingAllowed = true;
+        nowMovingPlayerIndex = controlPlayerIndexWithOrder;
     }
 
     public void moveBindPlayer(int bindPlayerIndex)
     {
         player[bindPlayerIndex].movingAllowed = true;
+        nowMovingPlayerIndex = bindPlayerIndex;
     }
         
     //check
@@ -499,7 +528,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
         space.SetActive(true);
-
+        SoundManager.instance.SoundPlayer("ShowPanel1");
         StartCoroutine(DoActionRoutine());
         
     }
@@ -542,10 +571,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-
-    
-
     public void EndGame(string name)
     {
         winner = name;
@@ -566,8 +591,16 @@ public class GameManager : MonoBehaviour
 
     public void ReturnToLobby()
     {
+        SoundManager.instance.SoundPlayer("Button");
         PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene("Main");
+    }
+
+    public void QuitGame()
+    {
+        SoundManager.instance.SoundPlayer("Button");
+        PhotonNetwork.LeaveRoom();
+        Application.Quit();
     }
 
 
@@ -592,11 +625,13 @@ public class GameManager : MonoBehaviour
     public void activeItemUsePanel()
     {
         itemUsePanel.SetActive(true);
+        SoundManager.instance.SoundPlayer("ShowPanel2");
     }
 
     public void activeItemUseResultPanel()
     {
         itemUseResultPanel.SetActive(true);
+        SoundManager.instance.SoundPlayer("ShowPanel2");
     }
 
     
@@ -698,106 +733,110 @@ public class GameManager : MonoBehaviour
 
     public void ChangeClothes(string age)
     {
+        SoundManager.instance.SoundPlayer("ChangeClothes");
         switch (age)
         {
             case "삼국시대":
-                if(controlPlayerIndexWithOrder == 0)
+                if (nowMovingPlayerIndex == 0)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[1];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[1];
                 }
-                else if (controlPlayerIndexWithOrder == 1)
+                else if (nowMovingPlayerIndex == 1)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player2Clothes[1];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player2Clothes[1];
                 }
-                else if (controlPlayerIndexWithOrder == 2)
+                else if (nowMovingPlayerIndex == 2)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player3Clothes[1];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player3Clothes[1];
                 }
-                else if (controlPlayerIndexWithOrder == 3)
+                else if (nowMovingPlayerIndex == 3)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player4Clothes[1];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player4Clothes[1];
                 }
 
                 break;
             case "고려시대":
-                if (controlPlayerIndexWithOrder == 0)
+                if (nowMovingPlayerIndex == 0)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[2];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[2];
                 }
-                else if (controlPlayerIndexWithOrder == 1)
+                else if (nowMovingPlayerIndex == 1)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player2Clothes[2];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player2Clothes[2];
                 }
-                else if (controlPlayerIndexWithOrder == 2)
+                else if (nowMovingPlayerIndex == 2)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player3Clothes[2];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player3Clothes[2];
                 }
-                else if (controlPlayerIndexWithOrder == 3)
+                else if (nowMovingPlayerIndex == 3)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player4Clothes[2];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player4Clothes[2];
                 }
                 break;
             case "조선시대":
-                if (controlPlayerIndexWithOrder == 0)
+                if (nowMovingPlayerIndex == 0)
                 {
                     player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[3];
                 }
-                else if (controlPlayerIndexWithOrder == 1)
+                else if (nowMovingPlayerIndex == 1)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player2Clothes[3];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player2Clothes[3];
                 }
-                else if (controlPlayerIndexWithOrder == 2)
+                else if (nowMovingPlayerIndex == 2)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player3Clothes[3];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player3Clothes[3];
                 }
-                else if (controlPlayerIndexWithOrder == 3)
+                else if (nowMovingPlayerIndex == 3)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player4Clothes[3];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player4Clothes[3];
                 }
                 break;
             case "근현대":
-                if (controlPlayerIndexWithOrder == 0)
+                if (nowMovingPlayerIndex == 0)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[4];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[4];
                 }
-                else if (controlPlayerIndexWithOrder == 1)
+                else if (nowMovingPlayerIndex == 1)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player2Clothes[4];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player2Clothes[4];
                 }
-                else if (controlPlayerIndexWithOrder == 2)
+                else if (nowMovingPlayerIndex == 2)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player3Clothes[4];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player3Clothes[4];
                 }
-                else if (controlPlayerIndexWithOrder == 3)
+                else if (nowMovingPlayerIndex == 3)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player4Clothes[4];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player4Clothes[4];
                 }
                 break;
             default:
-                if (controlPlayerIndexWithOrder == 0)
+                if (nowMovingPlayerIndex == 0)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[0];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[0];
                 }
-                else if (controlPlayerIndexWithOrder == 1)
+                else if (nowMovingPlayerIndex == 1)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player2Clothes[0];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player2Clothes[0];
                 }
-                else if (controlPlayerIndexWithOrder == 2)
+                else if (nowMovingPlayerIndex == 2)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player3Clothes[0];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player3Clothes[0];
                 }
-                else if (controlPlayerIndexWithOrder == 3)
+                else if (nowMovingPlayerIndex == 3)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player4Clothes[0];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player4Clothes[0];
                 }
                 break;
 
         }
+
     }
 
     public void Flip(bool isFlip)
     {
-        player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().flipX = isFlip;
+        player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().flipX = isFlip;
     }
+
+    
 }
 

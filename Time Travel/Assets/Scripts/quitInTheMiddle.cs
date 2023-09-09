@@ -105,6 +105,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
 
     IEnumerator endGame()
     {
+        SoundManager.instance.SoundPlayer("Finish");
         endGameText.transform.GetChild(0).GetComponent<TMP_Text>().text = "모든 플레이어가 게임을 중단하여 자동으로 종료됩니다.\n";
         endGameText.SetActive(true);
 

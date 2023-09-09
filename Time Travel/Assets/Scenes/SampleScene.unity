@@ -7958,6 +7958,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 600dc6f2cbc188e4d9639f25e6c3fb58, type: 3}
   - {fileID: 21300000, guid: 387603bccf52e984895a80f10d401eb1, type: 3}
   - {fileID: 21300000, guid: f5063f9764f8e7d4b9b2cb03d62dcc47, type: 3}
+  playerClothes: []
   newDiceSide: 0
   timerOn: 0
   isLadder: 0
@@ -7967,6 +7968,7 @@ MonoBehaviour:
   correctCount: 0
   secondRoll: 0
   isOver: 0
+  nowMovingPlayerIndex: 0
   canvas: {fileID: 0}
   problemCanvas: {fileID: 1323493764}
   dice: {fileID: 195150733}
@@ -8003,6 +8005,7 @@ MonoBehaviour:
   winner: 
   winnerName: {fileID: 808775134}
   nextTurn: 0
+  newBGMClip: {fileID: 8300000, guid: 65e19b90594875240b9635a3bf60f99c, type: 3}
   testTMP: {fileID: 1949348353}
   controlPlayerIndexWithOrder: 0
   localPlayerIndexWithOrder: 0
@@ -8013,6 +8016,7 @@ MonoBehaviour:
   currentTurnASetItem: 0
   currentTurnBSetItem: 0
   AllDoesntHaveBsetCard: 0
+  initialPlayerNum: 0
 --- !u!1 &1466658739
 GameObject:
   m_ObjectHideFlags: 0
@@ -10920,7 +10924,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2024704142}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1339857779}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: QuitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2024704142
 MonoBehaviour:
   m_ObjectHideFlags: 0

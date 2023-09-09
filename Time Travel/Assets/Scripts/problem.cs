@@ -136,6 +136,8 @@ public class problem : MonoBehaviour
             TimeText.text = "남은 시간: " + time.ToString() + "초";
             time -= 1;
             yield return new WaitForSeconds(1.0f);
+            if(time == 5)
+                SoundManager.instance.SoundPlayer("5Timer");
         }
         resultText.text = "틀렸습니다...";
         isPlayerCorrect = false;
@@ -232,17 +234,20 @@ public class problem : MonoBehaviour
     public void selectAnswerToOthers(int selectionNum)
     {
         StopCoroutine("setTimer");
+        SoundManager.instance.SoundPlayerStop();
         resultPanel.SetActive(true);
         int correctAnswer = int.Parse(answerData[problemID - 1]["답"].ToString());
         if (selectionNum == correctAnswer)
         {
             resultText.text = "정답입니다!";
             isPlayerCorrect = true;
+            SoundManager.instance.SoundPlayer("Correct");
         }
         else
         {
             resultText.text = "틀렸습니다...";
             isPlayerCorrect = false;
+            SoundManager.instance.SoundPlayer("Wrong");
         }
     }
 
@@ -282,6 +287,7 @@ public class problem : MonoBehaviour
         {
             return;
         }
+        SoundManager.instance.SoundPlayer("Button1");
         List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
         if (playerCards.Contains(DontDestroyObjects.items.hint))
         {
@@ -300,6 +306,7 @@ public class problem : MonoBehaviour
         {
             return;
         }
+        SoundManager.instance.SoundPlayer("Button1");
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.erase);
         selectionEraseButton.gameObject.SetActive(false);
         GameManager.instance.currentTurnASetItem = 1;
@@ -341,6 +348,7 @@ public class problem : MonoBehaviour
         {
             return;
         }
+        SoundManager.instance.SoundPlayer("Button1");
         problemPassButton.gameObject.SetActive(false);
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.pass);
         GameManager.instance.currentTurnASetItem = 1;

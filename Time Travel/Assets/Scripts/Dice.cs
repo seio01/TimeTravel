@@ -34,6 +34,7 @@ public class Dice : MonoBehaviour
 
     public IEnumerator RollDiceRoutine(int[] diceSpriteIndex)
     {
+        SoundManager.instance.SoundPlayer("RollDice");
         int ranSide = 0;
         for (int i = 0; i <= 10; i++)
         {
@@ -41,6 +42,7 @@ public class Dice : MonoBehaviour
             curSide.sprite = diceSides[ranSide];
             yield return new WaitForSeconds(0.05f);
         }
+        //SoundManager.instance.SoundPlayerStop();
         //ranSide + 1--> test용으로 바꾸기 checkcurPoint랑;
         manager.newDiceSide = ranSide + 1;
 

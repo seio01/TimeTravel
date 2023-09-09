@@ -13,13 +13,13 @@ public class Player : MonoBehaviour
     public float speed = 15f;
     public bool movingAllowed;
     public bool moveLadder;
-    public int curIndex;
+    public int curIndex; 
     public int ran;
     public int correctCount;
 
     void Start()
     {
-        transform.position = points[curIndex].transform.position;
+        //transform.position = points[curIndex].transform.position;
     }
 
     // Update is called once per frame
@@ -33,7 +33,6 @@ public class Player : MonoBehaviour
 
     public void MovePath()
     {
-        
 
         if (curIndex <= points.Length - 1)
         {
@@ -41,63 +40,59 @@ public class Player : MonoBehaviour
             if (transform.position == points[curIndex].transform.position)
             {
                 curIndex++;
-            }
-
-
-            if(curIndex == 10)
-            {
-                GameManager.instance.ChangeClothes("삼국시대");
-            }
-            else if (curIndex == 21)
-            {
-                GameManager.instance.Flip(true);
-            }
-            else if(curIndex == 22)
-            {
-                GameManager.instance.ChangeClothes("고려시대");
                 
-            }
-            else if(curIndex == 33)
-            {
-                GameManager.instance.Flip(false);
-            }
-            else if (curIndex == 42)
-            {
-                GameManager.instance.ChangeClothes("조선시대");
-            }
-            else if (curIndex == 45)
-            {
-                GameManager.instance.Flip(true);
-            }
-            else if (curIndex == 57)
-            {
-                GameManager.instance.Flip(false);
-            }
-            else if (curIndex == 69)
-            {
-                GameManager.instance.Flip(true);
-            }
-            else if (curIndex == 72)
-            {
-                GameManager.instance.ChangeClothes("근현대");
-            }
-            else if (curIndex == 81)
-            {
-                GameManager.instance.Flip(false);
-            }
-
-            //도착지점 도달시 게임 종료 
-            if (curIndex == points.Length - 1)
-            {
-                if(transform.position == points[points.Length - 1].transform.position)
+                if (curIndex == 10)
                 {
-                    movingAllowed = false;
-                    GameManager.instance.EndGame(PhotonNetwork.LocalPlayer.ToString());
+                    GameManager.instance.ChangeClothes("삼국시대");
                 }
-                
+                else if (curIndex == 21)
+                {
+                    GameManager.instance.Flip(true);
+                }
+                else if (curIndex == 22)
+                {
+                    GameManager.instance.ChangeClothes("고려시대");
+
+                }
+                else if (curIndex == 33)
+                {
+                    GameManager.instance.Flip(false);
+                }
+                else if (curIndex == 42)
+                {
+                    GameManager.instance.ChangeClothes("조선시대");
+                }
+                else if (curIndex == 45)
+                {
+                    GameManager.instance.Flip(true);
+                }
+                else if (curIndex == 57)
+                {
+                    GameManager.instance.Flip(false);
+                }
+                else if (curIndex == 69)
+                {
+                    GameManager.instance.Flip(true);
+                }
+                else if (curIndex == 72)
+                {
+                    GameManager.instance.ChangeClothes("근현대");
+                }
+                else if (curIndex == 81)
+                {
+                    GameManager.instance.Flip(false);
+                }
+                //도착
+                else if (curIndex == points.Length)
+                {
+                    GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].movingAllowed = false;
+                    GameManager.instance.EndGame(PhotonNetwork.LocalPlayer.ToString());
+                    SoundManager.instance.SoundPlayer("Finish");
+                }
+
             }
 
-
+            
         }
 
     }
@@ -105,7 +100,7 @@ public class Player : MonoBehaviour
     //사다리칸 이동
     public void MoveLadder()
     {
-
+        //SoundManager.instance.SoundPlayer("Ladder"); 계단 오르는 소리 뭘로...
         switch (curIndex - 1)
         {
             case 7:
@@ -179,6 +174,7 @@ public class Player : MonoBehaviour
 
     public void Transport()
     {
+        SoundManager.instance.SoundPlayer("Portal");
         switch (curIndex - 1)
         {
             case 15:

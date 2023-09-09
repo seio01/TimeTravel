@@ -21,6 +21,7 @@ public class Main : MonoBehaviour
     public Button makeRoom;
     public Button enterRoom;
 
+    public AudioClip mainSceneBGM;
     void Awake()
     {
         isSave = PlayerPrefs.HasKey("isBanned");
@@ -50,6 +51,8 @@ public class Main : MonoBehaviour
                 enterRoom.interactable = true;
             }
         }
+        SoundManager.instance.bgmPlayer.clip = mainSceneBGM;
+        SoundManager.instance.bgmPlayer.Play();
     }
 
     void Start()
@@ -84,4 +87,5 @@ public class Main : MonoBehaviour
     {
         Application.Quit();
     }
+
 }

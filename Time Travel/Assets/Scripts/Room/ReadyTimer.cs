@@ -10,6 +10,7 @@ public class ReadyTimer : MonoBehaviour
     public TMP_Text timeText;
     public float time;
 
+    public bool timerSound;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,12 +29,26 @@ public class ReadyTimer : MonoBehaviour
             return;
         time -= Time.deltaTime;
         timeText.text = string.Format("{0:F0}√ ", time);
-        if(time <= 0)
+        if (time <= 5)
         {
+            if (!timerSound)
+            {
+                timerSound = true;
+                SoundManager.instance.SoundPlayer("5Timer");
+            }
+            
+        }
+
+        if (time <= 0)
+        {
+            timerSound = false;
             rmanager.infoText.SetActive(false);
             rmanager.setTimer = false;
             rmanager.LeaveRoom();
         }
+        
 
     }
+
+
 }

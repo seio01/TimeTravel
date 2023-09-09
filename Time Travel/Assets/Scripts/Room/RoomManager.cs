@@ -25,6 +25,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public Button pickCardBtn;
     public Button leaveRoomBtn;
 
+
     public Sprite[] itemImg;
     public Image[] items;
 
@@ -144,6 +145,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void PickItems()
     {
+        SoundManager.instance.SoundPlayer("ItemPick");
         setTimer = false;
         timeText.SetActive(false);
         pickCardBtn.interactable = false;
@@ -204,6 +206,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         List<int> updatedPlayerList = new List<int>(updatedList);
         setOrderPanel.SetActive(true);
+        SoundManager.instance.SoundPlayer("ShowPanel2");
         leaveRoomBtn.interactable = false;
 
         for (int i = 0; i < updatedPlayerList.Count; i++)
@@ -261,10 +264,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
         
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
         //아이템 뽑은 것 다른 사람들에게 전송.
         UpdateItemListToOthers();
         gameStartText.SetActive(true);
+        SoundManager.instance.SoundPlayer("ShowPanel");
         yield return new WaitForSeconds(1.5f);
         PhotonNetwork.LoadLevel("Loading");//일단은 모든 클라이언트에서 씬 로드 하는걸로 하는데 이걸 나중에 master에서만 로드하고 동기화할지 결정해야할듯
 
@@ -272,6 +276,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void LeaveRoom()
     {
+        SoundManager.instance.SoundPlayer("Button");
         pickCardBtn.interactable = true;
         leaveRoomBtn.interactable = true;
         for (int i = 0; i < 4; i++)

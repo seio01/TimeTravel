@@ -27,6 +27,8 @@ public class UIFlipping : MonoBehaviour
 
     public void PrevPage()
     {
+        SoundManager.instance.SoundPlayer("FlipPage");
+
         if (currentPage == 0)
         {
             return;
@@ -50,7 +52,8 @@ public class UIFlipping : MonoBehaviour
 
     public void NextPage()
     {
-        if(currentPage == totalPage-1)
+        SoundManager.instance.SoundPlayer("FlipPage");
+        if (currentPage == totalPage-1)
         {
             return;
         }

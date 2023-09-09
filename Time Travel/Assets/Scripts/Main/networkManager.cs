@@ -91,6 +91,7 @@ public class networkManager : MonoBehaviourPunCallbacks
     //Join Random Room
     public void Connect()
     {
+        SoundManager.instance.SoundPlayer("Button");
         for (int i = 0; i < joinButton.Length; i++)
             joinButton[i].interactable = false;
         if (PhotonNetwork.IsConnected)
@@ -120,7 +121,7 @@ public class networkManager : MonoBehaviourPunCallbacks
     public void ClickCreateRoom()
     {
         roomMakePanel.gameObject.SetActive(true);
-        
+        SoundManager.instance.SoundPlayer("Button");
     }
 
     public void SetPassword()
@@ -152,6 +153,7 @@ public class networkManager : MonoBehaviourPunCallbacks
     public void ClickEnterRoom()
     {
         roomEnterPanel.gameObject.SetActive(true);
+        SoundManager.instance.SoundPlayer("Button");
     }
 
 
@@ -169,6 +171,8 @@ public class networkManager : MonoBehaviourPunCallbacks
             {
                 sameNickName = true;
                 changeNickName.SetActive(true);
+                SoundManager.instance.SoundPlayer("Warning");
+
                 PhotonNetwork.LeaveRoom();
                 break;
             }
