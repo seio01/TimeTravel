@@ -20,7 +20,9 @@ public class GameManager : MonoBehaviour
     public Sprite[] player3Clothes;
     public Sprite[] player4Clothes;
 
-    public Sprite[] playerClothes;
+    public Vector3 curCamPos;
+    public Vector3 minCamPos;
+    public Vector3 maxCamPos;
 
     public int newDiceSide;
     public bool timerOn;
@@ -31,6 +33,7 @@ public class GameManager : MonoBehaviour
     public int correctCount;
     public bool secondRoll;//정답 5번일때 
     public bool isOver;
+    public bool gameStart;
     public int nowMovingPlayerIndex;
 
 
@@ -113,7 +116,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("RoundStart", 1.5f);
+        ShowFullMap();
     }
 
     // Update is called once per frame
@@ -134,22 +137,13 @@ public class GameManager : MonoBehaviour
         //게임 종료
         if (isOver)
             return;
+
         //when to stop moving
         if (player[controlPlayerIndexWithOrder].curIndex > playerStartPoint[controlPlayerIndexWithOrder] + newDiceSide)
         {
             player[controlPlayerIndexWithOrder].movingAllowed = false;
-
-            for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-            {
-                if (i != nowMovingPlayerIndex && player[nowMovingPlayerIndex].transform == player[i].transform)
-                {
-                    //같은 자리일 경우
-                    Debug.Log("same position");
-                    player[nowMovingPlayerIndex].transform.position += new Vector3(0, 0.5f, 0);
-                }
-            }
             playerStartPoint[controlPlayerIndexWithOrder] = player[controlPlayerIndexWithOrder].curIndex - 1;
-
+            CheckPlayersPosition(controlPlayerIndexWithOrder);
 
             if (secondRoll)
             {
@@ -208,7 +202,49 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void CheckPlayersPosition(int index)
+    {
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            if (i != index)
+            {
+                if (player[index].transform.position == player[i].transform.position)
+                {
+                    //같은 자리일 경우
+                    player[index].transform.position += new Vector3(0, 2f, 0);
+                }
+            }
+        }
+    }
 
+    public void ShowFullMap()
+    {
+        curCamPos = Camera.main.transform.position;
+        Camera.main.orthographicSize = 100;
+        StartCoroutine(ShowFullMapRoutine());
+    }
+
+    IEnumerator ShowFullMapRoutine()
+    {
+        float journeyLength = Vector3.Distance(minCamPos, maxCamPos);
+        float startTime = Time.time;
+        float distanceCovered = 0f;
+
+        while (distanceCovered < journeyLength)
+        {
+            float distancePerFrame = (Time.time - startTime) * 30.0f; // 시간 간격으로 변경
+            float fractionOfJourney = distancePerFrame / journeyLength;
+            Camera.main.transform.position = Vector3.Lerp(minCamPos, maxCamPos, fractionOfJourney);
+            distanceCovered = Vector3.Distance(Camera.main.transform.position, minCamPos);
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(1f);
+        Camera.main.transform.position = curCamPos;
+        Camera.main.orthographicSize = 60;
+        gameStart = true;
+        Invoke("RoundStart", 1.5f);
+    }
 
     IEnumerator UIBiggerRoutine(bool bigger)
     {
@@ -571,9 +607,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void EndGame(string name)
+    public void EndGame(int winnerIndex)
     {
-        winner = name;
+        winner = DontDestroyObjects.instance.playerListWithOrder[winnerIndex].NickName;
         isOver = true;
         StartCoroutine(EndGameRoutine());
     }
@@ -836,6 +872,8 @@ public class GameManager : MonoBehaviour
     {
         player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().flipX = isFlip;
     }
+
+    
 
     
 }

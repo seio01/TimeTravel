@@ -287,11 +287,12 @@ public class problem : MonoBehaviour
         {
             return;
         }
-        SoundManager.instance.SoundPlayer("Button1");
+        
         List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
         if (playerCards.Contains(DontDestroyObjects.items.hint))
         {
-           TMP_Text hintText = hintPanel.transform.GetChild(0).GetComponent<TMP_Text>();
+            SoundManager.instance.SoundPlayer("Button1");
+            TMP_Text hintText = hintPanel.transform.GetChild(0).GetComponent<TMP_Text>();
             hintText.text = hintString;
             hintPanel.SetActive(true);
             hintButton.gameObject.SetActive(false);

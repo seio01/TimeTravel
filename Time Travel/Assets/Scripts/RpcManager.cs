@@ -54,6 +54,9 @@ public class RpcManager : MonoBehaviour
             if (GameManager.instance.player[bindPlayerIndex].curIndex > GameManager.instance.playerStartPoint[bindPlayerIndex] + GameManager.instance.newDiceSide)
             {
                 GameManager.instance.player[bindPlayerIndex].movingAllowed = false;
+
+                GameManager.instance.CheckPlayersPosition(bindPlayerIndex);
+
                 GameManager.instance.playerStartPoint[bindPlayerIndex] = GameManager.instance.player[bindPlayerIndex].curIndex - 1;
                 if (GameManager.instance.isLadder && !GameManager.instance.player[bindPlayerIndex].movingAllowed)
                 {

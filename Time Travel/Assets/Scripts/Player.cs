@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.instance.isOver)
+            return;
         if (movingAllowed)
             MovePath();
         if (moveLadder)
@@ -86,7 +88,7 @@ public class Player : MonoBehaviour
                 else if (curIndex == points.Length)
                 {
                     GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].movingAllowed = false;
-                    GameManager.instance.EndGame(PhotonNetwork.LocalPlayer.ToString());
+                    GameManager.instance.EndGame(GameManager.instance.controlPlayerIndexWithOrder);
                     SoundManager.instance.SoundPlayer("Finish");
                 }
 
@@ -104,71 +106,22 @@ public class Player : MonoBehaviour
         switch (curIndex - 1)
         {
             case 7:
-                transform.position = Vector2.MoveTowards(transform.position, points[36].transform.position, speed * Time.deltaTime);
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 36;
-                if(transform.position == points[36].transform.position)
-                {
-                    GameManager.instance.ChangeClothes("고려시대");
-                    curIndex = 37;
-                    manager.isLadder = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                } 
+                ReachedLadderPoint(36, "고려시대", false, false);
                 break;
             case 22:
-                transform.position = Vector2.MoveTowards(transform.position, points[48].transform.position, speed * Time.deltaTime);
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 48;
-
-                if (transform.position == points[48].transform.position)
-                {
-                    GameManager.instance.ChangeClothes("조선시대");
-                    curIndex = 49;
-                    manager.isLadder = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedLadderPoint(48, "조선시대", false, false);
                 break;
             case 53:
-                transform.position = Vector2.MoveTowards(transform.position, points[60].transform.position, speed * Time.deltaTime);
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 60;
-
-                if (transform.position == points[60].transform.position)
-                {
-                    GameManager.instance.Flip(false);
-                    curIndex = 61;
-                    manager.isLadder = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedLadderPoint(53, "null", true, false);
                 break;
             case 64:
-                transform.position = Vector2.MoveTowards(transform.position, points[73].transform.position, speed * Time.deltaTime);
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 73;
-
-                if (transform.position == points[73].transform.position)
-                {
-                    GameManager.instance.ChangeClothes("근현대");
-                    GameManager.instance.Flip(true);
-                    curIndex = 74;
-                    manager.isLadder = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedLadderPoint(73, "근현대", true, true);
                 break;
             case 76:
-                transform.position = Vector2.MoveTowards(transform.position, points[84].transform.position, speed * Time.deltaTime);
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 84;
-
-                if (transform.position == points[84].transform.position)
-                {
-                    GameManager.instance.Flip(false);
-                    curIndex = 85;
-                    manager.isLadder = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedLadderPoint(84, "null", true, false);
                 break;
         }
+        GameManager.instance.CheckPlayersPosition(GameManager.instance.controlPlayerIndexWithOrder);
 
     }
 
@@ -178,130 +131,75 @@ public class Player : MonoBehaviour
         switch (curIndex - 1)
         {
             case 15:
-                transform.position = points[30].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 30;
-                if (transform.position == points[30].transform.position)
-                {
-                    GameManager.instance.ChangeClothes("고려시대");
-                    GameManager.instance.Flip(true);
-                    curIndex = 31;
-                    manager.isTransport = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedTransportPoint(30, "고려시대", true, true);
                 break;
             case 26:
-                transform.position = points[38].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 38;
-                if (transform.position == points[38].transform.position)
-                {
-                    GameManager.instance.Flip(false);
-                    curIndex = 39;
-                    manager.isTransport = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedTransportPoint(38, "null", true, false);
                 break;
             case 30:
-                transform.position = points[15].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 15;
-                if (transform.position == points[15].transform.position)
-                {
-                    GameManager.instance.ChangeClothes("삼국시대");
-                    GameManager.instance.Flip(false);
-                    curIndex = 16;
-                    manager.isTransport = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedTransportPoint(15, "삼국시대", true, false);
                 break;
             case 32:
-                transform.position = points[80].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 80;
-                if (transform.position == points[80].transform.position)
-                {
-                    GameManager.instance.ChangeClothes("근현대");
-                    GameManager.instance.Flip(false);
-                    curIndex = 81;
-                    manager.isTransport = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedTransportPoint(80, "근현대", true, false);
                 break;
             case 38:
-                transform.position = points[26].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 26;
-                if (transform.position == points[26].transform.position)
-                {
-                    GameManager.instance.Flip(true);
-                    curIndex = 27;
-                    manager.isTransport = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedTransportPoint(26, "null", true, true);
                 break;
             case 46:
-                transform.position = points[67].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 67;
-                if (transform.position == points[67].transform.position)
-                {
-                    GameManager.instance.Flip(false);
-                    curIndex = 48;
-                    manager.isTransport = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedTransportPoint(67, "null", true, false);
                 break;
             case 62:
-                transform.position = points[90].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 90;
-                if (transform.position == points[90].transform.position)
-                {
-                    GameManager.instance.ChangeClothes("근현대");
-                    curIndex = 91;
-                    manager.isTransport = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedTransportPoint(90, "근현대", false, false);
                 break;
             case 67:
-                transform.position = points[46].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 46;
-                if (transform.position == points[46].transform.position)
-                {
-                    GameManager.instance.Flip(true);
-                    curIndex = 47;
-                    manager.isTransport = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedTransportPoint(46, "null", true, true);
                 break;
             case 80:
-                transform.position = points[32].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 32;
-                if (transform.position == points[32].transform.position)
-                {
-                    GameManager.instance.ChangeClothes("고려시대");
-                    GameManager.instance.Flip(false);
-                    curIndex = 33;
-                    manager.isTransport = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedTransportPoint(32, "고려시대", true, false);
                 break;
             case 90:
-                transform.position = points[62].transform.position;
-                GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = 62;
-                if (transform.position == points[62].transform.position)
-                {
-                    GameManager.instance.ChangeClothes("조선시대");
-                    curIndex = 63;
-                    manager.isTransport = false;
-                    manager.finishRound = true;
-                    GameManager.instance.UISmaller();
-                }
+                ReachedTransportPoint(62, "조선시대", false, false);
                 break;
            
         }
+        GameManager.instance.CheckPlayersPosition(GameManager.instance.controlPlayerIndexWithOrder);
     }
+
+    public void ReachedLadderPoint(int index, string age, bool needflip, bool flipState)
+    {
+        transform.position = Vector2.MoveTowards(transform.position, points[index].transform.position, speed * Time.deltaTime);
+        GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = index;
+
+        if (transform.position == points[index].transform.position)
+        {
+            if(age != "null")
+                GameManager.instance.ChangeClothes(age);
+            if(needflip == true)
+                GameManager.instance.Flip(flipState);
+            curIndex = index+1;
+            manager.isLadder = false;
+            manager.finishRound = true;
+            GameManager.instance.UISmaller();
+        }
+    }
+
+    public void ReachedTransportPoint(int index, string age, bool needflip, bool flipState)
+    {
+        transform.position = points[index].transform.position;
+        GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = index;
+        if (transform.position == points[index].transform.position)
+        {
+            if (age != "null")
+                GameManager.instance.ChangeClothes(age);
+            if (needflip == true)
+                GameManager.instance.Flip(flipState);
+            curIndex = index +1;
+            manager.isTransport = false;
+            manager.finishRound = true;
+            GameManager.instance.UISmaller();
+        }
+
+
+    }
+
 }

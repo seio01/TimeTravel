@@ -3833,7 +3833,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 50
+  orthographic size: 60
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3857,7 +3857,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -83, y: -109.5, z: -10}
+  m_LocalPosition: {x: -57, y: -104, z: -10}
   m_LocalScale: {x: 6.13, y: 11.94, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3877,8 +3877,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoothing: 0.2
-  minCameraBoundary: {x: -83, y: -109.5}
-  maxCameraBoundary: {x: 83, y: 109.5}
+  minCameraBoundary: {x: -57, y: -104}
+  maxCameraBoundary: {x: 74, y: 135}
 --- !u!1 &541042350
 GameObject:
   m_ObjectHideFlags: 0
@@ -4851,7 +4851,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: a592350e4e398b3468cba8ae9b4d9499, type: 3}
     m_FontSize: 70
     m_FontStyle: 0
     m_BestFit: 0
@@ -7550,7 +7550,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh26410
+  m_Name: pb_Mesh49678
   serializedVersion: 10
   m_SubMeshes: []
   m_Shapes:
@@ -7958,7 +7958,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 600dc6f2cbc188e4d9639f25e6c3fb58, type: 3}
   - {fileID: 21300000, guid: 387603bccf52e984895a80f10d401eb1, type: 3}
   - {fileID: 21300000, guid: f5063f9764f8e7d4b9b2cb03d62dcc47, type: 3}
-  playerClothes: []
+  curCamPos: {x: 0, y: 0, z: 0}
+  minCamPos: {x: 7.5, y: -110, z: -10}
+  maxCamPos: {x: 7.5, y: 110, z: -10}
   newDiceSide: 0
   timerOn: 0
   isLadder: 0
@@ -7968,6 +7970,7 @@ MonoBehaviour:
   correctCount: 0
   secondRoll: 0
   isOver: 0
+  gameStart: 0
   nowMovingPlayerIndex: 0
   canvas: {fileID: 0}
   problemCanvas: {fileID: 1323493764}

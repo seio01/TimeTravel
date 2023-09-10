@@ -17,6 +17,8 @@ public class targetCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GameManager.instance.gameStart)
+            return;
         Player player;
         if (RpcManager.instance.isMovableWithBind == true)
         {

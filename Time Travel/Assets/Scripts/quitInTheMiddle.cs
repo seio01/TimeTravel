@@ -51,6 +51,9 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
             stopCoroutinesAndSetActiveFalse();
+            GameManager.instance.isOver = true;
+            //남은 플레이어 닉네임
+            endPanel.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[0].NickName + " 님\n승리를 축하합니다!";
             StartCoroutine(endGame());
             return;
         }
@@ -105,7 +108,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
 
     IEnumerator endGame()
     {
-        SoundManager.instance.SoundPlayer("Finish");
+        SoundManager.instance.SoundPlayer("ShowPanel1");
         endGameText.transform.GetChild(0).GetComponent<TMP_Text>().text = "모든 플레이어가 게임을 중단하여 자동으로 종료됩니다.\n";
         endGameText.SetActive(true);
 
@@ -113,6 +116,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
 
         endGameText.SetActive(false);
         endPanel.SetActive(true);
+        SoundManager.instance.SoundPlayer("Finish");
     }
 
     public void changeControlPlayerIndex()

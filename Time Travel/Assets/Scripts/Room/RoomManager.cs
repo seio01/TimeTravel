@@ -145,6 +145,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void PickItems()
     {
+        SoundManager.instance.SoundPlayerStop();
         SoundManager.instance.SoundPlayer("ItemPick");
         setTimer = false;
         timeText.SetActive(false);
@@ -157,7 +158,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             items[i].sprite = itemImg[ran];
             itemList.Add(ran); 
         }
-        ran = Random.Range(4, 5);
+        ran = Random.Range(3, 6);
         items[3].sprite = itemImg[ran];
         itemList.Add(ran);
 
