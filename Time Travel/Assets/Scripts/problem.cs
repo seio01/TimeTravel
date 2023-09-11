@@ -73,9 +73,6 @@ public class problem : MonoBehaviour
     {
         hintPanel.SetActive(false);
         GameManager.instance.isThisTurnTimeSteal = false;
-        hintButton.interactable = true;
-        problemPassButton.GetComponent<Button>().interactable = true;
-        selectionEraseButton.GetComponent<Button>().interactable = true;
         if (isPlayerCorrect == true)
         {
             if (GameManager.instance.isUsedBind == true)
@@ -84,23 +81,20 @@ public class problem : MonoBehaviour
             }
             GameManager.instance.MovePlayer();
 
-            if (!usePassItem) //�н������� correctcount����x
+            if (!usePassItem) //패스했을땐 correctcount증가x
             {
                 GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].correctCount++;
                 GameManager.instance.UpdateGaugeImg();
             }
-            
+
 
         }
         else
         {
             GameManager.instance.finishRound = true;
-            if (GameManager.instance.isOver == false)
-            {
-                GameManager.instance.UISmaller();
-            }
+            GameManager.instance.UISmaller();
         }
-            
+
     }
 
     public void setProblemPanel(int problemID, int prevDynasty)
@@ -110,8 +104,7 @@ public class problem : MonoBehaviour
         getInfoFromCSV();
         setImage();
         controlButtons();
-        GameManager.instance.testTMP.text = "problemID: " + problemID.ToString() + "\n"+" ���� ���� ������: " + prevDynasty.ToString()+"\n";
-        GameManager.instance.testTMP.text += "�ô뿡�� "+ problemData[problemID - 1 ]["ID"].ToString() + "��° ����, ��:  " +answerData[problemID - 1]["��"].ToString();
+        GameManager.instance.testTMP.text = answerData[problemID - 1]["답"].ToString();
         if (problemType == "ox")
         {
             if (GameManager.instance.isThisTurnTimeSteal == true)
@@ -140,26 +133,23 @@ public class problem : MonoBehaviour
     {
         while (time >= 0)
         {
-            TimeText.text = "���� �ð�: " + time.ToString() + "��";
+            TimeText.text = "남은 시간: " + time.ToString() + "초";
             time -= 1;
             yield return new WaitForSeconds(1.0f);
-            if(time == 5)
+            if (time == 5)
                 SoundManager.instance.SoundPlayer("5Timer");
         }
-        resultText.text = "Ʋ�Ƚ��ϴ�...";
+        resultText.text = "틀렸습니다...";
         isPlayerCorrect = false;
-        hintButton.interactable = false;
-        problemPassButton.GetComponent<Button>().interactable = false;
-        selectionEraseButton.GetComponent<Button>().interactable = false;
         resultPanel.SetActive(true);
     }
 
     void getInfoFromCSV()
     {
-        dynasty = problemData[problemID - 1]["�ô�"].ToString();
-        problemType = problemData[problemID - 1]["����"].ToString();
-        isHaveHint = problemData[problemID - 1]["��Ʈ ����"].ToString();
-        hintString = problemData[problemID - 1]["��Ʈ"].ToString();
+        dynasty = problemData[problemID - 1]["시대"].ToString();
+        problemType = problemData[problemID - 1]["유형"].ToString();
+        isHaveHint = problemData[problemID - 1]["힌트 여부"].ToString();
+        hintString = problemData[problemID - 1]["힌트"].ToString();
         dynastyText.text = dynasty;
     }
 
@@ -169,19 +159,19 @@ public class problem : MonoBehaviour
         Sprite[] dynastyImageGraph = null;
         switch (dynasty)
         {
-            case "������":
+            case "고조선":
                 dynastyImageGraph = problemScript.dynasty1;
                 break;
-            case "�ﱹ�ô�":
+            case "삼국시대":
                 dynastyImageGraph = problemScript.dynasty2;
                 break;
-            case "����":
+            case "고려":
                 dynastyImageGraph = problemScript.dynasty3;
                 break;
-            case "�����ô�":
+            case "조선시대":
                 dynastyImageGraph = problemScript.dynasty4;
                 break;
-            case "�ٴ�����":
+            case "근대이후":
                 dynastyImageGraph = problemScript.dynasty5;
                 break;
             default: break;
@@ -208,10 +198,10 @@ public class problem : MonoBehaviour
         {
             selection3.gameObject.SetActive(true);
             selection4.gameObject.SetActive(true);
-            setSelectionText(selection1, "������1");
-            setSelectionText(selection2, "������2");
-            setSelectionText(selection3, "������3");
-            setSelectionText(selection4, "������4");
+            setSelectionText(selection1, "선택지1");
+            setSelectionText(selection2, "선택지2");
+            setSelectionText(selection3, "선택지3");
+            setSelectionText(selection4, "선택지4");
         }
         if (isHaveHint == "o")
         {
@@ -237,9 +227,6 @@ public class problem : MonoBehaviour
         {
             return;
         }
-        hintButton.interactable = false;
-        problemPassButton.GetComponent<Button>().interactable = false;
-        selectionEraseButton.GetComponent<Button>().interactable = false;
         PV.RPC("selectAnswerToOthers", RpcTarget.AllViaServer, selectionNum);
     }
 
@@ -249,16 +236,16 @@ public class problem : MonoBehaviour
         StopCoroutine("setTimer");
         SoundManager.instance.SoundPlayerStop();
         resultPanel.SetActive(true);
-        int correctAnswer = int.Parse(answerData[problemID - 1]["��"].ToString());
+        int correctAnswer = int.Parse(answerData[problemID - 1]["답"].ToString());
         if (selectionNum == correctAnswer)
         {
-            resultText.text = "�����Դϴ�!";
+            resultText.text = "정답입니다!";
             isPlayerCorrect = true;
             SoundManager.instance.SoundPlayer("Correct");
         }
         else
         {
-            resultText.text = "Ʋ�Ƚ��ϴ�...";
+            resultText.text = "틀렸습니다...";
             isPlayerCorrect = false;
             SoundManager.instance.SoundPlayer("Wrong");
         }
@@ -280,7 +267,7 @@ public class problem : MonoBehaviour
     public void showSelectionEraseButton()
     {
         List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
-        if (playerCards.Contains(DontDestroyObjects.items.erase) && problemType == "4������")
+        if (playerCards.Contains(DontDestroyObjects.items.erase) && problemType == "4지선다")
         {
             selectionEraseButton.SetActive(true);
         }
@@ -292,7 +279,7 @@ public class problem : MonoBehaviour
 
     public void showHint()
     {
-        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer || GameManager.instance.isOver == true)
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
         {
             return;
         }
@@ -300,7 +287,7 @@ public class problem : MonoBehaviour
         {
             return;
         }
-        
+
         List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
         if (playerCards.Contains(DontDestroyObjects.items.hint))
         {
@@ -312,15 +299,11 @@ public class problem : MonoBehaviour
             RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.hint);
             GameManager.instance.currentTurnASetItem = 1;
         }
-        else
-        {
-            hintButton.interactable = false;
-        }
     }
 
     public void eraseWrongSelection()
     {
-        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer || GameManager.instance.isOver == true)
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
         {
             return;
         }
@@ -328,7 +311,7 @@ public class problem : MonoBehaviour
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.erase);
         selectionEraseButton.gameObject.SetActive(false);
         GameManager.instance.currentTurnASetItem = 1;
-        int correctAnswer = int.Parse(answerData[problemID - 1]["��"].ToString());
+        int correctAnswer = int.Parse(answerData[problemID - 1]["답"].ToString());
         int eraseSelection;
         while (true)
         {
@@ -358,7 +341,7 @@ public class problem : MonoBehaviour
 
     public void passProblem()
     {
-        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer || GameManager.instance.isOver == true)
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
         {
             return;
         }
@@ -378,22 +361,22 @@ public class problem : MonoBehaviour
     {
         StopCoroutine("setTimer");
         resultPanel.SetActive(true);
-        resultText.text = "������ �н��߽��ϴ�. \n";
-        string correctAnswer = answerData[problemID - 1]["��"].ToString();
+        resultText.text = "문제를 패스했습니다. \n";
+        string correctAnswer = answerData[problemID - 1]["답"].ToString();
         if (problemType == "ox")
         {
             if (correctAnswer == "1")
             {
-                resultText.text += "������ o �����ϴ�.";
+                resultText.text += "정답은 o 였습니다.";
             }
             else
             {
-                resultText.text += "������ x �����ϴ�.";
+                resultText.text += "정답은 x 였습니다.";
             }
         }
         else
         {
-            resultText.text += "������ " + correctAnswer + "���̾����ϴ�.";
+            resultText.text += "정답은 " + correctAnswer + "번이었습니다.";
         }
         isPlayerCorrect = true;
         usePassItem = true;

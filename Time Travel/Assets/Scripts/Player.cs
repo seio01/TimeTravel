@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     public float speed = 15f;
     public bool movingAllowed;
     public bool moveLadder;
-    public int curIndex; 
+    public int curIndex;
     public int ran;
     public int correctCount;
 
@@ -42,10 +42,10 @@ public class Player : MonoBehaviour
             if (transform.position == points[curIndex].transform.position)
             {
                 curIndex++;
-                
+
                 if (curIndex == 10)
                 {
-                    GameManager.instance.ChangeClothes("�ﱹ�ô�");
+                    GameManager.instance.ChangeClothes("삼국시대");
                 }
                 else if (curIndex == 21)
                 {
@@ -53,7 +53,7 @@ public class Player : MonoBehaviour
                 }
                 else if (curIndex == 22)
                 {
-                    GameManager.instance.ChangeClothes("�����ô�");
+                    GameManager.instance.ChangeClothes("고려시대");
 
                 }
                 else if (curIndex == 33)
@@ -62,7 +62,7 @@ public class Player : MonoBehaviour
                 }
                 else if (curIndex == 42)
                 {
-                    GameManager.instance.ChangeClothes("�����ô�");
+                    GameManager.instance.ChangeClothes("조선시대");
                 }
                 else if (curIndex == 45)
                 {
@@ -78,13 +78,13 @@ public class Player : MonoBehaviour
                 }
                 else if (curIndex == 72)
                 {
-                    GameManager.instance.ChangeClothes("������");
+                    GameManager.instance.ChangeClothes("근현대");
                 }
                 else if (curIndex == 81)
                 {
                     GameManager.instance.Flip(false);
                 }
-                //����
+                //도착
                 else if (curIndex == points.Length)
                 {
                     GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].movingAllowed = false;
@@ -94,28 +94,28 @@ public class Player : MonoBehaviour
 
             }
 
-            
+
         }
 
     }
 
-    //��ٸ�ĭ �̵�
+    //사다리칸 이동
     public void MoveLadder()
     {
-        //SoundManager.instance.SoundPlayer("Ladder"); ��� ������ �Ҹ� ����...
+        //SoundManager.instance.SoundPlayer("Ladder"); 계단 오르는 소리 뭘로...
         switch (curIndex - 1)
         {
             case 7:
-                ReachedLadderPoint(36, "�����ô�", false, false);
+                ReachedLadderPoint(36, "고려시대", false, false);
                 break;
             case 22:
-                ReachedLadderPoint(48, "�����ô�", false, false);
+                ReachedLadderPoint(48, "조선시대", false, false);
                 break;
             case 53:
                 ReachedLadderPoint(53, "null", true, false);
                 break;
             case 64:
-                ReachedLadderPoint(73, "������", true, true);
+                ReachedLadderPoint(73, "근현대", true, true);
                 break;
             case 76:
                 ReachedLadderPoint(84, "null", true, false);
@@ -131,16 +131,16 @@ public class Player : MonoBehaviour
         switch (curIndex - 1)
         {
             case 15:
-                ReachedTransportPoint(30, "�����ô�", true, true);
+                ReachedTransportPoint(30, "고려시대", true, true);
                 break;
             case 26:
                 ReachedTransportPoint(38, "null", true, false);
                 break;
             case 30:
-                ReachedTransportPoint(15, "�ﱹ�ô�", true, false);
+                ReachedTransportPoint(15, "삼국시대", true, false);
                 break;
             case 32:
-                ReachedTransportPoint(80, "������", true, false);
+                ReachedTransportPoint(80, "근현대", true, false);
                 break;
             case 38:
                 ReachedTransportPoint(26, "null", true, true);
@@ -149,18 +149,18 @@ public class Player : MonoBehaviour
                 ReachedTransportPoint(67, "null", true, false);
                 break;
             case 62:
-                ReachedTransportPoint(90, "������", false, false);
+                ReachedTransportPoint(90, "근현대", false, false);
                 break;
             case 67:
                 ReachedTransportPoint(46, "null", true, true);
                 break;
             case 80:
-                ReachedTransportPoint(32, "�����ô�", true, false);
+                ReachedTransportPoint(32, "고려시대", true, false);
                 break;
             case 90:
-                ReachedTransportPoint(62, "�����ô�", false, false);
+                ReachedTransportPoint(62, "조선시대", false, false);
                 break;
-           
+
         }
         GameManager.instance.CheckPlayersPosition(GameManager.instance.controlPlayerIndexWithOrder);
     }
@@ -172,11 +172,11 @@ public class Player : MonoBehaviour
 
         if (transform.position == points[index].transform.position)
         {
-            if(age != "null")
+            if (age != "null")
                 GameManager.instance.ChangeClothes(age);
-            if(needflip == true)
+            if (needflip == true)
                 GameManager.instance.Flip(flipState);
-            curIndex = index+1;
+            curIndex = index + 1;
             manager.isLadder = false;
             manager.finishRound = true;
             GameManager.instance.UISmaller();
@@ -193,7 +193,7 @@ public class Player : MonoBehaviour
                 GameManager.instance.ChangeClothes(age);
             if (needflip == true)
                 GameManager.instance.Flip(flipState);
-            curIndex = index +1;
+            curIndex = index + 1;
             manager.isTransport = false;
             manager.finishRound = true;
             GameManager.instance.UISmaller();

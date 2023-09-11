@@ -13,9 +13,8 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     public static quitInTheMiddle instance;
     public TMP_Text testTMP;
 
-    public List<int>outPlayerIndex;
+    public List<int> outPlayerIndex;
     public Dice diceScript;
-    public problem problemScript;
     public GameObject endGameText;
     public GameObject endPanel;
 
@@ -51,11 +50,10 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
-            GameManager.instance.isOver = true;
             stopCoroutinesAndSetActiveFalse();
             GameManager.instance.isOver = true;
-            //���� �÷��̾� �г���
-            endPanel.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[0].NickName + " ��\n�¸��� �����մϴ�!";
+            //남은 플레이어 닉네임
+            endPanel.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[0].NickName + " 님\n승리를 축하합니다!";
             StartCoroutine(endGame());
             return;
         }
@@ -85,11 +83,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
                     break;
                 }
             }
-        }
-        GameManager.instance.testTMP.text = ""; 
-        for (int i = 0; i < outPlayerIndex.Count; i++)
-        {
-            GameManager.instance.testTMP.text = outPlayerIndex[i]+"  ";
+
         }
     }
 
@@ -115,7 +109,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     IEnumerator endGame()
     {
         SoundManager.instance.SoundPlayer("ShowPanel1");
-        endGameText.transform.GetChild(0).GetComponent<TMP_Text>().text = "��� �÷��̾ ������ �ߴ��Ͽ� �ڵ����� ����˴ϴ�.\n";
+        endGameText.transform.GetChild(0).GetComponent<TMP_Text>().text = "모든 플레이어가 게임을 중단하여 자동으로 종료됩니다.\n";
         endGameText.SetActive(true);
 
         yield return new WaitForSeconds(2f);
@@ -138,7 +132,6 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     void stopCoroutinesAndSetActiveFalse()
     {
         diceScript.StopAllCoroutines();
-        problemScript.StopAllCoroutines();
         GameManager.instance.StopAllCoroutines();
         GameManager.instance.startRoundPanel.SetActive(false);
         GameManager.instance.itemUsePanel.SetActive(false);
