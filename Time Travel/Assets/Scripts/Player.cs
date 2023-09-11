@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
                 
                 if (curIndex == 10)
                 {
-                    GameManager.instance.ChangeClothes("»ï±¹½Ã´ë");
+                    GameManager.instance.ChangeClothes("ï¿½ï±¹ï¿½Ã´ï¿½");
                 }
                 else if (curIndex == 21)
                 {
@@ -53,7 +53,7 @@ public class Player : MonoBehaviour
                 }
                 else if (curIndex == 22)
                 {
-                    GameManager.instance.ChangeClothes("°í·Á½Ã´ë");
+                    GameManager.instance.ChangeClothes("ï¿½ï¿½ï¿½ï¿½ï¿½Ã´ï¿½");
 
                 }
                 else if (curIndex == 33)
@@ -62,7 +62,7 @@ public class Player : MonoBehaviour
                 }
                 else if (curIndex == 42)
                 {
-                    GameManager.instance.ChangeClothes("Á¶¼±½Ã´ë");
+                    GameManager.instance.ChangeClothes("ï¿½ï¿½ï¿½ï¿½ï¿½Ã´ï¿½");
                 }
                 else if (curIndex == 45)
                 {
@@ -78,13 +78,13 @@ public class Player : MonoBehaviour
                 }
                 else if (curIndex == 72)
                 {
-                    GameManager.instance.ChangeClothes("±ÙÇö´ë");
+                    GameManager.instance.ChangeClothes("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
                 }
                 else if (curIndex == 81)
                 {
                     GameManager.instance.Flip(false);
                 }
-                //µµÂø
+                //ï¿½ï¿½ï¿½ï¿½
                 else if (curIndex == points.Length)
                 {
                     GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].movingAllowed = false;
@@ -99,23 +99,23 @@ public class Player : MonoBehaviour
 
     }
 
-    //»ç´Ù¸®Ä­ ÀÌµ¿
+    //ï¿½ï¿½Ù¸ï¿½Ä­ ï¿½Ìµï¿½
     public void MoveLadder()
     {
-        //SoundManager.instance.SoundPlayer("Ladder"); °è´Ü ¿À¸£´Â ¼Ò¸® ¹»·Î...
+        //SoundManager.instance.SoundPlayer("Ladder"); ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò¸ï¿½ ï¿½ï¿½ï¿½ï¿½...
         switch (curIndex - 1)
         {
             case 7:
-                ReachedLadderPoint(36, "°í·Á½Ã´ë", false, false);
+                ReachedLadderPoint(36, "ï¿½ï¿½ï¿½ï¿½ï¿½Ã´ï¿½", false, false);
                 break;
             case 22:
-                ReachedLadderPoint(48, "Á¶¼±½Ã´ë", false, false);
+                ReachedLadderPoint(48, "ï¿½ï¿½ï¿½ï¿½ï¿½Ã´ï¿½", false, false);
                 break;
             case 53:
                 ReachedLadderPoint(53, "null", true, false);
                 break;
             case 64:
-                ReachedLadderPoint(73, "±ÙÇö´ë", true, true);
+                ReachedLadderPoint(73, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", true, true);
                 break;
             case 76:
                 ReachedLadderPoint(84, "null", true, false);
@@ -131,16 +131,16 @@ public class Player : MonoBehaviour
         switch (curIndex - 1)
         {
             case 15:
-                ReachedTransportPoint(30, "°í·Á½Ã´ë", true, true);
+                ReachedTransportPoint(30, "ï¿½ï¿½ï¿½ï¿½ï¿½Ã´ï¿½", true, true);
                 break;
             case 26:
                 ReachedTransportPoint(38, "null", true, false);
                 break;
             case 30:
-                ReachedTransportPoint(15, "»ï±¹½Ã´ë", true, false);
+                ReachedTransportPoint(15, "ï¿½ï±¹ï¿½Ã´ï¿½", true, false);
                 break;
             case 32:
-                ReachedTransportPoint(80, "±ÙÇö´ë", true, false);
+                ReachedTransportPoint(80, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", true, false);
                 break;
             case 38:
                 ReachedTransportPoint(26, "null", true, true);
@@ -149,16 +149,16 @@ public class Player : MonoBehaviour
                 ReachedTransportPoint(67, "null", true, false);
                 break;
             case 62:
-                ReachedTransportPoint(90, "±ÙÇö´ë", false, false);
+                ReachedTransportPoint(90, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", false, false);
                 break;
             case 67:
                 ReachedTransportPoint(46, "null", true, true);
                 break;
             case 80:
-                ReachedTransportPoint(32, "°í·Á½Ã´ë", true, false);
+                ReachedTransportPoint(32, "ï¿½ï¿½ï¿½ï¿½ï¿½Ã´ï¿½", true, false);
                 break;
             case 90:
-                ReachedTransportPoint(62, "Á¶¼±½Ã´ë", false, false);
+                ReachedTransportPoint(62, "ï¿½ï¿½ï¿½ï¿½ï¿½Ã´ï¿½", false, false);
                 break;
            
         }

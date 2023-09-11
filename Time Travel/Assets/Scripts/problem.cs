@@ -73,6 +73,9 @@ public class problem : MonoBehaviour
     {
         hintPanel.SetActive(false);
         GameManager.instance.isThisTurnTimeSteal = false;
+        hintButton.interactable = true;
+        problemPassButton.GetComponent<Button>().interactable = true;
+        selectionEraseButton.GetComponent<Button>().interactable = true;
         if (isPlayerCorrect == true)
         {
             if (GameManager.instance.isUsedBind == true)
@@ -81,7 +84,7 @@ public class problem : MonoBehaviour
             }
             GameManager.instance.MovePlayer();
 
-            if (!usePassItem) //ÆÐ½ºÇßÀ»¶© correctcountÁõ°¡x
+            if (!usePassItem) //ï¿½Ð½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ correctcountï¿½ï¿½ï¿½ï¿½x
             {
                 GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].correctCount++;
                 GameManager.instance.UpdateGaugeImg();
@@ -92,7 +95,10 @@ public class problem : MonoBehaviour
         else
         {
             GameManager.instance.finishRound = true;
-            GameManager.instance.UISmaller();
+            if (GameManager.instance.isOver == false)
+            {
+                GameManager.instance.UISmaller();
+            }
         }
             
     }
@@ -104,7 +110,8 @@ public class problem : MonoBehaviour
         getInfoFromCSV();
         setImage();
         controlButtons();
-        GameManager.instance.testTMP.text = answerData[problemID - 1]["´ä"].ToString();
+        GameManager.instance.testTMP.text = "problemID: " + problemID.ToString() + "\n"+" ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: " + prevDynasty.ToString()+"\n";
+        GameManager.instance.testTMP.text += "ï¿½Ã´ë¿¡ï¿½ï¿½ "+ problemData[problemID - 1 ]["ID"].ToString() + "ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½:  " +answerData[problemID - 1]["ï¿½ï¿½"].ToString();
         if (problemType == "ox")
         {
             if (GameManager.instance.isThisTurnTimeSteal == true)
@@ -133,23 +140,26 @@ public class problem : MonoBehaviour
     {
         while (time >= 0)
         {
-            TimeText.text = "³²Àº ½Ã°£: " + time.ToString() + "ÃÊ";
+            TimeText.text = "ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½: " + time.ToString() + "ï¿½ï¿½";
             time -= 1;
             yield return new WaitForSeconds(1.0f);
             if(time == 5)
                 SoundManager.instance.SoundPlayer("5Timer");
         }
-        resultText.text = "Æ²·È½À´Ï´Ù...";
+        resultText.text = "Æ²ï¿½È½ï¿½ï¿½Ï´ï¿½...";
         isPlayerCorrect = false;
+        hintButton.interactable = false;
+        problemPassButton.GetComponent<Button>().interactable = false;
+        selectionEraseButton.GetComponent<Button>().interactable = false;
         resultPanel.SetActive(true);
     }
 
     void getInfoFromCSV()
     {
-        dynasty = problemData[problemID - 1]["½Ã´ë"].ToString();
-        problemType = problemData[problemID - 1]["À¯Çü"].ToString();
-        isHaveHint = problemData[problemID - 1]["ÈùÆ® ¿©ºÎ"].ToString();
-        hintString = problemData[problemID - 1]["ÈùÆ®"].ToString();
+        dynasty = problemData[problemID - 1]["ï¿½Ã´ï¿½"].ToString();
+        problemType = problemData[problemID - 1]["ï¿½ï¿½ï¿½ï¿½"].ToString();
+        isHaveHint = problemData[problemID - 1]["ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½"].ToString();
+        hintString = problemData[problemID - 1]["ï¿½ï¿½Æ®"].ToString();
         dynastyText.text = dynasty;
     }
 
@@ -159,19 +169,19 @@ public class problem : MonoBehaviour
         Sprite[] dynastyImageGraph = null;
         switch (dynasty)
         {
-            case "°íÁ¶¼±":
+            case "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½":
                 dynastyImageGraph = problemScript.dynasty1;
                 break;
-            case "»ï±¹½Ã´ë":
+            case "ï¿½ï±¹ï¿½Ã´ï¿½":
                 dynastyImageGraph = problemScript.dynasty2;
                 break;
-            case "°í·Á":
+            case "ï¿½ï¿½ï¿½ï¿½":
                 dynastyImageGraph = problemScript.dynasty3;
                 break;
-            case "Á¶¼±½Ã´ë":
+            case "ï¿½ï¿½ï¿½ï¿½ï¿½Ã´ï¿½":
                 dynastyImageGraph = problemScript.dynasty4;
                 break;
-            case "±Ù´ëÀÌÈÄ":
+            case "ï¿½Ù´ï¿½ï¿½ï¿½ï¿½ï¿½":
                 dynastyImageGraph = problemScript.dynasty5;
                 break;
             default: break;
@@ -198,10 +208,10 @@ public class problem : MonoBehaviour
         {
             selection3.gameObject.SetActive(true);
             selection4.gameObject.SetActive(true);
-            setSelectionText(selection1, "¼±ÅÃÁö1");
-            setSelectionText(selection2, "¼±ÅÃÁö2");
-            setSelectionText(selection3, "¼±ÅÃÁö3");
-            setSelectionText(selection4, "¼±ÅÃÁö4");
+            setSelectionText(selection1, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1");
+            setSelectionText(selection2, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2");
+            setSelectionText(selection3, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3");
+            setSelectionText(selection4, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½4");
         }
         if (isHaveHint == "o")
         {
@@ -227,6 +237,9 @@ public class problem : MonoBehaviour
         {
             return;
         }
+        hintButton.interactable = false;
+        problemPassButton.GetComponent<Button>().interactable = false;
+        selectionEraseButton.GetComponent<Button>().interactable = false;
         PV.RPC("selectAnswerToOthers", RpcTarget.AllViaServer, selectionNum);
     }
 
@@ -236,16 +249,16 @@ public class problem : MonoBehaviour
         StopCoroutine("setTimer");
         SoundManager.instance.SoundPlayerStop();
         resultPanel.SetActive(true);
-        int correctAnswer = int.Parse(answerData[problemID - 1]["´ä"].ToString());
+        int correctAnswer = int.Parse(answerData[problemID - 1]["ï¿½ï¿½"].ToString());
         if (selectionNum == correctAnswer)
         {
-            resultText.text = "Á¤´äÀÔ´Ï´Ù!";
+            resultText.text = "ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½!";
             isPlayerCorrect = true;
             SoundManager.instance.SoundPlayer("Correct");
         }
         else
         {
-            resultText.text = "Æ²·È½À´Ï´Ù...";
+            resultText.text = "Æ²ï¿½È½ï¿½ï¿½Ï´ï¿½...";
             isPlayerCorrect = false;
             SoundManager.instance.SoundPlayer("Wrong");
         }
@@ -267,7 +280,7 @@ public class problem : MonoBehaviour
     public void showSelectionEraseButton()
     {
         List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
-        if (playerCards.Contains(DontDestroyObjects.items.erase) && problemType == "4Áö¼±´Ù")
+        if (playerCards.Contains(DontDestroyObjects.items.erase) && problemType == "4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
         {
             selectionEraseButton.SetActive(true);
         }
@@ -279,7 +292,7 @@ public class problem : MonoBehaviour
 
     public void showHint()
     {
-        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer || GameManager.instance.isOver == true)
         {
             return;
         }
@@ -299,11 +312,15 @@ public class problem : MonoBehaviour
             RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.hint);
             GameManager.instance.currentTurnASetItem = 1;
         }
+        else
+        {
+            hintButton.interactable = false;
+        }
     }
 
     public void eraseWrongSelection()
     {
-        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer || GameManager.instance.isOver == true)
         {
             return;
         }
@@ -311,7 +328,7 @@ public class problem : MonoBehaviour
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.erase);
         selectionEraseButton.gameObject.SetActive(false);
         GameManager.instance.currentTurnASetItem = 1;
-        int correctAnswer = int.Parse(answerData[problemID - 1]["´ä"].ToString());
+        int correctAnswer = int.Parse(answerData[problemID - 1]["ï¿½ï¿½"].ToString());
         int eraseSelection;
         while (true)
         {
@@ -341,7 +358,7 @@ public class problem : MonoBehaviour
 
     public void passProblem()
     {
-        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer || GameManager.instance.isOver == true)
         {
             return;
         }
@@ -361,22 +378,22 @@ public class problem : MonoBehaviour
     {
         StopCoroutine("setTimer");
         resultPanel.SetActive(true);
-        resultText.text = "¹®Á¦¸¦ ÆÐ½ºÇß½À´Ï´Ù. \n";
-        string correctAnswer = answerData[problemID - 1]["´ä"].ToString();
+        resultText.text = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½. \n";
+        string correctAnswer = answerData[problemID - 1]["ï¿½ï¿½"].ToString();
         if (problemType == "ox")
         {
             if (correctAnswer == "1")
             {
-                resultText.text += "Á¤´äÀº o ¿´½À´Ï´Ù.";
+                resultText.text += "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ o ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.";
             }
             else
             {
-                resultText.text += "Á¤´äÀº x ¿´½À´Ï´Ù.";
+                resultText.text += "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ x ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.";
             }
         }
         else
         {
-            resultText.text += "Á¤´äÀº " + correctAnswer + "¹øÀÌ¾ú½À´Ï´Ù.";
+            resultText.text += "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ " + correctAnswer + "ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.";
         }
         isPlayerCorrect = true;
         usePassItem = true;

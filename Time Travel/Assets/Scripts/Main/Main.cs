@@ -24,6 +24,7 @@ public class Main : MonoBehaviour
     public AudioClip mainSceneBGM;
     void Awake()
     {
+        Screen.SetResolution(1920, 1080, false);
         isSave = PlayerPrefs.HasKey("isBanned");
         if (isSave == false)
         {

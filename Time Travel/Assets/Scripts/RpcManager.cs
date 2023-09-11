@@ -83,7 +83,6 @@ public class RpcManager : MonoBehaviour
     public void checkPositionAndMoveBindPlayer(int num)
     {
         isMovableWithBind = true;
-        testTMP.text = num.ToString();
         if (num == 7 || num == 22 || num == 53 || num == 64 || num == 76)
         {
             GameManager.instance.moveBindPlayer(bindPlayerIndex);
@@ -241,7 +240,6 @@ public class RpcManager : MonoBehaviour
         {
             DontDestroyObjects.instance.playerItems[playerIndex].Remove(DontDestroyObjects.items.pass);
         }
-        testTMP.text = DontDestroyObjects.instance.playerItems[playerIndex].Count.ToString();
         GameManager.instance.eraseItemUI(playerIndex, itemName);
     }
 
@@ -283,12 +281,7 @@ public class RpcManager : MonoBehaviour
     {
         if (GameManager.instance.controlPlayer == PhotonNetwork.LocalPlayer)
         {
-            testTMP.text = "주사위 setTrue\n";
             PV.RPC("setDiceTrueToOthers", RpcTarget.AllViaServer);
-        }
-        else
-        {
-            testTMP.text = "오류!\n";
         }
     }
 
@@ -324,7 +317,6 @@ public class RpcManager : MonoBehaviour
     {
         int problemID = 0;
         int prevDynasty = 0;
-        Debug.Log(playerPosition);
         if (playerPosition >= 1 && playerPosition <= 8)
         {
             problemID = Random.Range(1, 31);

@@ -117,7 +117,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         if (playerListImg[localPlayerIndex].transform.GetChild(2).gameObject.activeSelf == true)
         {
-            playerListImg[localPlayerIndex].GetComponent<playerPanel>().setNewPlayerToReadyMe();
+            playerListImg[localPlayerIndex].GetComponent<playerPanel>().setNewPlayerToReadyMe(newPlayer.NickName);
         }
     }
 

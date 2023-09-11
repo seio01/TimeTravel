@@ -15,6 +15,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
 
     public List<int>outPlayerIndex;
     public Dice diceScript;
+    public problem problemScript;
     public GameObject endGameText;
     public GameObject endPanel;
 
@@ -50,10 +51,11 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
+            GameManager.instance.isOver = true;
             stopCoroutinesAndSetActiveFalse();
             GameManager.instance.isOver = true;
-            //³²Àº ÇÃ·¹ÀÌ¾î ´Ð³×ÀÓ
-            endPanel.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[0].NickName + " ´Ô\n½Â¸®¸¦ ÃàÇÏÇÕ´Ï´Ù!";
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½
+            endPanel.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[0].NickName + " ï¿½ï¿½\nï¿½Â¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½!";
             StartCoroutine(endGame());
             return;
         }
@@ -83,7 +85,11 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
                     break;
                 }
             }
-
+        }
+        GameManager.instance.testTMP.text = ""; 
+        for (int i = 0; i < outPlayerIndex.Count; i++)
+        {
+            GameManager.instance.testTMP.text = outPlayerIndex[i]+"  ";
         }
     }
 
@@ -109,7 +115,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     IEnumerator endGame()
     {
         SoundManager.instance.SoundPlayer("ShowPanel1");
-        endGameText.transform.GetChild(0).GetComponent<TMP_Text>().text = "¸ðµç ÇÃ·¹ÀÌ¾î°¡ °ÔÀÓÀ» Áß´ÜÇÏ¿© ÀÚµ¿À¸·Î Á¾·áµË´Ï´Ù.\n";
+        endGameText.transform.GetChild(0).GetComponent<TMP_Text>().text = "ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß´ï¿½ï¿½Ï¿ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ë´Ï´ï¿½.\n";
         endGameText.SetActive(true);
 
         yield return new WaitForSeconds(2f);
@@ -132,6 +138,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     void stopCoroutinesAndSetActiveFalse()
     {
         diceScript.StopAllCoroutines();
+        problemScript.StopAllCoroutines();
         GameManager.instance.StopAllCoroutines();
         GameManager.instance.startRoundPanel.SetActive(false);
         GameManager.instance.itemUsePanel.SetActive(false);
