@@ -108,18 +108,17 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
         testTMP.text = "";
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
             List<DontDestroyObjects.items> test = DontDestroyObjects.instance. playerItems[i];
+            testTMP.text += i + " : ";
             for (int j = 0; j < test.Count; j++)
             {
                 testTMP.text += test[j].ToString()+" ";
             }
             testTMP.text += "\n";
         }
-        */
         //게임 종료
         if (isOver)
             return;
@@ -177,7 +176,7 @@ public class GameManager : MonoBehaviour
                 updatePlayerInformationUI(controlPlayerIndexWithOrder);
             }
             controlPlayerIndexWithOrder++;
-            if (controlPlayerIndexWithOrder == PhotonNetwork.CurrentRoom.PlayerCount)
+            if (controlPlayerIndexWithOrder == initialPlayerNum)
             {
                 controlPlayerIndexWithOrder = 0;
             }
@@ -423,7 +422,14 @@ public class GameManager : MonoBehaviour
     //check
     public int getPlayerNextPosition()
     {
-        return player[controlPlayerIndexWithOrder].curIndex + newDiceSide;
+        if (player[controlPlayerIndexWithOrder].curIndex == 0)
+        {
+            return player[controlPlayerIndexWithOrder].curIndex + newDiceSide;
+        }
+        else
+        {
+            return player[controlPlayerIndexWithOrder].curIndex + newDiceSide - 1;
+        }
     }
 
     public void useItemCard(DontDestroyObjects.items itemName)
@@ -512,10 +518,10 @@ public class GameManager : MonoBehaviour
         if(spaceCategory == "Problem")
         {
             activeItemUsePanel();
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(1.5f);
             if (AllDoesntHaveBsetCard == false)
             {
-                yield return new WaitForSeconds(5.0f);
+                yield return new WaitForSeconds(4.5f);
                 activeItemUseResultPanel();
                 yield return new WaitForSeconds(3.5f);
             }
@@ -567,6 +573,7 @@ public class GameManager : MonoBehaviour
     public void ReturnToLobby()
     {
         PhotonNetwork.LeaveRoom();
+        Destroy(DontDestroyObjects.instance);
         SceneManager.LoadScene("Main");
     }
 

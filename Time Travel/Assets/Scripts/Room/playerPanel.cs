@@ -14,6 +14,7 @@ public class playerPanel : MonoBehaviourPunCallbacks
     public TMP_Text MeTextObject;
     public GameObject edge;
 
+
     // Start is called before the first frame update
 
     void Start()
@@ -37,15 +38,30 @@ public class playerPanel : MonoBehaviourPunCallbacks
     }
 
 
-    public void setNewPlayerToReadyMe()
+    public void setNewPlayerToReadyMe(string name)
     {
-        PV.RPC("setReady", RpcTarget.OthersBuffered, roomManagerScript.localPlayerIndex);
+        PV.RPC("setReadyToNewPlayer", RpcTarget.Others, roomManagerScript.localPlayerIndex, name);
     }
 
 
     [PunRPC]
     void setReady(int index)
     {
+        roomManagerScript.playerListImg[index].transform.transform.Find("Ready Text").gameObject.SetActive(true);
+        roomManagerScript.readyCounts++;
+        if (roomManagerScript.readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)  //나중에 masterClient만 start하도록 수정.
+        {
+            roomManagerScript.StartGame();
+        }
+    }
+
+    [PunRPC]
+    void setReadyToNewPlayer(int index, string recieverNickName)
+    {
+        if (PhotonNetwork.LocalPlayer.NickName != recieverNickName)
+        {
+            return;
+        }
         roomManagerScript.playerListImg[index].transform.transform.Find("Ready Text").gameObject.SetActive(true);
         roomManagerScript.readyCounts++;
         if (roomManagerScript.readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)  //나중에 masterClient만 start하도록 수정.

@@ -25,6 +25,10 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.instance.isOver == true)
+        {
+            return;
+        }
         if (movingAllowed)
             MovePath();
         if (moveLadder)
@@ -250,7 +254,7 @@ public class Player : MonoBehaviour
                 if (transform.position == points[67].transform.position)
                 {
                     GameManager.instance.Flip(false);
-                    curIndex = 48;
+                    curIndex = 68;
                     manager.isTransport = false;
                     manager.finishRound = true;
                     GameManager.instance.UISmaller();

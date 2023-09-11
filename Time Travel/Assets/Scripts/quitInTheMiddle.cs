@@ -15,6 +15,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
 
     public List<int>outPlayerIndex;
     public Dice diceScript;
+    public problem problemScript;
     public GameObject endGameText;
     public GameObject endPanel;
 
@@ -50,6 +51,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
+            GameManager.instance.isOver = true;
             stopCoroutinesAndSetActiveFalse();
             StartCoroutine(endGame());
             return;
@@ -80,7 +82,11 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
                     break;
                 }
             }
-
+        }
+        GameManager.instance.testTMP.text = ""; 
+        for (int i = 0; i < outPlayerIndex.Count; i++)
+        {
+            GameManager.instance.testTMP.text = outPlayerIndex[i]+"  ";
         }
     }
 
@@ -111,7 +117,8 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(2f);
 
         endGameText.SetActive(false);
-        endPanel.SetActive(true);
+        endPanel.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.LocalPlayer.NickName+ "´Ô \n ¿ì½ÂÀ» ÃàÇÏµå¸³´Ï´Ù!";
+       endPanel.SetActive(true);
     }
 
     public void changeControlPlayerIndex()
@@ -127,6 +134,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     void stopCoroutinesAndSetActiveFalse()
     {
         diceScript.StopAllCoroutines();
+        problemScript.StopAllCoroutines();
         GameManager.instance.StopAllCoroutines();
         GameManager.instance.startRoundPanel.SetActive(false);
         GameManager.instance.itemUsePanel.SetActive(false);

@@ -73,6 +73,9 @@ public class problem : MonoBehaviour
     {
         hintPanel.SetActive(false);
         GameManager.instance.isThisTurnTimeSteal = false;
+        hintButton.interactable = true;
+        problemPassButton.GetComponent<Button>().interactable = true;
+        selectionEraseButton.GetComponent<Button>().interactable = true;
         if (isPlayerCorrect == true)
         {
             if (GameManager.instance.isUsedBind == true)
@@ -92,7 +95,10 @@ public class problem : MonoBehaviour
         else
         {
             GameManager.instance.finishRound = true;
-            GameManager.instance.UISmaller();
+            if (GameManager.instance.isOver == false)
+            {
+                GameManager.instance.UISmaller();
+            }
         }
             
     }
@@ -105,7 +111,7 @@ public class problem : MonoBehaviour
         setImage();
         controlButtons();
         GameManager.instance.testTMP.text = "problemID: " + problemID.ToString() + "\n"+" 이전 세대 문제들: " + prevDynasty.ToString()+"\n";
-        GameManager.instance.testTMP.text += "시대에서 "+ problemData[problemID - 1 ]["ID"].ToString() + "답:  " +answerData[problemID - 1]["답"].ToString();
+        GameManager.instance.testTMP.text += "시대에서 "+ problemData[problemID - 1 ]["ID"].ToString() + "번째 문제, 답:  " +answerData[problemID - 1]["답"].ToString();
         if (problemType == "ox")
         {
             if (GameManager.instance.isThisTurnTimeSteal == true)
@@ -140,6 +146,9 @@ public class problem : MonoBehaviour
         }
         resultText.text = "틀렸습니다...";
         isPlayerCorrect = false;
+        hintButton.interactable = false;
+        problemPassButton.GetComponent<Button>().interactable = false;
+        selectionEraseButton.GetComponent<Button>().interactable = false;
         resultPanel.SetActive(true);
     }
 
@@ -226,6 +235,9 @@ public class problem : MonoBehaviour
         {
             return;
         }
+        hintButton.interactable = false;
+        problemPassButton.GetComponent<Button>().interactable = false;
+        selectionEraseButton.GetComponent<Button>().interactable = false;
         PV.RPC("selectAnswerToOthers", RpcTarget.AllViaServer, selectionNum);
     }
 
@@ -275,7 +287,7 @@ public class problem : MonoBehaviour
 
     public void showHint()
     {
-        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer || GameManager.instance.isOver == true)
         {
             return;
         }
@@ -286,18 +298,22 @@ public class problem : MonoBehaviour
         List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
         if (playerCards.Contains(DontDestroyObjects.items.hint))
         {
-           TMP_Text hintText = hintPanel.transform.GetChild(0).GetComponent<TMP_Text>();
+            TMP_Text hintText = hintPanel.transform.GetChild(0).GetComponent<TMP_Text>();
             hintText.text = hintString;
             hintPanel.SetActive(true);
             hintButton.gameObject.SetActive(false);
             RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.hint);
             GameManager.instance.currentTurnASetItem = 1;
         }
+        else
+        {
+            hintButton.interactable = false;
+        }
     }
 
     public void eraseWrongSelection()
     {
-        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer || GameManager.instance.isOver == true)
         {
             return;
         }
@@ -334,7 +350,7 @@ public class problem : MonoBehaviour
 
     public void passProblem()
     {
-        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer)
+        if (GameManager.instance.controlPlayer != PhotonNetwork.LocalPlayer || GameManager.instance.isOver == true)
         {
             return;
         }

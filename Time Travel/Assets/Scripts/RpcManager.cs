@@ -314,7 +314,6 @@ public class RpcManager : MonoBehaviour
     {
         int problemID = 0;
         int prevDynasty = 0;
-        Debug.Log(playerPosition);
         if (playerPosition >= 1 && playerPosition <= 8)
         {
             problemID = Random.Range(1, 31);
