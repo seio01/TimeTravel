@@ -51,8 +51,13 @@ public class playerPanel : MonoBehaviourPunCallbacks
         roomManagerScript.readyCounts++;
         if (roomManagerScript.readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)  //나중에 masterClient만 start하도록 수정.
         {
-            roomManagerScript.StartGame();
+            Invoke("StartGameWithTimer", 1f);
         }
+    }
+
+    void StartGameWithTimer()
+    {
+        roomManagerScript.StartGame();
     }
 
     [PunRPC]

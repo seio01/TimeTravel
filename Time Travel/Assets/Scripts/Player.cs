@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 {
     public GameManager manager;
     public Transform[] points;
+    public List<int> incorrectProblemNumbers;
 
     public float speed = 15f;
     public bool movingAllowed;
@@ -121,7 +122,7 @@ public class Player : MonoBehaviour
                 ReachedLadderPoint(84, "null", true, false);
                 break;
         }
-        GameManager.instance.CheckPlayersPosition(GameManager.instance.controlPlayerIndexWithOrder);
+        
 
     }
 
@@ -162,7 +163,7 @@ public class Player : MonoBehaviour
                 break;
 
         }
-        GameManager.instance.CheckPlayersPosition(GameManager.instance.controlPlayerIndexWithOrder);
+        
     }
 
     public void ReachedLadderPoint(int index, string age, bool needflip, bool flipState)
@@ -172,6 +173,7 @@ public class Player : MonoBehaviour
 
         if (transform.position == points[index].transform.position)
         {
+            GameManager.instance.CheckPlayersPosition(GameManager.instance.controlPlayerIndexWithOrder);
             if (age != "null")
                 GameManager.instance.ChangeClothes(age);
             if (needflip == true)
@@ -189,6 +191,7 @@ public class Player : MonoBehaviour
         GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] = index;
         if (transform.position == points[index].transform.position)
         {
+            GameManager.instance.CheckPlayersPosition(GameManager.instance.controlPlayerIndexWithOrder);
             if (age != "null")
                 GameManager.instance.ChangeClothes(age);
             if (needflip == true)
