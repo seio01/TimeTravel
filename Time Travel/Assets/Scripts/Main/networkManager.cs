@@ -181,7 +181,7 @@ public class networkManager : MonoBehaviourPunCallbacks
         if (!sameNickName)
         {
             connectionInfoText.text = "방 참가 성공.";
-            SceneManager.LoadScene("Room");
+            PhotonNetwork.LoadLevel("Room");
         }
         
 

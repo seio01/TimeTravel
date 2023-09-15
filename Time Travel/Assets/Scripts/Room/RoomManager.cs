@@ -21,6 +21,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public GameObject setOrderPanel;
     public GameObject gameStartText;
     public GameObject forcedStartTimeText;
+    public TMP_Text pickCardText;
 
     public Button pickCardBtn;
     public Button leaveRoomBtn;
@@ -65,7 +66,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
             playerListImg[i].transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[i].NickName;
 
         }
-
         setLocalPlayerIndex();
         //timer기능
         Timer();
@@ -77,6 +77,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
 
+        PV.RPC("receieveReadyInformation", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.NickName);
     }
 
 
@@ -115,10 +116,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (playerListImg[localPlayerIndex].transform.GetChild(2).gameObject.activeSelf == true)
-        {
-            playerListImg[localPlayerIndex].GetComponent<playerPanel>().setNewPlayerToReadyMe(newPlayer.NickName);
-        }
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
@@ -150,6 +147,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         setTimer = false;
         timeText.SetActive(false);
         pickCardBtn.interactable = false;
+        pickCardText.text = "뽑은 카드 위로 마우스를 올리면 \n설명을 볼 수 있습니다.\n";
         int ran;
         //아이템 뽑기
         for(int i = 0; i < 3; i++)
@@ -286,7 +284,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
         Destroy(DontDestroyObjects.instance);
         PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene("Main");
+        PhotonNetwork.LoadLevel("Main");
     }
 
     void setLocalPlayerIndex()
@@ -347,5 +345,43 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         forcedStartTimeText.SetActive(true);
         timerScript.time = masterClientTime;
+    }
+
+    [PunRPC]
+    void receieveReadyInformation(string newPlayerName)
+    {
+        bool[] isReady = new bool[PhotonNetwork.CurrentRoom.MaxPlayers];
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        {
+            if (playerListImg[i].transform.GetChild(2).gameObject.activeSelf == true)
+            {
+                isReady[i] = true;
+            }
+            else
+            {
+                isReady[i] = false;
+            }
+        }
+        PV.RPC("setReady", RpcTarget.Others, newPlayerName, isReady);
+    }
+
+    [PunRPC]
+    void setReady(string localPlayerNickName, bool[] isReady)
+    {
+        if (localPlayerNickName != PhotonNetwork.LocalPlayer.NickName)
+        {
+            return;
+        }
+        else
+        {
+            for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+            {
+                if (isReady[i] == true)
+                {
+                    playerListImg[i].transform.GetChild(2).gameObject.SetActive(true);
+                    readyCounts++;
+                }
+            }
+        }
     }
 }

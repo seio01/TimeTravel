@@ -23,6 +23,7 @@ public class problem : MonoBehaviour
     public GameObject selectionEraseButton;
     public List<Dictionary<string, object>> problemData;
     public List<Dictionary<string, object>> answerData;
+    public TMP_Text playerNameText;
 
     public int problemID;
     public int prevDynasty;
@@ -62,10 +63,21 @@ public class problem : MonoBehaviour
         usePassItem = false;
         getPlayerNextPosition();
         resultText = resultPanel.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
-        Debug.Log(playerPosition);
+        playerNameText.text = "현재 문제 푸는 사람: " + GameManager.instance.controlPlayer.NickName;
         if (GameManager.instance.controlPlayer == PhotonNetwork.LocalPlayer)
         {
             RpcManager.instance.setProblemID(playerPosition);
+            selection1.interactable = true;
+            selection2.interactable = true;
+            selection3.interactable = true;
+            selection4.interactable = true;
+        }
+        else
+        {
+            selection1.interactable = false;
+            selection2.interactable = false;
+            selection3.interactable = false;
+            selection4.interactable = false;
         }
     }
 

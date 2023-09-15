@@ -60,8 +60,8 @@ public class GameManager : MonoBehaviour
     public string winner;
     public TMP_Text winnerName;
     public bool nextTurn;
-
     public AudioClip newBGMClip;
+    public TMP_Text controlPlayerNameText;
 
     public TMP_Text testTMP;
     public int controlPlayerIndexWithOrder;
@@ -111,6 +111,7 @@ public class GameManager : MonoBehaviour
         AllDoesntHaveBsetCard = false;
         controlPlayerIndexWithOrder = 0;
         controlPlayer = DontDestroyObjects.instance.playerListWithOrder[0];
+        controlPlayerNameText.text = "현재 차례: " + controlPlayer.NickName;
     }
 
     // Start is called before the first frame update
@@ -122,6 +123,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         testTMP.text = "";
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
@@ -133,6 +135,7 @@ public class GameManager : MonoBehaviour
             }
             testTMP.text += "\n";
         }
+        */
         //게임 종료
         if (isOver)
             return;
@@ -357,6 +360,7 @@ public class GameManager : MonoBehaviour
             }
             controlPlayer = DontDestroyObjects.instance.playerListWithOrder[controlPlayerIndexWithOrder];
         }
+        controlPlayerNameText.text = "현재 차례: " + controlPlayer.NickName;
         nextTurn = false;
         StartCoroutine(UIBiggerRoutine(true));
         //수정..?
