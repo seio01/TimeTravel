@@ -91,8 +91,12 @@ public class SoundManager : MonoBehaviour
     
     public void SoundPlayerStop()
     {
-        int curIndex = soundIndex == 0 ? sfxPlayer.Length-1 : soundIndex - 1;
-        sfxPlayer[curIndex].Stop();
+        for(int i = 0; i < sfxPlayer.Length; i++)
+        {
+            sfxPlayer[i].Stop();
+        }
+        //int curIndex = soundIndex == 0 ? sfxPlayer.Length-1 : soundIndex - 1;
+        
     }
 
     public void ChangeBGMPlayerVolume(GameObject soundBtn)

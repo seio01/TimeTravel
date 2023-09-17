@@ -144,7 +144,6 @@ public class GameManager : MonoBehaviour
             player[controlPlayerIndexWithOrder].movingAllowed = false;
             playerStartPoint[controlPlayerIndexWithOrder] = player[controlPlayerIndexWithOrder].curIndex - 1;
             CheckPlayersPosition(controlPlayerIndexWithOrder);
-            Debug.Log("stopmoving");
             if (secondRoll)
             {
                 secondRoll = false;
@@ -219,7 +218,6 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        Debug.Log("hp" + highestYPos);
         if(isSamePos)
             player[index].transform.position = new Vector3(player[index].transform.position.x, highestYPos + 2.0f, player[index].transform.position.z);
     }
@@ -657,21 +655,18 @@ public class GameManager : MonoBehaviour
 
     public void CheckIncorrectProblems()
     {
+        
         SoundManager.instance.SoundPlayer("Button");
         //수정
         for(int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
             if(DontDestroyObjects.instance.playerListWithOrder[i].NickName == PhotonNetwork.LocalPlayer.NickName)
             {
+                Debug.Log("incorrect");
                 checkIncorrectProblemSc.ShowIncorrectProblems(i);
             }
         }
-        /*if (DontDestroyObjects.instance.playerListWithOrder[controlPlayerIndexWithOrder] != PhotonNetwork.LocalPlayer)
-        {
-            return;
-        }*/
-        //checkIncorrectProblemSc.ShowIncorrectProblems(controlPlayerIndexWithOrder);
-
+        Debug.Log("incorrect11");
     }
 
 
@@ -847,7 +842,7 @@ public class GameManager : MonoBehaviour
             case "조선시대":
                 if (nowMovingPlayerIndex == 0)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[3];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[3];
                 }
                 else if (nowMovingPlayerIndex == 1)
                 {

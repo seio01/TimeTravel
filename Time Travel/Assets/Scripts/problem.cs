@@ -295,7 +295,7 @@ public class problem : MonoBehaviour
         {
             return;
         }
-
+        SoundManager.instance.SoundPlayer("Button");
         List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
         if (playerCards.Contains(DontDestroyObjects.items.hint))
         {
@@ -357,7 +357,9 @@ public class problem : MonoBehaviour
         {
             return;
         }
+        SoundManager.instance.SoundPlayerStop();
         SoundManager.instance.SoundPlayer("Button1");
+        
         problemPassButton.gameObject.SetActive(false);
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.pass);
         GameManager.instance.currentTurnASetItem = 1;

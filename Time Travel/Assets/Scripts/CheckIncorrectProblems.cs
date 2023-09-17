@@ -12,7 +12,7 @@ public class CheckIncorrectProblems : MonoBehaviour
     public Button leftBtn;
     public Button rightBtn;
 
-    public TMP_Text noIncorrectText;
+    public GameObject noIncorrectText;
 
     public problem problemScript;
     public problemGraph problemGraphScript;
@@ -38,6 +38,7 @@ public class CheckIncorrectProblems : MonoBehaviour
         problemGraphScript = problem.instance.problemScript;
 
     }
+
 
     void Start()
     {
@@ -104,14 +105,18 @@ public class CheckIncorrectProblems : MonoBehaviour
     {
         if (GameManager.instance.player[playerIndex].incorrectProblemNumbers.Count == 0)
         {
-            noIncorrectText.text = "틀린 문제가 없습니다. 수고하셨습니다!";
-            noIncorrectText.gameObject.SetActive(true);
+            noIncorrectText.SetActive(true);
             return;
         }
             
 
         incorrectProblemPanel.gameObject.SetActive(true);
         totalPage = GameManager.instance.player[playerIndex].incorrectProblemNumbers.Count;
+        if (totalPage <= 1)
+        {
+            leftBtn.interactable = false;
+            rightBtn.interactable = false;
+        }
         for (int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemNumbers.Count; i++)
         {
             problemID = GameManager.instance.player[playerIndex].incorrectProblemNumbers[i];
