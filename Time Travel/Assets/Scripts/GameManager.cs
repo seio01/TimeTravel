@@ -62,7 +62,6 @@ public class GameManager : MonoBehaviour
     public string winner;
     public TMP_Text winnerName;
     public bool nextTurn;
-    
 
     public AudioClip newBGMClip;
 

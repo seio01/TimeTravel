@@ -158,7 +158,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             items[i].sprite = itemImg[ran];
             itemList.Add(ran); 
         }
-        ran = Random.Range(5, 6); //¹Ù²Ù±â Random.Range(3, 6)
+        ran = Random.Range(5, 6);
         items[3].sprite = itemImg[ran];
         itemList.Add(ran);
 
