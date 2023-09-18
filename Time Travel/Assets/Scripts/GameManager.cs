@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
     public string winner;
     public TMP_Text winnerName;
     public bool nextTurn;
-    public GameObject diceAndSoundPanel;
+    
 
     public AudioClip newBGMClip;
 
@@ -79,6 +79,9 @@ public class GameManager : MonoBehaviour
     public bool AllDoesntHaveBsetCard;
 
     public int initialPlayerNum;
+
+    public GameObject diceAndSoundPanel;
+
     void Awake()
     {
         if (instance == null)
@@ -123,7 +126,8 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*testTMP.text = "";
+        /*
+        testTMP.text = "";
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
             List<DontDestroyObjects.items> test = DontDestroyObjects.instance. playerItems[i];
@@ -133,7 +137,8 @@ public class GameManager : MonoBehaviour
                 testTMP.text += test[j].ToString()+" ";
             }
             testTMP.text += "\n";
-        }*/
+        }
+        */
         //게임 종료
         if (isOver)
             return;
