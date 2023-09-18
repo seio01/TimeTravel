@@ -9,6 +9,8 @@ using Photon.Pun.UtilityScripts;
 
 public class problem : MonoBehaviour
 {
+    public static problem instance;
+
     public Button selection1;
     public Button selection2;
     public Button selection3;
@@ -46,6 +48,9 @@ public class problem : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        if (instance == null)
+            instance = this;
+
         resultText = resultPanel.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
         problemID = 1;
         prevDynasty = 0;
@@ -257,6 +262,9 @@ public class problem : MonoBehaviour
         }
         else
         {
+            //오답 저장
+            if(!GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemNumbers.Contains(problemID))
+                GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemNumbers.Add(problemID);
             resultText.text = "틀렸습니다...";
             isPlayerCorrect = false;
             SoundManager.instance.SoundPlayer("Wrong");
@@ -299,7 +307,7 @@ public class problem : MonoBehaviour
         {
             return;
         }
-
+        SoundManager.instance.SoundPlayer("Button");
         List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
         if (playerCards.Contains(DontDestroyObjects.items.hint))
         {
@@ -361,7 +369,9 @@ public class problem : MonoBehaviour
         {
             return;
         }
+        SoundManager.instance.SoundPlayerStop();
         SoundManager.instance.SoundPlayer("Button1");
+        
         problemPassButton.gameObject.SetActive(false);
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.pass);
         GameManager.instance.currentTurnASetItem = 1;
@@ -398,4 +408,5 @@ public class problem : MonoBehaviour
     {
         playerPosition = GameManager.instance.getPlayerNextPosition();
     }
+
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
@@ -11,7 +12,13 @@ public class SoundManager : MonoBehaviour
     public AudioClip[] clips;
     public int soundIndex;
 
-    public bool soundOn = true;
+    public bool bgmSoundOn = true;
+    public bool sfxSoundOn = true;
+
+    public Sprite bgmOff;
+    public Sprite bgmOn;
+    public Sprite sfxOff;
+    public Sprite sfxOn;
 
     void Awake()
     {
@@ -84,16 +91,49 @@ public class SoundManager : MonoBehaviour
     
     public void SoundPlayerStop()
     {
-        int curIndex = soundIndex == 0 ? sfxPlayer.Length-1 : soundIndex - 1;
-        sfxPlayer[curIndex].Stop();
+        for(int i = 0; i < sfxPlayer.Length; i++)
+        {
+            sfxPlayer[i].Stop();
+        }
+        //int curIndex = soundIndex == 0 ? sfxPlayer.Length-1 : soundIndex - 1;
+        
     }
 
-    public void ChangeBGMPlayerVolume()
+    public void ChangeBGMPlayerVolume(GameObject soundBtn)
     {
-        soundOn = !soundOn;
-        if(!soundOn)
+        bgmSoundOn = !bgmSoundOn;
+        if (!bgmSoundOn)
+        {
             bgmPlayer.volume = 0;
+            soundBtn.GetComponent<Image>().sprite = bgmOff;
+        }
         else
+        {
             bgmPlayer.volume = 0.1f;
+            soundBtn.GetComponent<Image>().sprite = bgmOn;
+        }
+            
+    }
+    public void ChangeSFXPlayerVolume(GameObject soundBtn)
+    {
+        sfxSoundOn = !sfxSoundOn;
+        if (!sfxSoundOn) 
+        { 
+            for (int i = 0; i < sfxPlayer.Length; i++)
+            {
+                sfxPlayer[i].volume = 0;
+                soundBtn.GetComponent<Image>().sprite = sfxOff;
+            }
+        
+        }
+
+        else
+        {
+            for (int i = 0; i < sfxPlayer.Length; i++)
+            {
+                sfxPlayer[i].volume = 0.3f;
+                soundBtn.GetComponent<Image>().sprite = sfxOn;
+            }
+        }
     }
 }

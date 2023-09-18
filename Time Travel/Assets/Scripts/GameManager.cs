@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
     public Vector3 minCamPos;
     public Vector3 maxCamPos;
 
+    public CheckIncorrectProblems checkIncorrectProblemSc;
+
     public int newDiceSide;
     public bool timerOn;
     public bool isLadder;
@@ -76,6 +78,9 @@ public class GameManager : MonoBehaviour
     public bool AllDoesntHaveBsetCard;
 
     public int initialPlayerNum;
+
+    public GameObject diceAndSoundPanel;
+
     void Awake()
     {
         if (instance == null)
@@ -95,9 +100,7 @@ public class GameManager : MonoBehaviour
         setPlayerPieces();
         setLocalPlayerIndexWithOrder();
         initVariables();
-        //SoundManager.instance.bgmPlayer.Stop();
         SoundManager.instance.bgmPlayer.clip = newBGMClip;
-        //SoundManager.instance.bgmPlayer.volume = 0.3f;
         SoundManager.instance.bgmPlayer.Play();
     }
 
@@ -146,7 +149,6 @@ public class GameManager : MonoBehaviour
             player[controlPlayerIndexWithOrder].movingAllowed = false;
             playerStartPoint[controlPlayerIndexWithOrder] = player[controlPlayerIndexWithOrder].curIndex - 1;
             CheckPlayersPosition(controlPlayerIndexWithOrder);
-
             if (secondRoll)
             {
                 secondRoll = false;
@@ -208,17 +210,23 @@ public class GameManager : MonoBehaviour
 
     public void CheckPlayersPosition(int index)
     {
+        bool isSamePos = false;
+        float highestYPos = player[index].transform.position.y;
+
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
             if (i != index)
             {
-                if (player[index].transform.position == player[i].transform.position)
+                if (player[index].transform.position.x == player[i].transform.position.x)
                 {
-                    //같은 자리일 경우
-                    player[index].transform.position += new Vector3(0, 2f, 0);
+                    isSamePos = true;
+                    if (highestYPos <= player[i].transform.position.y)
+                        highestYPos = player[i].transform.position.y;
                 }
             }
         }
+        if(isSamePos)
+            player[index].transform.position = new Vector3(player[index].transform.position.x, highestYPos + 2.0f, player[index].transform.position.z);
     }
 
     public void ShowFullMap()
@@ -247,6 +255,7 @@ public class GameManager : MonoBehaviour
         Camera.main.transform.position = curCamPos;
         Camera.main.orthographicSize = 60;
         gameStart = true;
+        diceAndSoundPanel.SetActive(true); //임시
         Invoke("RoundStart", 1.5f);
     }
 
@@ -342,6 +351,7 @@ public class GameManager : MonoBehaviour
 
     public void RoundStart()
     {
+
         if (checkControlPlayerOut() == true)
         {
             controlPlayerIndexWithOrder++;
@@ -365,7 +375,6 @@ public class GameManager : MonoBehaviour
         controlPlayerNameText.text = "현재 차례: " + controlPlayer.NickName;
         nextTurn = false;
         StartCoroutine(UIBiggerRoutine(true));
-        //수정..?
         currentTurnASetItem = 0;
         currentTurnBSetItem = 0;
         AllDoesntHaveBsetCard = false;
@@ -472,7 +481,7 @@ public class GameManager : MonoBehaviour
         ResetGaugeImg();
 
         yield return new WaitForSeconds(1f);
-        diceImg.SetActive(true);
+        //diceImg.SetActive(true);
         diceTimer.gameObject.SetActive(true);
         timerOn = true;
 
@@ -654,6 +663,22 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
+    public void CheckIncorrectProblems()
+    {
+        
+        SoundManager.instance.SoundPlayer("Button");
+        //수정
+        for(int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        {
+            if(DontDestroyObjects.instance.playerListWithOrder[i].NickName == PhotonNetwork.LocalPlayer.NickName)
+            {
+                Debug.Log("incorrect");
+                checkIncorrectProblemSc.ShowIncorrectProblems(i);
+            }
+        }
+        Debug.Log("incorrect11");
+    }
+
 
     public void updatePlayerInformationUI(int controlPlayerIndex)
     {
@@ -827,7 +852,7 @@ public class GameManager : MonoBehaviour
             case "조선시대":
                 if (nowMovingPlayerIndex == 0)
                 {
-                    player[controlPlayerIndexWithOrder].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[3];
+                    player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().sprite = player1Clothes[3];
                 }
                 else if (nowMovingPlayerIndex == 1)
                 {
@@ -887,7 +912,6 @@ public class GameManager : MonoBehaviour
     {
         player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().flipX = isFlip;
     }
-
     
 
     

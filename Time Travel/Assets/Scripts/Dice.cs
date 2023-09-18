@@ -42,7 +42,6 @@ public class Dice : MonoBehaviour
             curSide.sprite = diceSides[ranSide];
             yield return new WaitForSeconds(0.05f);
         }
-        //SoundManager.instance.SoundPlayerStop();
         //ranSide + 1--> test용으로 바꾸기 checkcurPoint랑;
         manager.newDiceSide = ranSide + 1;
 
@@ -50,7 +49,7 @@ public class Dice : MonoBehaviour
 
         if (!manager.secondRoll)
         {
-            manager.diceImg.SetActive(false);
+            //manager.diceImg.SetActive(false);
             manager.CheckCurPoint(GameManager.instance.playerStartPoint[GameManager.instance.controlPlayerIndexWithOrder] + ranSide + 1);
         }
         else
