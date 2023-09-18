@@ -15,6 +15,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
 
     public List<int> outPlayerIndex;
     public Dice diceScript;
+    public problem problemScript;
     public GameObject endGameText;
     public GameObject endPanel;
 
@@ -52,14 +53,17 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
         {
             stopCoroutinesAndSetActiveFalse();
             GameManager.instance.isOver = true;
-            //ë‚¨ì€ í”Œë ˆì´ì–´ ë‹‰ë„¤ì„
-            endPanel.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[0].NickName + " ë‹˜\nìŠ¹ë¦¬ë¥¼ ì¶•í•˜í•©ë‹ˆë‹¤!";
+            //³²Àº ÇÃ·¹ÀÌ¾î ´Ğ³×ÀÓ
+            endPanel.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[0].NickName + " ´Ô\n½Â¸®¸¦ ÃàÇÏÇÕ´Ï´Ù!";
             StartCoroutine(endGame());
             return;
         }
         if (otherPlayer == GameManager.instance.controlPlayer)
         {
             int index = GameManager.instance.controlPlayerIndexWithOrder;
+            GameManager.instance.playerInformationUIs[index].SetActive(false);
+            Color c= new Color(100 / 255f, 100 / 255f, 100 / 255f);
+            GameManager.instance.player[index].gameObject.GetComponent<SpriteRenderer>().color = c;
             if (GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].movingAllowed == true)
             {
                 outPlayerIndex.Add(index);
@@ -72,6 +76,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
                 stopCoroutinesAndSetActiveFalse();
                 GameManager.instance.Invoke("RoundStart", 1);
             }
+
         }
         else
         {
@@ -80,6 +85,9 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
                 if (otherPlayer.NickName == DontDestroyObjects.instance.playerListWithOrder[i].NickName)
                 {
                     outPlayerIndex.Add(i);
+                    GameManager.instance.playerInformationUIs[i].SetActive(false);
+                    Color c = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+                    GameManager.instance.player[i].gameObject.GetComponent<SpriteRenderer>().color = c;
                     break;
                 }
             }
@@ -109,7 +117,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     IEnumerator endGame()
     {
         SoundManager.instance.SoundPlayer("ShowPanel1");
-        endGameText.transform.GetChild(0).GetComponent<TMP_Text>().text = "ëª¨ë“  í”Œë ˆì´ì–´ê°€ ê²Œì„ì„ ì¤‘ë‹¨í•˜ì—¬ ìë™ìœ¼ë¡œ ì¢…ë£Œë©ë‹ˆë‹¤.\n";
+        endGameText.transform.GetChild(0).GetComponent<TMP_Text>().text = "¸ğµç ÇÃ·¹ÀÌ¾î°¡ °ÔÀÓÀ» Áß´ÜÇÏ¿© ÀÚµ¿À¸·Î Á¾·áµË´Ï´Ù.\n";
         endGameText.SetActive(true);
 
         yield return new WaitForSeconds(2f);
@@ -132,6 +140,8 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     void stopCoroutinesAndSetActiveFalse()
     {
         diceScript.StopAllCoroutines();
+        problemScript.StopAllCoroutines();
+        GameManager.instance.problemCanvas.gameObject.SetActive(false);
         GameManager.instance.StopAllCoroutines();
         GameManager.instance.startRoundPanel.SetActive(false);
         GameManager.instance.itemUsePanel.SetActive(false);

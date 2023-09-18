@@ -11,6 +11,8 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     bool canNotUse;
     public GameObject textPanel;
     public TMP_Text itemText;
+
+    public BsetItemUsePanel panelScript;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +37,11 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     void Update()
     {
         if (GameManager.instance.currentTurnBSetItem > 0)
+        {
+            canNotUse = true;
+            changeColorBlack();
+        }
+        if (RpcManager.instance.isSomeoneUseCardSteal == true)
         {
             canNotUse = true;
             changeColorBlack();
@@ -91,7 +98,15 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         }
         else if (spriteName == "Ä«µå»©¾Ñ±â")
         {
-            RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.cardSteal);
+            if (RpcManager.instance.isSomeoneUseCardSteal == false)
+            {
+                RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.cardSteal);
+            }
+            else
+            {
+                return;
+            }
+
         }
         else
         {

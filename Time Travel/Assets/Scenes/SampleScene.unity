@@ -2016,6 +2016,7 @@ MonoBehaviour:
   testTMP: {fileID: 1949348353}
   outPlayerIndex: 
   diceScript: {fileID: 195150733}
+  problemScript: {fileID: 1223628118}
   endGameText: {fileID: 869182881}
   endPanel: {fileID: 811253859}
   MiddleQuitPanel: {fileID: 1106484503}
@@ -3891,7 +3892,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -57}
+  m_AnchoredPosition: {x: 0, y: -40}
   m_SizeDelta: {x: 600, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &510218711
@@ -6398,7 +6399,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 600, y: 250}
+  m_SizeDelta: {x: 600, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1163656031
 MonoBehaviour:
@@ -6413,15 +6414,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.509434, g: 0.4101497, b: 0.34923458, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 7e3f01c34fc00c14dacce6e628ed94cb, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -7841,7 +7842,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh64968
+  m_Name: pb_Mesh26188
   serializedVersion: 10
   m_SubMeshes: []
   m_Shapes:
@@ -8030,7 +8031,8 @@ MonoBehaviour:
   problemCanvas: {fileID: 1323493764}
   isUpdatedPlayerUI: 0
   isMovableWithBind: 0
-  bindPlayerIndex: 0
+  bindPlayerIndexes: 
+  isSomeoneUseCardSteal: 0
 --- !u!4 &1297621358
 Transform:
   m_ObjectHideFlags: 0

@@ -173,8 +173,9 @@ public class GameManager : MonoBehaviour
                 if (isMovableWithBind == true)
                 {
                     updatePlayerInformationUI(controlPlayerIndexWithOrder);
+                    RpcManager.instance.bindPlayerIndexes.Sort();
                     RpcManager.instance.isMovableWithBind = true;
-                    moveBindPlayer(RpcManager.instance.bindPlayerIndex);
+                    //moveBindPlayer();
                 }
                 else if(!secondRoll)
                 {
@@ -190,6 +191,7 @@ public class GameManager : MonoBehaviour
             finishRound = false;
             isMovableWithBind = false;
             isUsedBind = false;
+            RpcManager.instance.isSomeoneUseCardSteal = false;
             if (controlPlayer == PhotonNetwork.LocalPlayer)
             {
                 updatePlayerInformationUI(controlPlayerIndexWithOrder);
@@ -367,6 +369,7 @@ public class GameManager : MonoBehaviour
         currentTurnASetItem = 0;
         currentTurnBSetItem = 0;
         AllDoesntHaveBsetCard = false;
+        RpcManager.instance.isSomeoneUseCardSteal = false;
         if (correctCount != 5)
             secondRoll = false;
         player[controlPlayerIndexWithOrder].moveLadder = false;
@@ -482,9 +485,10 @@ public class GameManager : MonoBehaviour
         nowMovingPlayerIndex = controlPlayerIndexWithOrder;
     }
 
-    public void moveBindPlayer(int bindPlayerIndex)
+    public void moveBindPlayer()
     {
-        player[bindPlayerIndex].movingAllowed = true;
+        int firstBindIndex = RpcManager.instance.bindPlayerIndexes[0];
+        player[firstBindIndex].movingAllowed = true;
         nowMovingPlayerIndex = bindPlayerIndex;
     }
         

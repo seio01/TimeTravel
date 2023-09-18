@@ -22,7 +22,7 @@ public class targetCamera : MonoBehaviour
         Player player;
         if (RpcManager.instance.isMovableWithBind == true)
         {
-            player = GameManager.instance.player[RpcManager.instance.bindPlayerIndex];
+            player = GameManager.instance.player[RpcManager.instance.bindPlayerIndexes[0]];
         }
         else
         {

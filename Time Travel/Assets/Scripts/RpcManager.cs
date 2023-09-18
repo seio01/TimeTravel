@@ -27,7 +27,9 @@ public class RpcManager : MonoBehaviour
     public bool isUpdatedPlayerUI;
 
     public bool isMovableWithBind;
-    public int bindPlayerIndex;
+    public List<int> bindPlayerIndexes;
+
+    public bool isSomeoneUseCardSteal;
     // Start is called before the first frame update
     void Awake()
     {
@@ -37,7 +39,8 @@ public class RpcManager : MonoBehaviour
         }
         isUpdatedPlayerUI = false;
         isMovableWithBind = false;
-        bindPlayerIndex = -1;
+        isSomeoneUseCardSteal = false;
+        bindPlayerIndexes = new List<int>();
     }
 
     void Start()
@@ -50,30 +53,30 @@ public class RpcManager : MonoBehaviour
     {
         if (isMovableWithBind == true)
         {
-            GameManager.instance.testTMP.text = bindPlayerIndex.ToString();
-            if (GameManager.instance.player[bindPlayerIndex].curIndex > GameManager.instance.playerStartPoint[bindPlayerIndex] + GameManager.instance.newDiceSide)
+            if (bindPlayerIndexes.Count != 0)
             {
-                GameManager.instance.player[bindPlayerIndex].movingAllowed = false;
-
-                GameManager.instance.CheckPlayersPosition(bindPlayerIndex);
-
-                GameManager.instance.playerStartPoint[bindPlayerIndex] = GameManager.instance.player[bindPlayerIndex].curIndex - 1;
-                if (GameManager.instance.isLadder && !GameManager.instance.player[bindPlayerIndex].movingAllowed)
+                int bindPlayerIndex = bindPlayerIndexes[0];
+                GameManager.instance.player[bindPlayerIndex].movingAllowed = true;
+                GameManager.instance.nowMovingPlayerIndex = bindPlayerIndex;
+                if (GameManager.instance.player[bindPlayerIndex].curIndex > GameManager.instance.playerStartPoint[bindPlayerIndex] + GameManager.instance.newDiceSide)
                 {
-                    GameManager.instance.player[bindPlayerIndex].moveLadder = true;
-                }
-                else if (GameManager.instance.isTransport && !GameManager.instance.player[bindPlayerIndex].movingAllowed)
-                {
-                    GameManager.instance.player[bindPlayerIndex].Transport();
-                }
-                else
-                {
-                    isMovableWithBind = false;
-                    GameManager.instance.isMovableWithBind = false;
+                    GameManager.instance.player[bindPlayerIndex].movingAllowed = false;
+                    GameManager.instance.CheckPlayersPosition(bindPlayerIndex);
+                    GameManager.instance.playerStartPoint[bindPlayerIndex] = GameManager.instance.player[bindPlayerIndex].curIndex - 1;
                     GameManager.instance.updatePlayerInformationUI(bindPlayerIndex);
-                    GameManager.instance.finishRound = true;
-                    GameManager.instance.UISmaller();
-                    //GameManager.instance.nextTurn = true;
+                    if (bindPlayerIndexes.Count == 1)
+                    {
+                        GameManager.instance.isMovableWithBind = false;
+                        isMovableWithBind = false;
+                        bindPlayerIndexes.RemoveAt(0);
+                        GameManager.instance.finishRound = true;
+                        GameManager.instance.UISmaller();
+                        bindPlayerIndexes.Clear();
+                    }
+                    else
+                    {
+                        bindPlayerIndexes.RemoveAt(0);
+                    }
                 }
             }
         }
@@ -85,17 +88,17 @@ public class RpcManager : MonoBehaviour
         isMovableWithBind = true;
         if (num == 7 || num == 22 || num == 53 || num == 64 || num == 76)
         {
-            GameManager.instance.moveBindPlayer(bindPlayerIndex);
+            //GameManager.instance.moveBindPlayer(bindPlayerIndex);
             GameManager.instance.isLadder = true;
         }
         else if (num == 15 || num == 30 || num == 26 || num == 38 || num == 32 || num == 80 || num == 46 || num == 67 || num == 62 || num == 90)
         {
-            GameManager.instance.moveBindPlayer(bindPlayerIndex);
+            //GameManager.instance.moveBindPlayer(bindPlayerIndex);
             GameManager.instance.isTransport = true;
         }
         else
         {
-            GameManager.instance.moveBindPlayer(bindPlayerIndex);
+            //GameManager.instance.moveBindPlayer(bindPlayerIndex);
         }
     }
 
@@ -136,10 +139,13 @@ public class RpcManager : MonoBehaviour
         PV.RPC("cardStealToOthers", RpcTarget.All, playerIndex, stolenCardIndex);
     }
 
+    /*
     public void moveWithBind(int localPlayerIndex)
     {
         PV.RPC("moveWithBindToOthers", RpcTarget.AllViaServer, localPlayerIndex);
     }
+    */
+
 
     public void makeIsUsedBindTrue(int localPlayerIndex)
     {
@@ -247,20 +253,27 @@ public class RpcManager : MonoBehaviour
     void useBsetItemCardToOthers(Photon.Realtime.Player p, string itemName)
     {
         currentTurnItems.Add(p, itemName);
+        if (itemName.ToString() == "cardSteal")
+        {
+            PV.RPC("setBool", RpcTarget.AllViaServer);
+        }
     }
 
+    /*
     [PunRPC]
     void moveWithBindToOthers(int localPlayerIndex)
     {
-        bindPlayerIndex = localPlayerIndex;
+        bindPlayerIndexes.Add(localPlayerIndex);
         isMovableWithBind = true;
-        GameManager.instance.moveBindPlayer(localPlayerIndex);
+        GameManager.instance.moveBindPlayer();
     }
+    */
+
 
     [PunRPC]
     void makeIsUsedBindTrueToOthers(int localPlayerIndex)
     {
-        bindPlayerIndex = localPlayerIndex;
+        bindPlayerIndexes.Add(localPlayerIndex);
         GameManager.instance.isMovableWithBind = true;
     }
 
@@ -373,4 +386,9 @@ public class RpcManager : MonoBehaviour
         GameManager.instance.winnerName.text = winner + " ´Ô ½Â¸®¸¦ ÃàÇÏÇÕ´Ï´Ù!";
     }
 
+    [PunRPC]
+    void setBool()
+    {
+        isSomeoneUseCardSteal = true;
+    }
 }
