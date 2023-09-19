@@ -2455,6 +2455,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ceb94c7ece5ada14ab0c019b16bd0318, type: 3}
   - {fileID: 8300000, guid: 9bc53b72a12013742bbef693854f475e, type: 3}
   - {fileID: 8300000, guid: a459add4fbe59584494451f2bb9ae95d, type: 3}
+  - {fileID: 8300000, guid: 1fe039d01d90e9148b2cbb1bd139f35f, type: 3}
   soundIndex: 0
   bgmSoundOn: 1
   sfxSoundOn: 1
@@ -3473,7 +3474,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uB2E4\uB978 \uB2C9\uB124\uC784\uC744 \uC0AC\uC6A9\uD574 \uC8FC\uC138\uC694."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fe4221a4f42822349b0d189d645a584d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7ee486d66f2c4c743b47df2de5c6b228, type: 2}
   m_sharedMaterial: {fileID: 3884357027817348187, guid: fe4221a4f42822349b0d189d645a584d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3537,7 +3538,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &394240917

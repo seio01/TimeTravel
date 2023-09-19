@@ -83,6 +83,10 @@ public class SoundManager : MonoBehaviour
             case "Button1":
                 sfxPlayer[soundIndex].clip = clips[15];
                 break;
+            case "DiceTimer":
+                sfxPlayer[soundIndex].clip = clips[16];
+                break;
+
 
         }
         sfxPlayer[soundIndex].Play();

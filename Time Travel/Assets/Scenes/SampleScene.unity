@@ -2158,6 +2158,7 @@ MonoBehaviour:
   MiddleQuitPanel: {fileID: 1106484503}
   YesButton: {fileID: 262230660}
   NoButton: {fileID: 541042352}
+  isApplicationQuit: 0
 --- !u!4 &460146643
 Transform:
   m_ObjectHideFlags: 0
@@ -5388,7 +5389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5283019, g: 0.31149852, b: 0.11712353, a: 1}
+  m_Color: {r: 0.2265806, g: 0.3490566, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6596,7 +6597,7 @@ MonoBehaviour:
   noIncorrectText: {fileID: 2088375919}
   problemScript: {fileID: 0}
   problemGraphScript: {fileID: 0}
-  problemPrefab: {fileID: 104470448041242753, guid: 24552adbed5f4b341b16c0720469140e, type: 3}
+  problemPrefab: {fileID: 104470448041242753, guid: b5c614a518b830944b1212e574e9d045, type: 3}
   selection1: {fileID: 0}
   selection2: {fileID: 0}
   selection3: {fileID: 0}
@@ -8650,7 +8651,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh72172
+  m_Name: pb_Mesh52614
   serializedVersion: 10
   m_SubMeshes: []
   m_Shapes:
@@ -9124,6 +9125,7 @@ MonoBehaviour:
   AllDoesntHaveBsetCard: 0
   initialPlayerNum: 0
   diceAndSoundPanel: {fileID: 2063885151}
+  quitScript: {fileID: 460146642}
 --- !u!1 &1379455021
 GameObject:
   m_ObjectHideFlags: 0
@@ -9966,7 +9968,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4056604, g: 0, b: 0.007864057, a: 1}
+  m_Color: {r: 0.22160912, g: 0.44357425, b: 0.5660378, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -11048,7 +11050,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.105882354, g: 0.1316804, b: 0.30980393, a: 1}
+  m_Color: {r: 0.2924528, g: 0.28555533, b: 0.28555533, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
