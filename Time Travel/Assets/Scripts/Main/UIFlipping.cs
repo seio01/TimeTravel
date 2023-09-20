@@ -14,7 +14,7 @@ public class UIFlipping : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        totalPage = 4;
+        totalPage = pages.Length;
         leftBtn.onClick.AddListener(() => { PrevPage(); });
         rightBtn.onClick.AddListener(() => { NextPage(); });
     }

@@ -23,6 +23,9 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     public Button YesButton;
     public Button NoButton;
 
+    public Action quitEvent;
+    public bool isApplicationQuit;
+
     void Awake()
     {
         if (instance == null)
@@ -30,8 +33,8 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
             instance = this;
         }
         outPlayerIndex = new List<int>();
+        InitializeApplicationQuit();
     }
-
     void Start()
     {
         YesButton.onClick.AddListener(gameQuit);
@@ -51,6 +54,9 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
+            //게임 승리했을때 한사람 나가는 경우는 제외 --> test해봐야
+            //if (GameManager.instance.isOver)
+            //    return;
             stopCoroutinesAndSetActiveFalse();
             GameManager.instance.isOver = true;
             for (int i = 0; i < DontDestroyObjects.instance.playerListWithOrder.Count; i++)
@@ -150,7 +156,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     void stopCoroutinesAndSetActiveFalse()
     {
         diceScript.StopAllCoroutines();
-        problemScript.StopAllCoroutines();
+        problem.instance.StopAllCoroutines();
         GameManager.instance.problemCanvas.gameObject.SetActive(false);
         GameManager.instance.StopAllCoroutines();
         GameManager.instance.startRoundPanel.SetActive(false);
@@ -175,15 +181,39 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
 
     void gameQuit()
     {
-        var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
+        //test
+        /*var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
         string bannedTime = ((long)timeSpan.TotalSeconds).ToString();
         PlayerPrefs.SetInt("isBanned", 1);
-        PlayerPrefs.SetString("bannedTime", bannedTime);
+        PlayerPrefs.SetString("bannedTime", bannedTime);*/
+        isApplicationQuit = true;
         Application.Quit();
     }
 
     void no()
     {
-        MiddleQuitPanel.gameObject.SetActive(false);
+        isApplicationQuit = false;
+        MiddleQuitPanel.SetActive(false);
+    }
+
+    private void InitializeApplicationQuit()
+    {
+        quitEvent += () =>
+        {
+            MiddleQuitPanel.SetActive(true);
+        };
+
+        Application.wantsToQuit += ApplicationQuit;
+    }
+
+    //프로그램 종료
+    private bool ApplicationQuit()
+    {
+        if (!isApplicationQuit)
+        {
+            quitEvent?.Invoke();
+        }
+
+        return isApplicationQuit;
     }
 }

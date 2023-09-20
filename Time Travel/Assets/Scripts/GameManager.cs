@@ -81,6 +81,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject diceAndSoundPanel;
 
+    public quitInTheMiddle quitScript;
+
     void Awake()
     {
         if (instance == null)
@@ -660,6 +662,7 @@ public class GameManager : MonoBehaviour
     public void QuitGame()
     {
         SoundManager.instance.SoundPlayer("Button");
+        quitScript.isApplicationQuit = true;
         PhotonNetwork.LeaveRoom();
         Application.Quit();
     }
