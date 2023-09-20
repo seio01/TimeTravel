@@ -28,19 +28,7 @@ public class DiceTimer : MonoBehaviour
         if (diceTime >= 0)
         {
             diceTime -= Time.deltaTime;
-            int newSecond = Mathf.RoundToInt(diceTime);
-
-            if (newSecond != currentSecond)
-            {
-                currentSecond = newSecond;
-                soundPlayed = false;
-            }
-
-            if (currentSecond >= 0 && !soundPlayed)
-            {
-                SoundManager.instance.SoundPlayer("DiceTimer");
-                soundPlayed = true;
-            }
+            PlayDiceTimerSound();
         }
 
         else if (diceTime < 0)
@@ -55,13 +43,24 @@ public class DiceTimer : MonoBehaviour
         }
         
 
-        diceTimeText.text = Mathf.Round(diceTime).ToString();
-        /*if(diceTime == 3 || diceTime == 2 || diceTime == 1 || diceTime == 0)
+        diceTimeText.text = Mathf.Round(diceTime).ToString();   
+    }
+
+    void PlayDiceTimerSound()
+    {
+        int newSecond = Mathf.RoundToInt(diceTime);
+
+        if (newSecond != currentSecond)
+        {
+            currentSecond = newSecond;
+            soundPlayed = false;
+        }
+
+        if (currentSecond < 3 && currentSecond >= 0 && !soundPlayed)
         {
             SoundManager.instance.SoundPlayer("DiceTimer");
-            Debug.Log("dicetimer" + diceTimeText.text);
-        }*/
-            
+            soundPlayed = true;
+        }
     }
 
 }

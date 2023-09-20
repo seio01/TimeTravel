@@ -44,19 +44,19 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        /*if (Input.GetKeyDown(KeyCode.Escape))
         {
             OnApplicationQuit();
-        }
+        }*/
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
-            //게임 승리했을때 한사람 나가는 경우는 제외 --> test해봐야
-            //if (GameManager.instance.isOver)
-            //    return;
+            //게임 승리했을때 한사람 나가는 경우는 제외
+            if (GameManager.instance.isOver)
+                return;
             stopCoroutinesAndSetActiveFalse();
             GameManager.instance.isOver = true;
             for (int i = 0; i < DontDestroyObjects.instance.playerListWithOrder.Count; i++)
@@ -167,7 +167,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
         RpcManager.instance.diceTimer.gameObject.SetActive(false);
     }
 
-    void OnApplicationQuit()
+    /*void OnApplicationQuit()
     {
         if (GameManager.instance.isOver == false)
         {
@@ -177,7 +177,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
         {
             return;
         }
-    }
+    }*/
 
     void gameQuit()
     {
@@ -196,7 +196,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
         MiddleQuitPanel.SetActive(false);
     }
 
-    private void InitializeApplicationQuit()
+    void InitializeApplicationQuit()
     {
         quitEvent += () =>
         {
@@ -207,9 +207,9 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     }
 
     //프로그램 종료
-    private bool ApplicationQuit()
+    bool ApplicationQuit()
     {
-        if (!isApplicationQuit)
+        if (!isApplicationQuit && !GameManager.instance.isOver)
         {
             quitEvent?.Invoke();
         }

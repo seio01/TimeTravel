@@ -383,7 +383,7 @@ public class RpcManager : MonoBehaviour
     {
         GameManager.instance.endPanel.SetActive(true);
         GameManager.instance.isOver = isOver;
-        GameManager.instance.winnerName.text = winner + " ´Ô ½Â¸®¸¦ ÃàÇÏÇÕ´Ï´Ù!";
+        GameManager.instance.winnerName.text = winner + " ´Ô\n½Â¸®¸¦ ÃàÇÏÇÕ´Ï´Ù!";
     }
 
     [PunRPC]

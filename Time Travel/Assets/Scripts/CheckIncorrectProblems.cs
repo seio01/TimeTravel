@@ -108,7 +108,6 @@ public class CheckIncorrectProblems : MonoBehaviour
             noIncorrectText.SetActive(true);
             return;
         }
-            
 
         incorrectProblemPanel.gameObject.SetActive(true);
         totalPage = GameManager.instance.player[playerIndex].incorrectProblemNumbers.Count;
@@ -227,4 +226,5 @@ public class CheckIncorrectProblems : MonoBehaviour
         TMP_Text selectionText = selection.transform.GetChild(0).GetComponent<TMP_Text>();
         selectionText.text = problemScript.answerData[problemID - 1][selectionName].ToString();
     }
+
 }

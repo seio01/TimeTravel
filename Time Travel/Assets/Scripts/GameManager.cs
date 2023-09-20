@@ -82,6 +82,7 @@ public class GameManager : MonoBehaviour
     public GameObject diceAndSoundPanel;
 
     public quitInTheMiddle quitScript;
+    public GameObject noIncorrectText;
 
     void Awake()
     {
@@ -656,6 +657,7 @@ public class GameManager : MonoBehaviour
         SoundManager.instance.SoundPlayer("Button");
         PhotonNetwork.LeaveRoom();
         Destroy(DontDestroyObjects.instance);
+        quitScript.isApplicationQuit = true;
         SceneManager.LoadScene("Main");
     }
 
@@ -935,8 +937,13 @@ public class GameManager : MonoBehaviour
     {
         player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().flipX = isFlip;
     }
-    
 
-    
+
+    public void CloseNoIncorrectPanel()
+    {
+        SoundManager.instance.SoundPlayer("Button");
+        noIncorrectText.SetActive(false);
+    }
+
 }
 
