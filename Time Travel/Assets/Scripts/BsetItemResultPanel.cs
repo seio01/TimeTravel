@@ -46,6 +46,7 @@ public class BsetItemResultPanel : MonoBehaviour
         {
             int controlPlayerCardNum = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder].Count;
             int stealCardIndex = Random.Range(0, controlPlayerCardNum);
+            GameManager.instance.testTMP.text = "»©¾ÑÀº Ä«µå index: " + stealCardIndex.ToString() + "\n";
             RpcManager.instance.cardSteal(GameManager.instance.localPlayerIndexWithOrder, stealCardIndex);
         }
     }

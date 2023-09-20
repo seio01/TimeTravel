@@ -53,6 +53,16 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
         {
             stopCoroutinesAndSetActiveFalse();
             GameManager.instance.isOver = true;
+            for (int i = 0; i < DontDestroyObjects.instance.playerListWithOrder.Count; i++)
+            {
+                if (otherPlayer.NickName == DontDestroyObjects.instance.playerListWithOrder[i].NickName)
+                {
+                    GameManager.instance.playerInformationUIs[i].SetActive(false);
+                    Color c = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+                    GameManager.instance.player[i].gameObject.GetComponent<SpriteRenderer>().color = c;
+                    break;
+                }
+            }
             //남은 플레이어 닉네임
             endPanel.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[0].NickName + " 님\n승리를 축하합니다!";
             StartCoroutine(endGame());

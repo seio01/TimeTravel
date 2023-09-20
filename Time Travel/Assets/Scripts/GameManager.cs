@@ -102,6 +102,7 @@ public class GameManager : MonoBehaviour
         initVariables();
         SoundManager.instance.bgmPlayer.clip = newBGMClip;
         SoundManager.instance.bgmPlayer.Play();
+
     }
 
     void initVariables()
@@ -716,8 +717,15 @@ public class GameManager : MonoBehaviour
         GameObject itemPanel = playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(1).gameObject;
         GameObject stolenCard = itemPanel.transform.GetChild(cardIndex).gameObject;
         string itemName = stolenCard.GetComponent<Image>().sprite.name;
+        
+
+        
         GameObject itemUIPrefab = Resources.Load<GameObject>("Prefabs/itemImageUI");
         Destroy(stolenCard);
+
+        //testTMP.text += "»©¾Ñ±ä Ä«µå index: " + playerIndex.ToString()+itemName+"\n";
+
+
         if (itemName == "¿î¸í°øµ¿Ã¼ UI")
         {
             DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Remove(DontDestroyObjects.items.bind);
@@ -726,7 +734,7 @@ public class GameManager : MonoBehaviour
             createdItem.transform.SetParent(playerInformationUIs[playerIndex].transform.GetChild(1), false);
             createdItem.GetComponent<Image>().sprite = itemSmallSprites[5];
         }
-        else if (itemName == "Ä«µå»©¾Ñ±â")
+        else if (itemName == "Ä«µå »©¾Ñ±â")
         {
             DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Remove(DontDestroyObjects.items.cardSteal);
             DontDestroyObjects.instance.playerItems[playerIndex].Add(DontDestroyObjects.items.cardSteal);
@@ -734,7 +742,7 @@ public class GameManager : MonoBehaviour
             createdItem.transform.SetParent(playerInformationUIs[playerIndex].transform.GetChild(1), false);
             createdItem.GetComponent<Image>().sprite = itemSmallSprites[3];
         }
-        else if (itemName == "½Ã°£»©¾Ñ±â UI")
+        else if (itemName == "½Ã°£ »©¾Ñ±â UI")
         {
             DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Remove(DontDestroyObjects.items.timeSteal);
             DontDestroyObjects.instance.playerItems[playerIndex].Add(DontDestroyObjects.items.timeSteal);
@@ -753,7 +761,7 @@ public class GameManager : MonoBehaviour
         else if (itemName == "¼±ÅÃÁö Áö¿ì±â UI")
         {
             DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Remove(DontDestroyObjects.items.erase);
-            DontDestroyObjects.instance.playerItems[playerIndex].Add(DontDestroyObjects.items.bind);
+            DontDestroyObjects.instance.playerItems[playerIndex].Add(DontDestroyObjects.items.erase);
             GameObject createdItem = Instantiate(itemUIPrefab);
             createdItem.transform.SetParent(playerInformationUIs[playerIndex].transform.GetChild(1), false);
             createdItem.GetComponent<Image>().sprite = itemSmallSprites[1];
@@ -766,13 +774,25 @@ public class GameManager : MonoBehaviour
             createdItem.transform.SetParent(playerInformationUIs[playerIndex].transform.GetChild(1), false);
             createdItem.GetComponent<Image>().sprite = itemSmallSprites[2];
         }
-
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            List<DontDestroyObjects.items> test = DontDestroyObjects.instance.playerItems[i];
+            testTMP.text += i + " : ";
+            for (int j = 0; j < test.Count; j++)
+            {
+                testTMP.text += test[j].ToString() + " ";
+            }
+            testTMP.text += "\n";
+        }
     }
 
     public void eraseItemUI(int index, string itemName)
     {
         GameObject itemPanel = playerInformationUIs[index].transform.GetChild(1).gameObject;
         string itemNameToSpirteName = "";
+
+        testTMP.text = "";
+        testTMP.text += itemName + "\n";
         if (itemName == "¿î¸í°øµ¿Ã¼")
         {
             itemNameToSpirteName = "¿î¸í°øµ¿Ã¼ UI";
