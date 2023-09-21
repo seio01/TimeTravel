@@ -117,7 +117,7 @@ public class Player : MonoBehaviour
                 ReachedLadderPoint(60, "null", false, false);
                 break;
             case 64:
-                GameManager.instance.Flip(false);
+                GameManager.instance.Flip(true);
                 ReachedLadderPoint(73, "근현대", false, true);
                 break;
             case 76:

@@ -391,4 +391,56 @@ public class RpcManager : MonoBehaviour
     {
         isSomeoneUseCardSteal = true;
     }
+
+    public void GetAdditionalItem(int ran)
+    {
+        PV.RPC("ShowAddtionalItemToOthers", RpcTarget.All, ran, GameManager.instance.controlPlayerIndexWithOrder);
+    }
+
+    [PunRPC]
+    void ShowAddtionalItemToOthers(int ran, int currentPlayerIndex)
+    {
+        //int itemCount = DontDestroyObjects.instance.playerItems[currentPlayerIndex].Count;
+        GameObject itemUIPrefab = Resources.Load<GameObject>("Prefabs/itemImageUI");
+        GameObject createdItem = Instantiate(itemUIPrefab);
+
+        if (ran == 0)
+        {
+            DontDestroyObjects.instance.playerItems[currentPlayerIndex].Add(DontDestroyObjects.items.hint);
+            createdItem.transform.SetParent(GameManager.instance.playerInformationUIs[currentPlayerIndex].transform.GetChild(1), false);
+            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[0];
+
+        }
+        else if (ran == 1)
+        {
+            DontDestroyObjects.instance.playerItems[currentPlayerIndex].Add(DontDestroyObjects.items.erase);
+            createdItem.transform.SetParent(GameManager.instance.playerInformationUIs[currentPlayerIndex].transform.GetChild(1), false);
+            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[1];
+
+        }
+        else if (ran == 2)
+        {
+            DontDestroyObjects.instance.playerItems[currentPlayerIndex].Add(DontDestroyObjects.items.pass);
+            createdItem.transform.SetParent(GameManager.instance.playerInformationUIs[currentPlayerIndex].transform.GetChild(1), false);
+            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[3];
+        }
+        else if (ran == 3)
+        {
+            DontDestroyObjects.instance.playerItems[currentPlayerIndex].Add(DontDestroyObjects.items.cardSteal);
+            createdItem.transform.SetParent(GameManager.instance.playerInformationUIs[currentPlayerIndex].transform.GetChild(1), false);
+            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[0];
+        }
+        else if (ran == 4)
+        {
+            DontDestroyObjects.instance.playerItems[currentPlayerIndex].Add(DontDestroyObjects.items.timeSteal);
+            createdItem.transform.SetParent(GameManager.instance.playerInformationUIs[currentPlayerIndex].transform.GetChild(1), false);
+            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[4];
+        }
+        else
+        {
+            DontDestroyObjects.instance.playerItems[currentPlayerIndex].Add(DontDestroyObjects.items.bind);
+            createdItem.transform.SetParent(GameManager.instance.playerInformationUIs[currentPlayerIndex].transform.GetChild(1), false);
+            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[5];
+        }
+    }
 }
