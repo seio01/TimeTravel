@@ -29,6 +29,8 @@ public class Dice : MonoBehaviour
 
     public void rollDice(int[] diceSpriteIndex)
     {
+        if (manager.isOver)
+            return;
         StartCoroutine("RollDiceRoutine", diceSpriteIndex);
     }
 

@@ -22,7 +22,7 @@ public class DiceTimer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!manager.timerOn)
+        if (!manager.timerOn || manager.isOver)
             return;
 
         if (diceTime >= 0)
