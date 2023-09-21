@@ -83,6 +83,7 @@ public class GameManager : MonoBehaviour
     public GameObject diceAndSoundPanel;
 
     public quitInTheMiddle quitScript;
+    public GameObject noIncorrectText;
 
     void Awake()
     {
@@ -427,52 +428,13 @@ public class GameManager : MonoBehaviour
         secondRoll = true;
         if (DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Count < 4) //가지고있는 아이템 개수가 3개이하일때 아이템 한장 추가 획득
         {
-            int itemCount = DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Count;
             spaceText.text = "랜덤한 아이템 하나를 추가로 획득합니다!";
             SoundManager.instance.SoundPlayer("ShowPanel1");
             space.SetActive(true);
-
-            int ran = Random.Range(0, 6);
-            GameObject itemUIPrefab = Resources.Load<GameObject>("Prefabs/itemImageUI");
-            GameObject createdItem = Instantiate(itemUIPrefab);
-
-            if (ran == 0)
+            if (PhotonNetwork.LocalPlayer == controlPlayer)
             {
-                DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Add(DontDestroyObjects.items.hint);
-                createdItem.transform.SetParent(playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(1), false);
-                createdItem.GetComponent<Image>().sprite = itemSmallSprites[0];
-
-            }
-            else if (ran == 1)
-            {
-                DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Add(DontDestroyObjects.items.erase);
-                createdItem.transform.SetParent(playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(1), false);
-                createdItem.GetComponent<Image>().sprite = itemSmallSprites[1];
-
-            }
-            else if (ran == 2)
-            {
-                DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Add(DontDestroyObjects.items.pass);
-                createdItem.transform.SetParent(playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(1), false);
-                createdItem.GetComponent<Image>().sprite = itemSmallSprites[3];
-            }
-            else if (ran == 3)
-            {
-                DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Add(DontDestroyObjects.items.cardSteal);
-                createdItem.transform.SetParent(playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(1), false);
-                createdItem.GetComponent<Image>().sprite = itemSmallSprites[0];
-            }
-            else if (ran == 4)
-            {
-                DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Add(DontDestroyObjects.items.timeSteal);
-                createdItem.transform.SetParent(playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(1), false);
-                createdItem.GetComponent<Image>().sprite = itemSmallSprites[4];
-            }
-            else
-            {
-                DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Add(DontDestroyObjects.items.bind);
-                createdItem.transform.SetParent(playerInformationUIs[controlPlayerIndexWithOrder].transform.GetChild(1), false);
-                createdItem.GetComponent<Image>().sprite = itemSmallSprites[5];
+                int ran = Random.Range(0, 6);
+                RpcManager.instance.GetAdditionalItem(ran);
             }
 
             yield return new WaitForSeconds(1f);
@@ -658,6 +620,7 @@ public class GameManager : MonoBehaviour
         SoundManager.instance.SoundPlayer("Button");
         PhotonNetwork.LeaveRoom();
         Destroy(DontDestroyObjects.instance);
+        quitScript.isApplicationQuit = true;
         SceneManager.LoadScene("Main");
     }
 
@@ -935,8 +898,13 @@ public class GameManager : MonoBehaviour
     {
         player[nowMovingPlayerIndex].gameObject.GetComponent<SpriteRenderer>().flipX = isFlip;
     }
-    
 
-    
+
+    public void CloseNoIncorrectPanel()
+    {
+        SoundManager.instance.SoundPlayer("Button");
+        noIncorrectText.SetActive(false);
+    }
+
 }
 
