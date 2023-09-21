@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text controlPlayerNameText;
 
     public TMP_Text testTMP;
+    public TMP_Text answerText;
     public int controlPlayerIndexWithOrder;
     public int localPlayerIndexWithOrder;
     public bool isThisTurnTimeSteal;
@@ -129,7 +130,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
+        
         testTMP.text = "";
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
@@ -141,7 +142,7 @@ public class GameManager : MonoBehaviour
             }
             testTMP.text += "\n";
         }
-        */
+        
         //게임 종료
         if (isOver)
             return;
@@ -381,6 +382,7 @@ public class GameManager : MonoBehaviour
         currentTurnASetItem = 0;
         currentTurnBSetItem = 0;
         AllDoesntHaveBsetCard = false;
+        RpcManager.instance.currentTurnUsedItemOfLocalPlayer = "";
         RpcManager.instance.isSomeoneUseCardSteal = false;
         if (correctCount != 5)
             secondRoll = false;
@@ -794,8 +796,6 @@ public class GameManager : MonoBehaviour
         GameObject itemPanel = playerInformationUIs[index].transform.GetChild(1).gameObject;
         string itemNameToSpirteName = "";
 
-        testTMP.text = "";
-        testTMP.text += itemName + "\n";
         if (itemName == "운명공동체")
         {
             itemNameToSpirteName = "운명공동체 UI";

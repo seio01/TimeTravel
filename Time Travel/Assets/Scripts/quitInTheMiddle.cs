@@ -156,7 +156,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     void stopCoroutinesAndSetActiveFalse()
     {
         diceScript.StopAllCoroutines();
-        problem.instance.StopAllCoroutines();
+        problemScript.StopAllCoroutines();
         GameManager.instance.problemCanvas.gameObject.SetActive(false);
         GameManager.instance.StopAllCoroutines();
         GameManager.instance.startRoundPanel.SetActive(false);

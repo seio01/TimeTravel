@@ -121,7 +121,7 @@ public class problem : MonoBehaviour
         getInfoFromCSV();
         setImage();
         controlButtons();
-        GameManager.instance.testTMP.text = answerData[problemID - 1]["답"].ToString();
+        GameManager.instance.answerText.text = answerData[problemID - 1]["답"].ToString();
         if (problemType == "ox")
         {
             if (GameManager.instance.isThisTurnTimeSteal == true)
