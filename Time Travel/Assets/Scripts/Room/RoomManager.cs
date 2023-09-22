@@ -7,6 +7,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using Photon.Pun.UtilityScripts;
 using TMPro;
+using System;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
@@ -21,6 +22,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public GameObject setOrderPanel;
     public GameObject gameStartText;
     public GameObject forcedStartTimeText;
+    public TMP_Text playerCountText;
     public TMP_Text pickCardText;
 
     public Button pickCardBtn;
@@ -43,9 +45,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public PhotonView PV;
     public forcedStartTimer timerScript;
 
+    public Action quitEvent;
+    public bool isApplicationQuit;
+    public GameObject MiddleQuitPanel;
+
+    public Button YesButton;
+    public Button NoButton;
     // Start is called before the first frame update
     void Awake()
     {
+
         if (instance == null)
         {
             instance = this;
@@ -55,6 +64,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
             Debug.Log(player.NickName);
         }
         Debug.Log(PhotonNetwork.CurrentRoom.MaxPlayers);
+        InitializeApplicationQuit();
+        isReady = false;
+        playerCountText.text = PhotonNetwork.PlayerList.Length.ToString() + "/" + PhotonNetwork.CurrentRoom.MaxPlayers.ToString();
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
             playerListImg[i].gameObject.SetActive(true);
@@ -69,17 +81,19 @@ public class RoomManager : MonoBehaviourPunCallbacks
         setLocalPlayerIndex();
         //timer기능
         Timer();
-        if (PhotonNetwork.IsMasterClient) //master만 리스트 생성
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
-            for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
-            {
-                playerOrderList.Add(i);
-            }
+            playerOrderList.Add(i);
         }
 
         PV.RPC("receieveReadyInformation", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.NickName);
     }
 
+    void Start()
+    {
+        YesButton.onClick.AddListener(gameQuit);
+        NoButton.onClick.AddListener(no);
+    }
 
     public void Timer()
     {
@@ -115,7 +129,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
             }
         }
-
+        playerCountText.text = PhotonNetwork.PlayerList.Length.ToString() + "/" + PhotonNetwork.CurrentRoom.MaxPlayers.ToString();
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
@@ -135,9 +149,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
             if (playerListImg[i].GetComponentInChildren<TMP_Text>().text == otherPlayer.NickName)
             {
                 playerListImg[i].GetComponentInChildren<TMP_Text>().text = "";
+                if (playerListImg[i].transform.transform.Find("Ready Text").gameObject.activeSelf == true)
+                {
+                    readyCounts--;
+                    localPlayerIndex--;
+                    playerListImg[i].transform.transform.Find("Ready Text").gameObject.SetActive(false);
+                }
                 break;
             }
         }
+        playerCountText.text = PhotonNetwork.PlayerList.Length.ToString() + "/" + PhotonNetwork.CurrentRoom.MaxPlayers.ToString();
     }
 
     public void PickItems()
@@ -147,16 +168,17 @@ public class RoomManager : MonoBehaviourPunCallbacks
         setTimer = false;
         timeText.SetActive(false);
         pickCardBtn.interactable = false;
+        isReady = true;
         pickCardText.text = "뽑은 카드 위로 마우스를 올리면 \n설명을 볼 수 있습니다.\n";
         int ran;
         //아이템 뽑기
         for(int i = 0; i < 3; i++)
         {
-            ran = Random.Range(0, 3);
+            ran = UnityEngine.Random.Range(0, 3);
             items[i].sprite = itemImg[ran];
             itemList.Add(ran); 
         }
-        ran = Random.Range(3, 6);
+        ran = UnityEngine.Random.Range(3, 6);
         items[3].sprite = itemImg[ran];
         itemList.Add(ran);
 
@@ -169,7 +191,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         //아이템 뽑기 완료하면 자동 레디되게
         playerListImg[localPlayerIndex].transform.transform.Find("Ready Text").gameObject.SetActive(true);
         playerListImg[localPlayerIndex].GetComponent<playerPanel>().setReadyToOther(localPlayerIndex);
-        //leaveButton.interactable = false; 주석 풀기
+        //leaveButton.interactable = false; 최종 버전에서는 주석 풀기
 
 
         // 레디했는데 인원이 max인원보다 적을 경우 60초 기다림. 새로운 사람이 들어왔을 때는 갱신 x, ready했을 때만 갱신.
@@ -186,7 +208,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         for (int i = 0; i < list.Count; i++)
         {
-            int ran = Random.Range(0, list.Count);
+            int ran = UnityEngine.Random.Range(0, list.Count);
             int temp = list[i];
             list[i] = list[ran];
             list[ran] = temp;
@@ -218,7 +240,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             for (int i = 0; i < updatedList.Length; i++)
             {
-                playerOrderList.Add(updatedList[i]);
+                playerOrderList[i] = updatedList[i];
             }
         }
         DontDestroyObjects.instance.setPlayerListWithOrder(updatedPlayerList);
@@ -246,8 +268,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         forcedStartTimeText.SetActive(false);
         //순서 정하기
+        if (RoomManager.instance.readyCounts != PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            int diff = PhotonNetwork.CurrentRoom.MaxPlayers - RoomManager.instance.readyCounts;
+            for (int i = 1; i <= diff; i++)
+            {
+                playerOrderList.RemoveAt(PhotonNetwork.CurrentRoom.MaxPlayers - i);
+            }
+        }
+
         if (PhotonNetwork.IsMasterClient)
         {
+            /*
             //max 안원수와 맞지 않는다면 list를 인원 수에 맞추기.
             if (RoomManager.instance.readyCounts != PhotonNetwork.CurrentRoom.MaxPlayers)
             {
@@ -257,6 +289,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                     playerOrderList.RemoveAt(PhotonNetwork.CurrentRoom.MaxPlayers - i);
                 }
             }
+            */
 
             playerOrderList = ShuffleOrder(playerOrderList);
             UpdateListToOthers();
@@ -383,5 +416,47 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 }
             }
         }
+    }
+
+    void gameQuit()
+    {
+        //test
+        //최종 버전에서는 주석 해제하기.
+        /*var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
+        string bannedTime = ((long)timeSpan.TotalSeconds).ToString();
+        PlayerPrefs.SetInt("isBanned", 1);
+        PlayerPrefs.SetString("bannedTime", bannedTime);*/
+        isApplicationQuit = true;
+        Application.Quit();
+    }
+
+    void no()
+    {
+        isApplicationQuit = false;
+        MiddleQuitPanel.SetActive(false);
+    }
+
+    void InitializeApplicationQuit()
+    {
+        quitEvent += () =>
+        {
+            MiddleQuitPanel.SetActive(true);
+        };
+
+        Application.wantsToQuit += ApplicationQuit;
+    }
+
+    bool ApplicationQuit()
+    {
+        if (isReady == false)
+        {
+            isApplicationQuit = true;
+        }
+        if (!isApplicationQuit && isReady == true)
+        {
+            quitEvent?.Invoke();
+        }
+
+        return isApplicationQuit;
     }
 }
