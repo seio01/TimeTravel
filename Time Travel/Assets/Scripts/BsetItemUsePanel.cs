@@ -43,6 +43,13 @@ public class BsetItemUsePanel : MonoBehaviour
             {
                 List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.localPlayerIndexWithOrder];
 
+                GameManager.instance.answerText.text = "";
+                for (int j = 0; j < playerCards.Count; j++)
+                {
+                    GameManager.instance.answerText.text += playerCards[j].ToString() + " ";
+                }
+                GameManager.instance.answerText.text += "\n";
+
                 if (playerCards.Contains(DontDestroyObjects.items.cardSteal) || playerCards.Contains(DontDestroyObjects.items.timeSteal) || playerCards.Contains(DontDestroyObjects.items.bind))
                 {
                     GameObject itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");

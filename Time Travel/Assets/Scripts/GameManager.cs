@@ -77,9 +77,9 @@ public class GameManager : MonoBehaviour
     public int currentTurnASetItem;
     public int currentTurnBSetItem;
     public bool AllDoesntHaveBsetCard;
-
+    public bool movableAfterSecondRoll;
     public int initialPlayerNum;
-
+    
     public GameObject diceAndSoundPanel;
 
     public quitInTheMiddle quitScript;
@@ -117,6 +117,7 @@ public class GameManager : MonoBehaviour
         isUsedBind = false;
         isMovableWithBind = false;
         AllDoesntHaveBsetCard = false;
+        movableAfterSecondRoll = true;
         controlPlayerIndexWithOrder = 0;
         controlPlayer = DontDestroyObjects.instance.playerListWithOrder[0];
         controlPlayerNameText.text = "현재 차례: " + controlPlayer.NickName;
@@ -156,15 +157,19 @@ public class GameManager : MonoBehaviour
             CheckPlayersPosition(controlPlayerIndexWithOrder);
             if (secondRoll)
             {
-                secondRoll = false;
-                finishRound = true;
-                UISmaller();
+                if (isMovableWithBind == false)
+                {
+                    secondRoll = false;
+                    finishRound = true;
+                    UISmaller();
+                }
             }
                 
             //정답 5번이면 주사위 한번 더 굴리기
             if (player[GameManager.instance.controlPlayerIndexWithOrder].correctCount == 5)
             {
                 player[GameManager.instance.controlPlayerIndexWithOrder].correctCount = 0;
+                movableAfterSecondRoll = false;
                 StartCoroutine(RollDiceAndGetItem());
             }
             if (isLadder && !player[controlPlayerIndexWithOrder].movingAllowed)
@@ -179,10 +184,12 @@ public class GameManager : MonoBehaviour
             {
                 if (isMovableWithBind == true)
                 {
-                    updatePlayerInformationUI(controlPlayerIndexWithOrder);
-                    RpcManager.instance.bindPlayerIndexes.Sort();
-                    RpcManager.instance.isMovableWithBind = true;
-                    //moveBindPlayer();
+                    if (movableAfterSecondRoll == true)
+                    {
+                        updatePlayerInformationUI(controlPlayerIndexWithOrder);
+                        RpcManager.instance.bindPlayerIndexes.Sort();
+                        RpcManager.instance.isMovableWithBind = true;
+                    }
                 }
                 else if(!secondRoll)
                 {
@@ -385,6 +392,7 @@ public class GameManager : MonoBehaviour
         AllDoesntHaveBsetCard = false;
         RpcManager.instance.currentTurnUsedItemOfLocalPlayer = "";
         RpcManager.instance.isSomeoneUseCardSteal = false;
+        movableAfterSecondRoll = true;
         if (correctCount != 5)
             secondRoll = false;
         player[controlPlayerIndexWithOrder].moveLadder = false;
@@ -425,6 +433,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator RollDiceAndGetItem()
     {
+        movableAfterSecondRoll = false;
         secondRoll = true;
         if (DontDestroyObjects.instance.playerItems[controlPlayerIndexWithOrder].Count < 4) //가지고있는 아이템 개수가 3개이하일때 아이템 한장 추가 획득
         {
@@ -451,7 +460,7 @@ public class GameManager : MonoBehaviour
         //diceImg.SetActive(true);
         diceTimer.gameObject.SetActive(true);
         timerOn = true;
-
+        movableAfterSecondRoll = true;
 
     }
 

@@ -103,7 +103,7 @@ public class problem : MonoBehaviour
                 GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].correctCount++;
                 GameManager.instance.UpdateGaugeImg();
             }
-
+            RpcManager.instance.bindPlayerDiceNum = GameManager.instance.newDiceSide;
 
         }
         else

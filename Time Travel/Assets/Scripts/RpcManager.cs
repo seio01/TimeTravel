@@ -30,6 +30,7 @@ public class RpcManager : MonoBehaviour
     public List<int> bindPlayerIndexes;
 
     public bool isSomeoneUseCardSteal;
+    public int bindPlayerDiceNum;
     // Start is called before the first frame update
     void Awake()
     {
@@ -58,7 +59,7 @@ public class RpcManager : MonoBehaviour
                 int bindPlayerIndex = bindPlayerIndexes[0];
                 GameManager.instance.player[bindPlayerIndex].movingAllowed = true;
                 GameManager.instance.nowMovingPlayerIndex = bindPlayerIndex;
-                if (GameManager.instance.player[bindPlayerIndex].curIndex > GameManager.instance.playerStartPoint[bindPlayerIndex] + GameManager.instance.newDiceSide)
+                if (GameManager.instance.player[bindPlayerIndex].curIndex > GameManager.instance.playerStartPoint[bindPlayerIndex] + bindPlayerDiceNum)
                 {
                     GameManager.instance.player[bindPlayerIndex].movingAllowed = false;
                     GameManager.instance.CheckPlayersPosition(bindPlayerIndex);
@@ -287,7 +288,6 @@ public class RpcManager : MonoBehaviour
     void setIsThisTurnTimeStealTrueToOthers()
     {
        GameManager.instance.isThisTurnTimeSteal = true;
-       //GameManager.instance. player[bindPlayerIndex].movingAllowed = true;
     }
 
     public void setDiceTrue()

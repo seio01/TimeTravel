@@ -13,6 +13,7 @@ public class card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     // Start is called before the first frame update
     void Start()
     {
+        textPanel.gameObject.SetActive(false);
         setItemText();
     }
 

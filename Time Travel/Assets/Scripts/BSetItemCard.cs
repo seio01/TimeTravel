@@ -19,7 +19,7 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         string spriteName = this.gameObject.GetComponent<Image>().sprite.name;
         textPanel = transform.parent.parent.GetChild(3).gameObject;
         itemText = textPanel.transform.GetChild(0).GetComponent<TMP_Text>();
-
+        textPanel.gameObject.SetActive(false);
         //setItemText();
         if (spriteName == "Ä«µå»©¾Ñ±â" && canStealCard() == false)
         {
@@ -36,7 +36,7 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.instance.currentTurnBSetItem > 0)
+        if (GameManager.instance.currentTurnBSetItem > 0 && isUsed == false)
         {
             canNotUse = true;
             changeColorBlack();
@@ -88,8 +88,10 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             return;
         }
         string spriteName = this.gameObject.GetComponent<Image>().sprite.name;
-        changeColorBlack();
+        Color usedColor = new Color(200 / 255f, 200 / 255f, 200 / 255f);
+        this.gameObject.GetComponent<Image>().color = usedColor;
         isUsed = true;
+        transform.GetChild(0).gameObject.SetActive(true);
         RpcManager.instance.currentTurnUsedItemOfLocalPlayer = spriteName;
         if (spriteName == "¿î¸í°øµ¿Ã¼")
         {
