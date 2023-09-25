@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
                 ReachedLadderPoint(48, "조선시대", false, false);
                 break;
             case 53:
-                GameManager.instance.Flip(true);
+                GameManager.instance.Flip(false);
                 ReachedLadderPoint(60, "null", false, false);
                 break;
             case 64:

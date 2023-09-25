@@ -86,6 +86,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public quitInTheMiddle quitScript;
     public GameObject noIncorrectText;
 
+    public int bindDiceSide;
+
     void Awake()
     {
         if (instance == null)
@@ -169,7 +171,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                     UISmaller();
                 }
             }
-                
+
             //정답 5번이면 주사위 한번 더 굴리기
             if (player[GameManager.instance.controlPlayerIndexWithOrder].correctCount == 5)
             {
@@ -196,7 +198,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                         RpcManager.instance.isMovableWithBind = true;
                     }
                 }
-                else if(!secondRoll)
+                else if (!secondRoll)
                 {
                     finishRound = true;
                     UISmaller();
@@ -405,7 +407,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         StartCoroutine(RoundStartRoutine());
     }
 
-    bool checkControlPlayerOut()
+    public bool checkControlPlayerOut()
     {
         if (quitInTheMiddle.instance.outPlayerIndex.Contains(controlPlayerIndexWithOrder))
         {

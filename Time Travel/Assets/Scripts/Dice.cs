@@ -56,7 +56,6 @@ public class Dice : MonoBehaviour
         }
         else
         {
-            Debug.Log("second roll");
             manager.MovePlayer();
         }
         yield return null;

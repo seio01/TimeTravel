@@ -369,9 +369,8 @@ public class problem : MonoBehaviour
         {
             return;
         }
-        SoundManager.instance.SoundPlayerStop();
-        SoundManager.instance.SoundPlayer("Button1");
-        
+
+
         problemPassButton.gameObject.SetActive(false);
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.pass);
         GameManager.instance.currentTurnASetItem = 1;
@@ -382,6 +381,8 @@ public class problem : MonoBehaviour
     void passProblemToOthers()
     {
         StopCoroutine("setTimer");
+        SoundManager.instance.SoundPlayerStop();
+        SoundManager.instance.SoundPlayer("Button1");
         resultPanel.SetActive(true);
         resultText.text = "문제를 패스했습니다. \n";
         string correctAnswer = answerData[problemID - 1]["답"].ToString();

@@ -87,12 +87,11 @@ public class SoundManager : MonoBehaviour
                 sfxPlayer[soundIndex].clip = clips[16];
                 break;
 
-
         }
         sfxPlayer[soundIndex].Play();
         soundIndex = (soundIndex + 1) % sfxPlayer.Length;
     }
-    
+
     public void SoundPlayerStop()
     {
         for(int i = 0; i < sfxPlayer.Length; i++)

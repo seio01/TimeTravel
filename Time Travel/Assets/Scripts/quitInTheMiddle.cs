@@ -133,7 +133,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     IEnumerator endGame()
     {
         SoundManager.instance.SoundPlayer("ShowPanel1");
-        endGameText.transform.GetChild(0).GetComponent<TMP_Text>().text = "모든 플레이어가 게임을 중단하여 자동으로 종료됩니다.\n";
+        endGameText.transform.GetChild(0).GetComponent<TMP_Text>().text = "모든 플레이어가 게임을 중단하여\n자동으로 종료됩니다.\n";
         endGameText.SetActive(true);
 
         yield return new WaitForSeconds(2f);
@@ -181,11 +181,10 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
 
     void gameQuit()
     {
-        //test
-        /*var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
+        var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
         string bannedTime = ((long)timeSpan.TotalSeconds).ToString();
         PlayerPrefs.SetInt("isBanned", 1);
-        PlayerPrefs.SetString("bannedTime", bannedTime);*/
+        PlayerPrefs.SetString("bannedTime", bannedTime);
         isApplicationQuit = true;
         Application.Quit();
     }

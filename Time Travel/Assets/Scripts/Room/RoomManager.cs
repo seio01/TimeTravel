@@ -121,7 +121,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             if(readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)
                 StartGame();
         }
-        //Debug.Log(newPlayer.NickName);
+        Debug.Log(newPlayer.NickName);
 
         for(int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
@@ -293,7 +293,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             UpdateListToOthers();
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
-        
+
         yield return new WaitForSeconds(3f);
         //아이템 뽑은 것 다른 사람들에게 전송.
         UpdateItemListToOthers();
@@ -312,12 +312,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         SoundManager.instance.SoundPlayer("Button");
+        SoundManager.instance.SoundPlayerStop();
         pickCardBtn.interactable = true;
         leaveRoomBtn.interactable = true;
         for (int i = 0; i < 4; i++)
         {
             items[i].gameObject.SetActive(false);
         }
+
         Destroy(DontDestroyObjects.instance);
         PhotonNetwork.LeaveRoom();
     }

@@ -61,6 +61,7 @@ public class RpcManager : MonoBehaviour
                 GameManager.instance.nowMovingPlayerIndex = bindPlayerIndex;
                 if (GameManager.instance.player[bindPlayerIndex].curIndex > GameManager.instance.playerStartPoint[bindPlayerIndex] + bindPlayerDiceNum)
                 {
+                    
                     GameManager.instance.player[bindPlayerIndex].movingAllowed = false;
                     GameManager.instance.CheckPlayersPosition(bindPlayerIndex);
                     GameManager.instance.playerStartPoint[bindPlayerIndex] = GameManager.instance.player[bindPlayerIndex].curIndex - 1;
@@ -419,5 +420,11 @@ public class RpcManager : MonoBehaviour
             createdItem.transform.SetParent(GameManager.instance.playerInformationUIs[currentPlayerIndex].transform.GetChild(1), false);
             createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[5];
         }
+
+        for(int i = 0; i < DontDestroyObjects.instance.playerItems[currentPlayerIndex].Count; i++)
+        {
+            Debug.Log("아이템 보유 목록 :" + DontDestroyObjects.instance.playerItems[currentPlayerIndex][i].ToString());
+        }
+        
     }
 }
