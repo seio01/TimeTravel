@@ -181,11 +181,10 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
 
     void gameQuit()
     {
-        //ban하는 부분은 test용으로 사용x
-        /*var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
+        var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
         string bannedTime = ((long)timeSpan.TotalSeconds).ToString();
         PlayerPrefs.SetInt("isBanned", 1);
-        PlayerPrefs.SetString("bannedTime", bannedTime);*/
+        PlayerPrefs.SetString("bannedTime", bannedTime);
         isApplicationQuit = true;
         Application.Quit();
     }

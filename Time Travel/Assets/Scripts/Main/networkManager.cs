@@ -72,7 +72,6 @@ public class networkManager : MonoBehaviourPunCallbacks
     public void setNickName()
     {
         PhotonNetwork.LocalPlayer.NickName = nickNameInput.text; //닉네임 입력
-        Debug.Log("닉네임" + nickNameInput.text);
     }
 
     public override void OnConnectedToMaster()

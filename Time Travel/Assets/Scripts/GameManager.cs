@@ -158,13 +158,11 @@ public class GameManager : MonoBehaviour
             CheckPlayersPosition(controlPlayerIndexWithOrder);
             if (secondRoll)
             {
-                Debug.Log("seco");
                 secondRoll = false;
                 finishRound = true;
                 if (isMovableWithBind == false)
                 {
                     UISmaller();
-                    Debug.Log("secondroll 움직임 끝나고?");
                 }
                 else
                     finishSecondRoll = true;
@@ -200,15 +198,11 @@ public class GameManager : MonoBehaviour
                     updatePlayerInformationUI(controlPlayerIndexWithOrder);
                     RpcManager.instance.bindPlayerIndexes.Sort();
                     RpcManager.instance.isMovableWithBind = true;
-                    //moveBindPlayer();
-                    Debug.Log("Bind");
                 }
                 else if (!secondRoll)
                 {
-                    Debug.Log("Hell");
                     finishRound = true;
                     UISmaller();
-                    //if(!secondRoll )
                 }
             }
 
