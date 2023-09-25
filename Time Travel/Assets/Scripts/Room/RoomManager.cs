@@ -294,12 +294,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         //아이템 뽑은 것 다른 사람들에게 전송.
         UpdateItemListToOthers();
         gameStartText.SetActive(true);
         SoundManager.instance.SoundPlayer("ShowPanel");
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
         if (PhotonNetwork.IsMasterClient)
         {
             PV.RPC("loadNextScene", RpcTarget.All);
