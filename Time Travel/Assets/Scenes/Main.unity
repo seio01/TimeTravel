@@ -3006,7 +3006,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &361292075
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3617,7 +3617,7 @@ MonoBehaviour:
     \uC0C9\uC758 \uD3EC\uD138\uC774 \uC788\uB294 \uCE78\uC73C\uB85C \uBC14\uB85C
     \uC774\uB3D9\uAC00\uB2A5\uD558\uB2E4\r\n- \uC591\uBC29\uD5A5\uC73C\uB85C \uC774\uB3D9\uD560
     \uC218 \uC788\uB2E4\r\n\r\n\uBE48\uCE78 : \uC544\uBB34 \uC77C\uB3C4 \uC77C\uC5B4\uB098\uC9C0
-    \uC54A\uB294\uB2E4"
+    \uC54A\uB294\uB2E4. \uD574\uB2F9 \uCE78\uC73C\uB85C \uC774\uB3D9\uD55C\uB2E4."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7ee486d66f2c4c743b47df2de5c6b228, type: 2}
   m_sharedMaterial: {fileID: -5346071677025868190, guid: 7ee486d66f2c4c743b47df2de5c6b228, type: 2}
@@ -6015,7 +6015,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &801994074
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7104,7 +7104,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1144362679
 RectTransform:
   m_ObjectHideFlags: 0

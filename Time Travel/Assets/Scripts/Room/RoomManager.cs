@@ -51,7 +51,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public Button YesButton;
     public Button NoButton;
-
     // Start is called before the first frame update
     void Awake()
     {
@@ -172,6 +171,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         timeText.SetActive(false);
         pickCardBtn.interactable = false;
         isReady = true;
+        leaveRoomBtn.interactable = false;
         pickCardText.text = "뽑은 카드 위로 마우스를 올리면 \n설명을 볼 수 있습니다.\n";
         int ran;
         //아이템 뽑기
@@ -201,7 +201,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
 
-        //leaveButton.interactable = false; 최종 버전에서는 주석 풀기
+
 
 
         // 레디했는데 인원이 max인원보다 적을 경우 60초 기다림. 새로운 사람이 들어왔을 때는 갱신 x, ready했을 때만 갱신.
