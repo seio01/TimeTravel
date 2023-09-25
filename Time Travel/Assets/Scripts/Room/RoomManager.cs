@@ -51,6 +51,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public Button YesButton;
     public Button NoButton;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -65,6 +66,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
         Debug.Log(PhotonNetwork.CurrentRoom.MaxPlayers);
         InitializeApplicationQuit();
+        PhotonNetwork.AutomaticallySyncScene = true;
         isReady = false;
         playerCountText.text = PhotonNetwork.PlayerList.Length.ToString() + "/" + PhotonNetwork.CurrentRoom.MaxPlayers.ToString();
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
@@ -92,7 +94,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     void Start()
     {
         YesButton.onClick.AddListener(gameQuit);
-        NoButton.onClick.AddListener(no);
+        //NoButton.onClick.AddListener(no);
     }
 
     public void Timer()
@@ -101,6 +103,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         timeText.SetActive(true);
         infoText.SetActive(true);
     }
+
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
@@ -189,8 +192,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
 
         //아이템 뽑기 완료하면 자동 레디되게
-        playerListImg[localPlayerIndex].transform.transform.Find("Ready Text").gameObject.SetActive(true);
-        playerListImg[localPlayerIndex].GetComponent<playerPanel>().setReadyToOther(localPlayerIndex);
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        {
+            playerListImg[i].GetComponent<playerPanel>().setReadyToOther(PhotonNetwork.LocalPlayer.NickName);
+            if (playerListImg[i].GetComponentInChildren<TMP_Text>().text == PhotonNetwork.LocalPlayer.NickName)
+            {
+                playerListImg[i].transform.transform.Find("Ready Text").gameObject.SetActive(true);
+            }
+        }
+
         //leaveButton.interactable = false; 최종 버전에서는 주석 풀기
 
 
@@ -279,18 +289,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            /*
-            //max 안원수와 맞지 않는다면 list를 인원 수에 맞추기.
-            if (RoomManager.instance.readyCounts != PhotonNetwork.CurrentRoom.MaxPlayers)
-            {
-                int diff = PhotonNetwork.CurrentRoom.MaxPlayers - RoomManager.instance.readyCounts;
-                for (int i = 1; i <= diff; i++)
-                {
-                    playerOrderList.RemoveAt(PhotonNetwork.CurrentRoom.MaxPlayers - i);
-                }
-            }
-            */
-
             playerOrderList = ShuffleOrder(playerOrderList);
             UpdateListToOthers();
             PhotonNetwork.CurrentRoom.IsOpen = false;
@@ -302,7 +300,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
         gameStartText.SetActive(true);
         SoundManager.instance.SoundPlayer("ShowPanel");
         yield return new WaitForSeconds(1.5f);
-        PhotonNetwork.LoadLevel("Loading");//일단은 모든 클라이언트에서 씬 로드 하는걸로 하는데 이걸 나중에 master에서만 로드하고 동기화할지 결정해야할듯
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PV.RPC("loadNextScene", RpcTarget.All);
+        }
+
+        //일단은 모든 클라이언트에서 씬 로드 하는걸로 하는데 이걸 나중에 master에서만 로드하고 동기화할지 결정해야할듯
 
     }
 
@@ -317,7 +320,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
         Destroy(DontDestroyObjects.instance);
         PhotonNetwork.LeaveRoom();
-        PhotonNetwork.LoadLevel("Main");
+    }
+
+    public override void OnLeftRoom()
+    {
+        if (SceneManager.GetActiveScene().name == "Room")
+        {
+            SceneManager.LoadScene("Main");
+        }
     }
 
     void setLocalPlayerIndex()
@@ -344,6 +354,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
         
+    }
+    [PunRPC]
+    void loadNextScene()
+    {
+        PhotonNetwork.LoadLevel("Loading");
     }
 
     [PunRPC]
@@ -383,23 +398,19 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void receieveReadyInformation(string newPlayerName)
     {
-        bool[] isReady = new bool[PhotonNetwork.CurrentRoom.MaxPlayers];
+        List<string> readyPlayerNames = new List<string>();
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
             if (playerListImg[i].transform.GetChild(2).gameObject.activeSelf == true)
             {
-                isReady[i] = true;
-            }
-            else
-            {
-                isReady[i] = false;
+                readyPlayerNames.Add(playerListImg[i].GetComponentInChildren<TMP_Text>().text);
             }
         }
-        PV.RPC("setReady", RpcTarget.Others, newPlayerName, isReady);
+        PV.RPC("setReady", RpcTarget.Others, newPlayerName, readyPlayerNames.ToArray());
     }
 
     [PunRPC]
-    void setReady(string localPlayerNickName, bool[] isReady)
+    void setReady(string localPlayerNickName, string[] playerNames)
     {
         if (localPlayerNickName != PhotonNetwork.LocalPlayer.NickName)
         {
@@ -407,12 +418,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+            for (int i = 0; i < playerNames.Length; i++)
             {
-                if (isReady[i] == true)
+                for (int j = 0; j < PhotonNetwork.CurrentRoom.MaxPlayers; j++)
                 {
-                    playerListImg[i].transform.GetChild(2).gameObject.SetActive(true);
-                    readyCounts++;
+                    if (playerListImg[j].GetComponentInChildren<TMP_Text>().text == playerNames[i])
+                    {
+                        playerListImg[j].transform.transform.Find("Ready Text").gameObject.SetActive(true);
+                        readyCounts++;
+                        break;
+                    }
                 }
             }
         }
@@ -440,23 +455,38 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         quitEvent += () =>
         {
-            MiddleQuitPanel.SetActive(true);
+            GameObject.Find("endCanvas").transform.GetChild(2).gameObject.SetActive(true);
         };
-
         Application.wantsToQuit += ApplicationQuit;
     }
 
     bool ApplicationQuit()
     {
-        if (isReady == false)
+        Scene scene = SceneManager.GetActiveScene();
+        if (scene.name == "Room")
         {
-            isApplicationQuit = true;
+            if (RoomManager.instance.isReady == false)
+            {
+                RoomManager.instance.isApplicationQuit = true;
+            }
+            if (!RoomManager.instance.isApplicationQuit && RoomManager.instance.isReady == true)
+            {
+                quitEvent?.Invoke();
+            }
+            return RoomManager.instance.isApplicationQuit;
         }
-        if (!isApplicationQuit && isReady == true)
+        else if (scene.name == "SampleScene")
         {
-            quitEvent?.Invoke();
+            if (!quitInTheMiddle.instance.isApplicationQuit && !GameManager.instance.isOver)
+            {
+                quitEvent?.Invoke();
+            }
+            return quitInTheMiddle.instance.isApplicationQuit;
+        }
+        else
+        {
+            return true;
         }
 
-        return isApplicationQuit;
     }
 }

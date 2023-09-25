@@ -89,17 +89,11 @@ public class RpcManager : MonoBehaviour
         isMovableWithBind = true;
         if (num == 7 || num == 22 || num == 53 || num == 64 || num == 76)
         {
-            //GameManager.instance.moveBindPlayer(bindPlayerIndex);
             GameManager.instance.isLadder = true;
         }
         else if (num == 15 || num == 30 || num == 26 || num == 38 || num == 32 || num == 80 || num == 46 || num == 67 || num == 62 || num == 90)
         {
-            //GameManager.instance.moveBindPlayer(bindPlayerIndex);
             GameManager.instance.isTransport = true;
-        }
-        else
-        {
-            //GameManager.instance.moveBindPlayer(bindPlayerIndex);
         }
     }
 
@@ -140,14 +134,6 @@ public class RpcManager : MonoBehaviour
         PV.RPC("cardStealToOthers", RpcTarget.All, playerIndex, stolenCardIndex);
     }
 
-    /*
-    public void moveWithBind(int localPlayerIndex)
-    {
-        PV.RPC("moveWithBindToOthers", RpcTarget.AllViaServer, localPlayerIndex);
-    }
-    */
-
-
     public void makeIsUsedBindTrue(int localPlayerIndex)
     {
         PV.RPC("makeIsUsedBindTrueToOthers", RpcTarget.AllViaServer, localPlayerIndex);
@@ -176,6 +162,7 @@ public class RpcManager : MonoBehaviour
                     itemUsePlayers.Add(entry.Key.ToString());
                     usedItems.Add(entry.Value);
                 }
+
                 PV.RPC("setResultTextToOthers", RpcTarget.All, itemUsePlayers.ToArray(), usedItems.ToArray());
             }
         }
@@ -184,6 +171,7 @@ public class RpcManager : MonoBehaviour
     [PunRPC]
     void setResultTextToOthers(string[] players, string[] items)
     {
+        resultText.text = "";
         for (int i = 0; i < players.Length; i++)
         {
             resultText.text += players[i] + "´ÔÀÌ ";
@@ -259,17 +247,6 @@ public class RpcManager : MonoBehaviour
             PV.RPC("setBool", RpcTarget.AllViaServer);
         }
     }
-
-    /*
-    [PunRPC]
-    void moveWithBindToOthers(int localPlayerIndex)
-    {
-        bindPlayerIndexes.Add(localPlayerIndex);
-        isMovableWithBind = true;
-        GameManager.instance.moveBindPlayer();
-    }
-    */
-
 
     [PunRPC]
     void makeIsUsedBindTrueToOthers(int localPlayerIndex)
@@ -422,13 +399,13 @@ public class RpcManager : MonoBehaviour
         {
             DontDestroyObjects.instance.playerItems[currentPlayerIndex].Add(DontDestroyObjects.items.pass);
             createdItem.transform.SetParent(GameManager.instance.playerInformationUIs[currentPlayerIndex].transform.GetChild(1), false);
-            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[3];
+            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[2];
         }
         else if (ran == 3)
         {
             DontDestroyObjects.instance.playerItems[currentPlayerIndex].Add(DontDestroyObjects.items.cardSteal);
             createdItem.transform.SetParent(GameManager.instance.playerInformationUIs[currentPlayerIndex].transform.GetChild(1), false);
-            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[0];
+            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[3];
         }
         else if (ran == 4)
         {

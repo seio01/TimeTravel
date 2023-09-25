@@ -32,9 +32,9 @@ public class playerPanel : MonoBehaviourPunCallbacks
         
     }
 
-    public void setReadyToOther(int index)
+    public void setReadyToOther(string playerName)
     {
-        PV.RPC("setReady", RpcTarget.AllViaServer, index);
+        PV.RPC("setReady", RpcTarget.AllViaServer, playerName);
     }
 
 
@@ -45,14 +45,18 @@ public class playerPanel : MonoBehaviourPunCallbacks
 
 
     [PunRPC]
-    void setReady(int index)
+    void setReady(string readyPlayerName)
     {
-        roomManagerScript.playerListImg[index].transform.transform.Find("Ready Text").gameObject.SetActive(true);
-        roomManagerScript.readyCounts++;
-        if (roomManagerScript.readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)  //나중에 masterClient만 start하도록 수정.
+        if (playerName.text == readyPlayerName)
         {
-            Invoke("StartGameWithTimer", 1f);
+            transform.GetChild(2).gameObject.SetActive(true);
+            roomManagerScript.readyCounts++;
+            if (roomManagerScript.readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)  //나중에 masterClient만 start하도록 수정.
+            {
+                Invoke("StartGameWithTimer", 1f);
+            }
         }
+
     }
 
     void StartGameWithTimer()

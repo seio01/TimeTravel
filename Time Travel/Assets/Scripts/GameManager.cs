@@ -7,7 +7,8 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using Photon.Pun.UtilityScripts;
-public class GameManager : MonoBehaviour
+
+public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager instance;
     public int[] playerStartPoint;
@@ -121,6 +122,10 @@ public class GameManager : MonoBehaviour
         controlPlayerIndexWithOrder = 0;
         controlPlayer = DontDestroyObjects.instance.playerListWithOrder[0];
         controlPlayerNameText.text = "현재 차례: " + controlPlayer.NickName;
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount;i++)
+        {
+            player[i].correctCount = 4;
+        }
     }
 
     // Start is called before the first frame update
@@ -134,21 +139,21 @@ public class GameManager : MonoBehaviour
     {
         
         testTMP.text = "";
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-        {
-            List<DontDestroyObjects.items> test = DontDestroyObjects.instance. playerItems[i];
-            testTMP.text += i + " : ";
-            for (int j = 0; j < test.Count; j++)
-            {
-                testTMP.text += test[j].ToString()+" ";
-            }
-            testTMP.text += "\n";
-        }
+
         
         //게임 종료
         if (isOver)
             return;
-
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            List<DontDestroyObjects.items> test = DontDestroyObjects.instance.playerItems[i];
+            testTMP.text += i + " : ";
+            for (int j = 0; j < test.Count; j++)
+            {
+                testTMP.text += test[j].ToString() + " ";
+            }
+            testTMP.text += "\n";
+        }
         //when to stop moving
         if (player[controlPlayerIndexWithOrder].curIndex > playerStartPoint[controlPlayerIndexWithOrder] + newDiceSide)
         {
@@ -630,7 +635,14 @@ public class GameManager : MonoBehaviour
         PhotonNetwork.LeaveRoom();
         Destroy(DontDestroyObjects.instance);
         quitScript.isApplicationQuit = true;
-        SceneManager.LoadScene("Main");
+    }
+
+    public override void OnLeftRoom()
+    {
+        if (SceneManager.GetActiveScene().name == "SampleScene")
+        {
+            SceneManager.LoadScene("Main");
+        }
     }
 
     public void QuitGame()

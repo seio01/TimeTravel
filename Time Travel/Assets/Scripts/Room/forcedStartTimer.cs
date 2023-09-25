@@ -26,6 +26,25 @@ public class forcedStartTimer : MonoBehaviour
     {
         time = 30f;
         check = false;
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
+        {
+            if (RoomManager.instance.playerListImg[i].GetComponentInChildren<TMP_Text>().text == PhotonNetwork.LocalPlayer.NickName && RoomManager.instance.playerListImg[i].transform.GetChild(2).gameObject.activeSelf == false)
+            {
+                Color textColor = new Color(0f / 255f, 0f / 255f, 0f / 255f);
+                textColor.a = 0.0f;
+                this.gameObject.GetComponent<TMP_Text>().color = textColor;
+            }
+            else if (RoomManager.instance.playerListImg[i].GetComponentInChildren<TMP_Text>().text == PhotonNetwork.LocalPlayer.NickName && RoomManager.instance.playerListImg[i].transform.GetChild(2).gameObject.activeSelf == true)
+            {
+                Color textColor = new Color(0f / 255f, 0f / 255f, 0f / 255f);
+                textColor.a = 1.0f;
+                this.gameObject.GetComponent<TMP_Text>().color = textColor;
+            }
+            else
+            {
+                continue;
+            }
+        }
     }
 
     // Update is called once per frame

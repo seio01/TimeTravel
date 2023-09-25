@@ -58,7 +58,7 @@ public class Main : MonoBehaviour
 
     void Start()
     {
-
+        //Screen.SetResolution(2304, 1296, false);
     }
 
     // Update is called once per frame

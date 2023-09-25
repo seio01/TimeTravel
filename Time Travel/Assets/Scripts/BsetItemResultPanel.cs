@@ -36,7 +36,7 @@ public class BsetItemResultPanel : MonoBehaviour
 
     void OnEnable()
     {
-        RpcManager.instance.setResultText();
+        resultText.text = "Åë½Å Áß...\n";
         StartCoroutine(WaitFor3Seconds());
         if (RpcManager.instance.currentTurnUsedItemOfLocalPlayer != "")
         {
@@ -46,14 +46,15 @@ public class BsetItemResultPanel : MonoBehaviour
         {
             int controlPlayerCardNum = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder].Count;
             int stealCardIndex = Random.Range(0, controlPlayerCardNum);
-            GameManager.instance.testTMP.text = "»©¾ÑÀº Ä«µå index: " + stealCardIndex.ToString() + "\n";
             RpcManager.instance.cardSteal(GameManager.instance.localPlayerIndexWithOrder, stealCardIndex);
         }
     }
 
     IEnumerator WaitFor3Seconds()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1.5f);
+        RpcManager.instance.setResultText();
+        yield return new WaitForSeconds(1.5f);
         this.gameObject.SetActive(false);
     }
 

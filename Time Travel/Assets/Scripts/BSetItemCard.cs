@@ -7,16 +7,16 @@ using TMPro;
 
 public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    bool isUsed;
+    bool isSelected;
     bool canNotUse;
     public GameObject textPanel;
     public TMP_Text itemText;
-
+    public string spriteName;
     public BsetItemUsePanel panelScript;
     // Start is called before the first frame update
     void Start()
     {
-        string spriteName = this.gameObject.GetComponent<Image>().sprite.name;
+        spriteName = this.gameObject.GetComponent<Image>().sprite.name;
         textPanel = transform.parent.parent.GetChild(3).gameObject;
         itemText = textPanel.transform.GetChild(0).GetComponent<TMP_Text>();
         textPanel.gameObject.SetActive(false);
@@ -28,7 +28,7 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         }
         else
         {
-            isUsed = false;
+            isSelected = false;
             canNotUse = false;
         }
     }
@@ -36,20 +36,59 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.instance.currentTurnBSetItem > 0 && isUsed == false)
+        if (spriteName == "Ä«µå»©¾Ñ±â" && canStealCard() == false)
         {
             canNotUse = true;
             changeColorBlack();
         }
-        if (RpcManager.instance.isSomeoneUseCardSteal == true)
+        else
         {
-            canNotUse = true;
-            changeColorBlack();
+            if (isSelected == false && RpcManager.instance.currentTurnUsedItemOfLocalPlayer != "")
+            {
+                canNotUse = true;
+                changeColorBlack();
+            }
+            if (isSelected == false && RpcManager.instance.currentTurnUsedItemOfLocalPlayer == "")
+            {
+                canNotUse = false;
+                Color whiteColor = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+                this.gameObject.GetComponent<Image>().color = whiteColor;
+            }
+            if (RpcManager.instance.isSomeoneUseCardSteal == true)
+            {
+                canNotUse = true;
+                changeColorBlack();
+            }
         }
     }
 
     void OnDisable()
     {
+        if (isSelected == true)
+        {
+            if (spriteName == "¿î¸í°øµ¿Ã¼")
+            {
+                RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.bind);
+                RpcManager.instance.makeIsUsedBindTrue(GameManager.instance.localPlayerIndexWithOrder);
+            }
+            else if (spriteName == "Ä«µå»©¾Ñ±â")
+            {
+                if (RpcManager.instance.isSomeoneUseCardSteal == false)
+                {
+                    RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.cardSteal);
+                }
+                else
+                {
+                    return;
+                }
+
+            }
+            else
+            {
+                RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.timeSteal);
+                RpcManager.instance.setIsThisTurnTimeStealTrue();
+            }
+        }
         Destroy(this.gameObject);
     }
 
@@ -83,39 +122,24 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (isUsed == true || canNotUse==true || GameManager.instance.currentTurnBSetItem > 0)
+        if (isSelected== true)
+        {
+            Color whiteColor = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+            this.gameObject.GetComponent<Image>().color = whiteColor;
+            isSelected= false;
+            transform.GetChild(0).gameObject.SetActive(false);
+            RpcManager.instance.currentTurnUsedItemOfLocalPlayer = "";
+            return;
+        }
+        if (canNotUse == true || RpcManager.instance.currentTurnUsedItemOfLocalPlayer != "")
         {
             return;
         }
-        string spriteName = this.gameObject.GetComponent<Image>().sprite.name;
         Color usedColor = new Color(200 / 255f, 200 / 255f, 200 / 255f);
         this.gameObject.GetComponent<Image>().color = usedColor;
-        isUsed = true;
+        isSelected= true;
         transform.GetChild(0).gameObject.SetActive(true);
         RpcManager.instance.currentTurnUsedItemOfLocalPlayer = spriteName;
-        if (spriteName == "¿î¸í°øµ¿Ã¼")
-        {
-            RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.bind);
-            RpcManager.instance.makeIsUsedBindTrue(GameManager.instance.localPlayerIndexWithOrder);
-        }
-        else if (spriteName == "Ä«µå»©¾Ñ±â")
-        {
-            if (RpcManager.instance.isSomeoneUseCardSteal == false)
-            {
-                RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.cardSteal);
-            }
-            else
-            {
-                return;
-            }
-
-        }
-        else
-        {
-            RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.timeSteal);
-            RpcManager.instance.setIsThisTurnTimeStealTrue();
-        }
-        GameManager.instance.currentTurnBSetItem++;
     }
 
     bool canStealCard()
