@@ -264,8 +264,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
             UpdateListToOthers();
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
-        
-        yield return new WaitForSeconds(2f);
+
+        yield return new WaitForSeconds(3f);
         //아이템 뽑은 것 다른 사람들에게 전송.
         UpdateItemListToOthers();
         gameStartText.SetActive(true);
@@ -277,6 +277,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
 
         //일단은 모든 클라이언트에서 씬 로드 하는걸로 하는데 이걸 나중에 master에서만 로드하고 동기화할지 결정해야할듯
+
     }
 
     public void LeaveRoom()
