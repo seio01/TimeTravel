@@ -60,8 +60,7 @@ public class RpcManager : MonoBehaviour
                 GameManager.instance.nowMovingPlayerIndex = bindPlayerIndex;
                 if (GameManager.instance.player[bindPlayerIndex].curIndex > GameManager.instance.playerStartPoint[bindPlayerIndex] + GameManager.instance.newDiceSide)
                 {
-                    //
-                    GameManager.instance.finishSecondRoll = false;
+                    
                     GameManager.instance.player[bindPlayerIndex].movingAllowed = false;
                     GameManager.instance.CheckPlayersPosition(bindPlayerIndex);
                     GameManager.instance.playerStartPoint[bindPlayerIndex] = GameManager.instance.player[bindPlayerIndex].curIndex - 1;

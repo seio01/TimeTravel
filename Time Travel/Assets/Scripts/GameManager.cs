@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
     public int currentTurnASetItem;
     public int currentTurnBSetItem;
     public bool AllDoesntHaveBsetCard;
-
+    public bool movableAfterSecondRoll;
     public int initialPlayerNum;
 
     public GameObject diceAndSoundPanel;
@@ -85,7 +85,6 @@ public class GameManager : MonoBehaviour
     public GameObject noIncorrectText;
 
     public int bindDiceSide;
-    public bool finishSecondRoll;
 
     void Awake()
     {
@@ -149,7 +148,16 @@ public class GameManager : MonoBehaviour
         //게임 종료
         if (isOver)
             return;
-
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            List<DontDestroyObjects.items> test = DontDestroyObjects.instance.playerItems[i];
+            testTMP.text += i + " : ";
+            for (int j = 0; j < test.Count; j++)
+            {
+                testTMP.text += test[j].ToString() + " ";
+            }
+            testTMP.text += "\n";
+        }
         //when to stop moving
         if (player[controlPlayerIndexWithOrder].curIndex > playerStartPoint[controlPlayerIndexWithOrder] + newDiceSide)
         {
@@ -158,22 +166,19 @@ public class GameManager : MonoBehaviour
             CheckPlayersPosition(controlPlayerIndexWithOrder);
             if (secondRoll)
             {
-                secondRoll = false;
-                finishRound = true;
                 if (isMovableWithBind == false)
                 {
+                    secondRoll = false;
+                    finishRound = true;
                     UISmaller();
                 }
-                else
-                    finishSecondRoll = true;
-                    
             }
-                
+
             //정답 5번이면 주사위 한번 더 굴리기
             if (player[GameManager.instance.controlPlayerIndexWithOrder].correctCount == 5)
             {
-                bindDiceSide = newDiceSide;
                 player[GameManager.instance.controlPlayerIndexWithOrder].correctCount = 0;
+                movableAfterSecondRoll = false;
                 StartCoroutine(RollDiceAndGetItem());
             }
             if (isLadder && !player[controlPlayerIndexWithOrder].movingAllowed)
@@ -186,18 +191,14 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if(finishSecondRoll && isMovableWithBind == true)
+                if (isMovableWithBind == true)
                 {
-                    newDiceSide = bindDiceSide;
-                    updatePlayerInformationUI(controlPlayerIndexWithOrder);
-                    RpcManager.instance.bindPlayerIndexes.Sort();
-                    RpcManager.instance.isMovableWithBind = true;
-                }
-                else if (!secondRoll && isMovableWithBind == true)
-                {
-                    updatePlayerInformationUI(controlPlayerIndexWithOrder);
-                    RpcManager.instance.bindPlayerIndexes.Sort();
-                    RpcManager.instance.isMovableWithBind = true;
+                    if (movableAfterSecondRoll == true)
+                    {
+                        updatePlayerInformationUI(controlPlayerIndexWithOrder);
+                        RpcManager.instance.bindPlayerIndexes.Sort();
+                        RpcManager.instance.isMovableWithBind = true;
+                    }
                 }
                 else if (!secondRoll)
                 {

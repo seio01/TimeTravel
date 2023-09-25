@@ -4538,7 +4538,7 @@ MonoBehaviour:
   moveLadder: 0
   curIndex: 0
   ran: 0
-  correctCount: 4
+  correctCount: 0
 --- !u!114 &666202852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6883,7 +6883,7 @@ MonoBehaviour:
   moveLadder: 0
   curIndex: 0
   ran: 0
-  correctCount: 4
+  correctCount: 0
 --- !u!212 &1177020314
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8529,12 +8529,12 @@ MonoBehaviour:
   currentTurnASetItem: 0
   currentTurnBSetItem: 0
   AllDoesntHaveBsetCard: 0
+  movableAfterSecondRoll: 0
   initialPlayerNum: 0
   diceAndSoundPanel: {fileID: 2063885151}
   quitScript: {fileID: 460146642}
   noIncorrectText: {fileID: 2088375919}
   bindDiceSide: 0
-  finishSecondRoll: 0
 --- !u!1 &1379455021
 GameObject:
   m_ObjectHideFlags: 0
