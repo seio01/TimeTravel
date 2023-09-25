@@ -147,6 +147,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         setTimer = false;
         timeText.SetActive(false);
         pickCardBtn.interactable = false;
+        isReady = true;
         leaveRoomBtn.interactable = false;
         pickCardText.text = "뽑은 카드 위로 마우스를 올리면 \n설명을 볼 수 있습니다.\n";
         int ran;
@@ -157,7 +158,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             items[i].sprite = itemImg[ran];
             itemList.Add(ran); 
         }
-        ran = 4;// Random.Range(3, 6);
+        ran = Random.Range(3, 6);
         items[3].sprite = itemImg[ran];
         itemList.Add(ran);
 
@@ -269,8 +270,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         UpdateItemListToOthers();
         gameStartText.SetActive(true);
         SoundManager.instance.SoundPlayer("ShowPanel");
-        yield return new WaitForSeconds(1f);
-        PhotonNetwork.LoadLevel("Loading");//일단은 모든 클라이언트에서 씬 로드 하는걸로 하는데 이걸 나중에 master에서만 로드하고 동기화할지 결정해야할듯
+        yield return new WaitForSeconds(1.5f);
+        //일단은 모든 클라이언트에서 씬 로드 하는걸로 하는데 이걸 나중에 master에서만 로드하고 동기화할지 결정해야할듯
 
     }
 
