@@ -26,7 +26,14 @@ public class targetCamera : MonoBehaviour
         }
         else
         {
-            player = GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder];
+            //out player focus x
+            if(GameManager.instance.checkControlPlayerOut() == true)
+            {
+                int playerIndex = GameManager.instance.controlPlayerIndexWithOrder + 1 == GameManager.instance.initialPlayerNum ? 0 : GameManager.instance.controlPlayerIndexWithOrder + 1;
+                player = GameManager.instance.player[playerIndex];
+            }
+            else
+                player = GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder];
         }
         Vector3 targetPos = new Vector3(player.gameObject.transform.position.x, player.gameObject.transform.position.y, this.transform.position.z);
         targetPos.x = Mathf.Clamp(targetPos.x, minCameraBoundary.x, maxCameraBoundary.x);

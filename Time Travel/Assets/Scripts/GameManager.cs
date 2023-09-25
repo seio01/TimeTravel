@@ -84,6 +84,9 @@ public class GameManager : MonoBehaviour
     public quitInTheMiddle quitScript;
     public GameObject noIncorrectText;
 
+    public int bindDiceSide;
+    public bool finishSecondRoll;
+
     void Awake()
     {
         if (instance == null)
@@ -155,14 +158,23 @@ public class GameManager : MonoBehaviour
             CheckPlayersPosition(controlPlayerIndexWithOrder);
             if (secondRoll)
             {
+                Debug.Log("seco");
                 secondRoll = false;
                 finishRound = true;
-                UISmaller();
+                if (isMovableWithBind == false)
+                {
+                    UISmaller();
+                    Debug.Log("secondroll 움직임 끝나고?");
+                }
+                else
+                    finishSecondRoll = true;
+                    
             }
                 
             //정답 5번이면 주사위 한번 더 굴리기
             if (player[GameManager.instance.controlPlayerIndexWithOrder].correctCount == 5)
             {
+                bindDiceSide = newDiceSide;
                 player[GameManager.instance.controlPlayerIndexWithOrder].correctCount = 0;
                 StartCoroutine(RollDiceAndGetItem());
             }
@@ -176,17 +188,27 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (isMovableWithBind == true)
+                if(finishSecondRoll && isMovableWithBind == true)
+                {
+                    newDiceSide = bindDiceSide;
+                    updatePlayerInformationUI(controlPlayerIndexWithOrder);
+                    RpcManager.instance.bindPlayerIndexes.Sort();
+                    RpcManager.instance.isMovableWithBind = true;
+                }
+                else if (!secondRoll && isMovableWithBind == true)
                 {
                     updatePlayerInformationUI(controlPlayerIndexWithOrder);
                     RpcManager.instance.bindPlayerIndexes.Sort();
                     RpcManager.instance.isMovableWithBind = true;
                     //moveBindPlayer();
+                    Debug.Log("Bind");
                 }
-                else if(!secondRoll)
+                else if (!secondRoll)
                 {
+                    Debug.Log("Hell");
                     finishRound = true;
                     UISmaller();
+                    //if(!secondRoll )
                 }
             }
 
@@ -390,7 +412,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(RoundStartRoutine());
     }
 
-    bool checkControlPlayerOut()
+    public bool checkControlPlayerOut()
     {
         if (quitInTheMiddle.instance.outPlayerIndex.Contains(controlPlayerIndexWithOrder))
         {

@@ -60,6 +60,8 @@ public class RpcManager : MonoBehaviour
                 GameManager.instance.nowMovingPlayerIndex = bindPlayerIndex;
                 if (GameManager.instance.player[bindPlayerIndex].curIndex > GameManager.instance.playerStartPoint[bindPlayerIndex] + GameManager.instance.newDiceSide)
                 {
+                    //
+                    GameManager.instance.finishSecondRoll = false;
                     GameManager.instance.player[bindPlayerIndex].movingAllowed = false;
                     GameManager.instance.CheckPlayersPosition(bindPlayerIndex);
                     GameManager.instance.playerStartPoint[bindPlayerIndex] = GameManager.instance.player[bindPlayerIndex].curIndex - 1;
@@ -422,13 +424,13 @@ public class RpcManager : MonoBehaviour
         {
             DontDestroyObjects.instance.playerItems[currentPlayerIndex].Add(DontDestroyObjects.items.pass);
             createdItem.transform.SetParent(GameManager.instance.playerInformationUIs[currentPlayerIndex].transform.GetChild(1), false);
-            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[3];
+            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[2];
         }
         else if (ran == 3)
         {
             DontDestroyObjects.instance.playerItems[currentPlayerIndex].Add(DontDestroyObjects.items.cardSteal);
             createdItem.transform.SetParent(GameManager.instance.playerInformationUIs[currentPlayerIndex].transform.GetChild(1), false);
-            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[0];
+            createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[3];
         }
         else if (ran == 4)
         {
@@ -442,5 +444,11 @@ public class RpcManager : MonoBehaviour
             createdItem.transform.SetParent(GameManager.instance.playerInformationUIs[currentPlayerIndex].transform.GetChild(1), false);
             createdItem.GetComponent<Image>().sprite = GameManager.instance.itemSmallSprites[5];
         }
+
+        for(int i = 0; i < DontDestroyObjects.instance.playerItems[currentPlayerIndex].Count; i++)
+        {
+            Debug.Log("아이템 보유 목록 :" + DontDestroyObjects.instance.playerItems[currentPlayerIndex][i].ToString());
+        }
+        
     }
 }
