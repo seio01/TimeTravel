@@ -73,15 +73,7 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             }
             else if (spriteName == "카드빼앗기")
             {
-                if (RpcManager.instance.isSomeoneUseCardSteal == false)
-                {
-                    RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.cardSteal);
-                }
-                else
-                {
-                    return;
-                }
-
+                RpcManager.instance.useBsetItemCard(DontDestroyObjects.items.cardSteal);
             }
             else
             {
@@ -97,15 +89,15 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         string spriteName = this.gameObject.GetComponent<Image>().sprite.name;
         if (spriteName == "카드빼앗기")
         {
-            itemText.text = "상대방의 카드 1장을 빼앗아 가져옵니다.\n상대방의 카드가 없거나 내 카드가 4장이면 쓸 수 없습니다.\n";
+            itemText.text = "상대방의 카드 1장을 빼앗아 가져옵니다.\n내 카드가 4장이면 쓸 수 없습니다.\n";
         }
         else if (spriteName == "운명공동체")
         {
-            itemText.text = "상대방이 문제를 맞힌다면 나도 주사위 눈에 해당하는 칸만큼 나아갑니다.\n";
+            itemText.text = "상대방이 문제를 맞힌다면 자신도 주사위 눈에 해당하는 칸만큼 나아갑니다.\n";
         }
         else
         {
-            itemText.text = "상대방이 문제 푸는 시간을 줄일 수 있습니다. \n ox 문제는 8초, 4지선다 문제는 15초로 줄어듭니다.\n";
+            itemText.text = "상대방이 문제 푸는 시간을 줄일 수 있습니다. \n ox 문제는 8초, 4지선다 문제는 25초로 줄어듭니다.\n";
         }
     }
 
@@ -129,6 +121,10 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             isSelected= false;
             transform.GetChild(0).gameObject.SetActive(false);
             RpcManager.instance.currentTurnUsedItemOfLocalPlayer = "";
+            if (spriteName == "카드빼앗기")
+            {
+                RpcManager.instance.setCardStealBool();
+            }
             return;
         }
         if (canNotUse == true || RpcManager.instance.currentTurnUsedItemOfLocalPlayer != "")
@@ -140,6 +136,10 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         isSelected= true;
         transform.GetChild(0).gameObject.SetActive(true);
         RpcManager.instance.currentTurnUsedItemOfLocalPlayer = spriteName;
+        if (spriteName == "카드빼앗기")
+        {
+            RpcManager.instance.setCardStealBool();
+        }
     }
 
     bool canStealCard()

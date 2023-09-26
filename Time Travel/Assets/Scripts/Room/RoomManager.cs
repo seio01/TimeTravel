@@ -37,7 +37,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public List<int> playerOrderList = new List<int>();
 
     public int readyCounts;
-    public int localPlayerIndex; //플레이어가 몇 번째로 들어왔는지
     public int playerIndexWithOrder; //순서 섞은 후 플레이어가 몇번째 순서인지
 
     public bool setTimer;
@@ -79,7 +78,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
             playerListImg[i].transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = PhotonNetwork.PlayerList[i].NickName;
 
         }
-        setLocalPlayerIndex();
         //timer기능
         Timer();
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
@@ -154,7 +152,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 if (playerListImg[i].transform.transform.Find("Ready Text").gameObject.activeSelf == true)
                 {
                     readyCounts--;
-                    localPlayerIndex--;
                     playerListImg[i].transform.transform.Find("Ready Text").gameObject.SetActive(false);
                 }
                 break;
@@ -181,7 +178,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             items[i].sprite = itemImg[ran];
             itemList.Add(ran); 
         }
-        ran = UnityEngine.Random.Range(3, 6);
+        ran = UnityEngine.Random.Range(5, 6);
         items[3].sprite = itemImg[ran];
         itemList.Add(ran);
 
@@ -329,18 +326,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         if (SceneManager.GetActiveScene().name == "Room")
         {
             SceneManager.LoadScene("Main");
-        }
-    }
-
-    void setLocalPlayerIndex()
-    {
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
-        {
-            if (PhotonNetwork.PlayerList[i].NickName == PhotonNetwork.LocalPlayer.NickName)
-            {
-                localPlayerIndex = i;
-                break;
-            }
         }
     }
 

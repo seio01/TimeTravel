@@ -37,13 +37,6 @@ public class playerPanel : MonoBehaviourPunCallbacks
         PV.RPC("setReady", RpcTarget.AllViaServer, playerName);
     }
 
-
-    public void setNewPlayerToReadyMe(string name)
-    {
-        PV.RPC("setReadyToNewPlayer", RpcTarget.Others, roomManagerScript.localPlayerIndex, name);
-    }
-
-
     [PunRPC]
     void setReady(string readyPlayerName)
     {

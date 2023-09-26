@@ -243,10 +243,6 @@ public class RpcManager : MonoBehaviour
     void useBsetItemCardToOthers(Photon.Realtime.Player p, string itemName)
     {
         currentTurnItems.Add(p, itemName);
-        if (itemName.ToString() == "cardSteal")
-        {
-            PV.RPC("setBool", RpcTarget.AllViaServer);
-        }
     }
 
     [PunRPC]
@@ -367,7 +363,14 @@ public class RpcManager : MonoBehaviour
     [PunRPC]
     void setBool()
     {
-        isSomeoneUseCardSteal = true;
+        if (isSomeoneUseCardSteal == true)
+        {
+            isSomeoneUseCardSteal = false;
+        }
+        else
+        {
+            isSomeoneUseCardSteal = true;
+        }
     }
 
     public void GetAdditionalItem(int ran)
@@ -426,5 +429,10 @@ public class RpcManager : MonoBehaviour
             Debug.Log("아이템 보유 목록 :" + DontDestroyObjects.instance.playerItems[currentPlayerIndex][i].ToString());
         }
         
+    }
+
+    public void setCardStealBool()
+    {
+        PV.RPC("setBool", RpcTarget.AllViaServer);
     }
 }

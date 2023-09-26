@@ -137,11 +137,11 @@ public class problem : MonoBehaviour
         {
             if (GameManager.instance.isThisTurnTimeSteal == true)
             {
-                StartCoroutine("setTimer", 20);
+                StartCoroutine("setTimer", 25);
             }
             else
             {
-                StartCoroutine("setTimer", 30);
+                StartCoroutine("setTimer", 40);
             }
         }
     }

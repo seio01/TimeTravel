@@ -15,6 +15,7 @@ public class forcedStartTimer : MonoBehaviour
     public float time = 60f;
 
     bool check;
+    bool isWaitForOut = false;
     // Start is called before the first frame update
 
     void Start()
@@ -50,17 +51,15 @@ public class forcedStartTimer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        time -= Time.deltaTime;
-        timeText.text = string.Format("{0:F0}초", time);
-        infoText.text = "시간이 지나면 자동으로 시작됩니다.\n 다른 사람이 들어와 레디를 하면 시간이 갱신됩니다.";
-        if (time <= 0)
+        if (isWaitForOut==false && time <= 0)
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount==1)
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {
                 forcedOutPanel.SetActive(true);
                 timeText.text = "";
                 if (check == false)
                 {
+                    isWaitForOut = true;
                     Invoke("leaveRoom", 1.5f);
                     check = true;
                 }
@@ -75,6 +74,12 @@ public class forcedStartTimer : MonoBehaviour
                 infoText.text = "마지막으로 들어온 사람이 카드 뽑기를 기다리는 중입니다.\n";
                 timeText.text = "";
             }
+        }
+        else if (isWaitForOut == false && time > 0)
+        {
+            time -= Time.deltaTime;
+            timeText.text = string.Format("{0:F0}초", time);
+            infoText.text = "시간이 지나면 자동으로 시작됩니다.\n 다른 사람이 들어와 레디를 하면 시간이 갱신됩니다.";
         }
     }
 
