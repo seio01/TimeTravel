@@ -178,7 +178,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             items[i].sprite = itemImg[ran];
             itemList.Add(ran); 
         }
-        ran = UnityEngine.Random.Range(5, 6);
+        ran = UnityEngine.Random.Range(3, 6);
         items[3].sprite = itemImg[ran];
         itemList.Add(ran);
 

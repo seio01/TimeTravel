@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         controlPlayerNameText.text = "ÇöÀç Â÷·Ê: " + controlPlayer.NickName;
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount;i++)
         {
-            player[i].correctCount = 4;
+            player[i].correctCount = 0;
         }
     }
 
