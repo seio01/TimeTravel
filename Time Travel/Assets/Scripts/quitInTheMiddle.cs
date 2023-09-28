@@ -167,23 +167,12 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
         RpcManager.instance.diceTimer.gameObject.SetActive(false);
     }
 
-    /*void OnApplicationQuit()
-    {
-        if (GameManager.instance.isOver == false)
-        {
-            MiddleQuitPanel.gameObject.SetActive(true);
-        }
-        else
-        {
-            return;
-        }
-    }*/
-
     void gameQuit()
     {
         var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
         string bannedTime = ((long)timeSpan.TotalSeconds).ToString();
         PlayerPrefs.SetInt("isBanned", 1);
+        PlayerPrefs.SetString("banType", "game");
         PlayerPrefs.SetString("bannedTime", bannedTime);
         isApplicationQuit = true;
         Application.Quit();

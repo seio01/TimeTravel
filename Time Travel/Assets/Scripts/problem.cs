@@ -327,6 +327,10 @@ public class problem : MonoBehaviour
         {
             return;
         }
+        if (GameManager.instance.currentTurnASetItem == 1)
+        {
+            return;
+        }
         SoundManager.instance.SoundPlayer("Button1");
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.erase);
         selectionEraseButton.gameObject.SetActive(false);

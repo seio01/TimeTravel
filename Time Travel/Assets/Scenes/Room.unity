@@ -5207,7 +5207,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "99\uCD08"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fe4221a4f42822349b0d189d645a584d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7ee486d66f2c4c743b47df2de5c6b228, type: 2}
   m_sharedMaterial: {fileID: 3884357027817348187, guid: fe4221a4f42822349b0d189d645a584d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -5271,7 +5271,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!224 &1182288029

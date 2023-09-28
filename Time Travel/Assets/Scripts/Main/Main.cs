@@ -8,11 +8,13 @@ using System;
 public class Main : MonoBehaviour
 {
     public GameObject explanationPanel;
+    public Button xButton;
     // Start is called before the first frame update
 
     private bool isSave;
     public int isBanned;
     long bannedTime;
+    string banType;
     public TMP_Text bannedText;
 
     public Button Player2;
@@ -36,6 +38,8 @@ public class Main : MonoBehaviour
             if (isBanned == 1)
             {
                 bannedTime = long.Parse(PlayerPrefs.GetString("bannedTime"));
+                banType = PlayerPrefs.GetString("banType");
+                setBannedText();
                 bannedText.gameObject.SetActive(true);
                 Player2.interactable = false;
                 Player3.interactable = false;
@@ -47,7 +51,7 @@ public class Main : MonoBehaviour
             {
                 Player2.interactable = true;
                 Player3.interactable = true;
-                Player4.interactable = false;
+                Player4.interactable = true;
                 makeRoom.interactable = true;
                 enterRoom.interactable = true;
             }
@@ -59,6 +63,7 @@ public class Main : MonoBehaviour
     void Start()
     {
         //Screen.SetResolution(2304, 1296, false);
+        xButton.onClick.AddListener(checkBannedText);
     }
 
     // Update is called once per frame
@@ -68,19 +73,22 @@ public class Main : MonoBehaviour
         {
             var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
             long currentTime = (long)timeSpan.TotalSeconds;
-            //확인용으로 1분, 나중에 3600초로 수정.
-            if (currentTime >= bannedTime + 60)
+
+            //최종 버전때 수정하기!
+            if (banType=="room"  && currentTime >= bannedTime + 60)  // 룸에서의 밴 (10분)
             {
-                PlayerPrefs.DeleteKey("bannedTime");
-                PlayerPrefs.SetInt("isBanned", 0);
-                isBanned = 0;
-                bannedText.gameObject.SetActive(false);
+                eraseBan();
+            }
+            if (banType == "game" && currentTime >= bannedTime + 60)  //게임 나갔을 때 밴 (1시간)
+            {
+                eraseBan();
             }
         }
     }
 
     public void ShowExplanation()
     {
+        bannedText.gameObject.SetActive(false);
         explanationPanel.SetActive(true);
     }
 
@@ -89,4 +97,38 @@ public class Main : MonoBehaviour
         Application.Quit();
     }
 
+    void setBannedText()
+    {
+        if (banType == "room")
+        {
+            long banEraseTime = bannedTime + 600;
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            DateTime banEraseTimeDT = origin.AddSeconds(banEraseTime).ToLocalTime();
+            bannedText.text = "이전에 게임을 종료하여 " + banEraseTimeDT + "까지\n 게임에 참여할 수 없습니다.\n";
+        }
+        else
+        {
+            long banEraseTime = bannedTime + 3600;
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            DateTime banEraseTimeDT = origin.AddSeconds(banEraseTime).ToLocalTime();
+            bannedText.text = "이전에 게임을 종료하여 " + banEraseTimeDT + "까지\n 게임에 참여할 수 없습니다.\n";
+        }
+    }
+
+    void eraseBan()
+    {
+        PlayerPrefs.DeleteKey("bannedTime");
+        PlayerPrefs.DeleteKey("banType");
+        PlayerPrefs.SetInt("isBanned", 0);
+        isBanned = 0;
+        bannedText.gameObject.SetActive(false);
+    }
+
+    void checkBannedText()
+    {
+        if (isBanned == 1)
+        {
+            bannedText.gameObject.SetActive(true);
+        }
+    }
 }
