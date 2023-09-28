@@ -175,7 +175,7 @@ public class RpcManager : MonoBehaviour
         resultText.text = "";
         for (int i = 0; i < players.Length; i++)
         {
-            resultText.text += players[i] + "´ÔÀÌ ";
+            resultText.text += players[i].Substring(4) + "´ÔÀÌ ";
             if (items[i] == "cardSteal")
             {
                 resultText.text+= "Ä«µå »©¾Ñ±â¸¦ »ç¿ëÇß½À´Ï´Ù.\n";
