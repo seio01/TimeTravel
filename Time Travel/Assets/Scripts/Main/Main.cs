@@ -62,7 +62,6 @@ public class Main : MonoBehaviour
 
     void Start()
     {
-        //Screen.SetResolution(2304, 1296, false);
         xButton.onClick.AddListener(checkBannedText);
     }
 
@@ -75,11 +74,11 @@ public class Main : MonoBehaviour
             long currentTime = (long)timeSpan.TotalSeconds;
 
             //최종 버전때 수정하기!
-            if (banType=="room"  && currentTime >= bannedTime + 60)  // 룸에서의 밴 (10분)
+            if (banType=="room"  && currentTime >= bannedTime + 600)
             {
                 eraseBan();
             }
-            if (banType == "game" && currentTime >= bannedTime + 60)  //게임 나갔을 때 밴 (1시간)
+            if (banType == "game" && currentTime >= bannedTime + 3600) 
             {
                 eraseBan();
             }

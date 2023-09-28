@@ -15,7 +15,6 @@ public class DontDestroyObjects : MonoBehaviour
     public enum items { hint, erase, pass, cardSteal, timeSteal, bind };
     public List<items>[] playerItems; //플레이어 전체 아이템 보유 리스트 배열
 
-    public TMP_Text test;
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
