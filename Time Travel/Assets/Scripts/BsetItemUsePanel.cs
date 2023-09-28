@@ -26,6 +26,7 @@ public class BsetItemUsePanel : MonoBehaviour
 
     void OnEnable()
     {
+        transform.GetChild(3).gameObject.SetActive(false);
         if (checkIfAllDoesntHaveBsetCard() == true)
         {
             useOrNotText.text = "모든 플레이어가 쓸 수 있는 카드가 없습니다.. \n";
@@ -43,37 +44,21 @@ public class BsetItemUsePanel : MonoBehaviour
             {
                 List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.localPlayerIndexWithOrder];
 
-                GameManager.instance.answerText.text = "";
-                for (int j = 0; j < playerCards.Count; j++)
-                {
-                    GameManager.instance.answerText.text += playerCards[j].ToString() + " ";
-                }
-                GameManager.instance.answerText.text += "\n";
-
                 if (playerCards.Contains(DontDestroyObjects.items.cardSteal) || playerCards.Contains(DontDestroyObjects.items.timeSteal) || playerCards.Contains(DontDestroyObjects.items.bind))
                 {
                     GameObject itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
                     transform.GetChild(2).gameObject.SetActive(true);
-                    if (playerCards.Contains(DontDestroyObjects.items.cardSteal))
+                    if (playerCards.Contains(DontDestroyObjects.items.cardSteal) && canUseCardSteal() == true)
                     {
-                        itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
-                        GameObject obj = Instantiate(itemCardPrefab);
-                        obj.GetComponent<Image>().sprite = itemCardImages[0];
-                        obj.transform.parent = transform.GetChild(2);
+                        setCardImageWithIndex(0);
                     }
                     if (playerCards.Contains(DontDestroyObjects.items.timeSteal))
                     {
-                        itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
-                        GameObject obj = Instantiate(itemCardPrefab);
-                        obj.GetComponent<Image>().sprite = itemCardImages[1];
-                        obj.transform.parent = transform.GetChild(2);
+                        setCardImageWithIndex(1);
                     }
                     if (playerCards.Contains(DontDestroyObjects.items.bind))
                     {
-                        itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
-                        GameObject obj = Instantiate(itemCardPrefab);
-                        obj.GetComponent<Image>().sprite = itemCardImages[2];
-                        obj.transform.parent = transform.GetChild(2);
+                        setCardImageWithIndex(2);
                     }
                     useOrNotText.text = "사용할 카드를 선택해주세요. \n (시간 내 선택되지 않을 시 카드는 사용되지 않습니다.)";
                 }
@@ -85,6 +70,28 @@ public class BsetItemUsePanel : MonoBehaviour
             time = 5;
             StartCoroutine("setTimer");
         }
+    }
+
+    bool canUseCardSteal()
+    {
+        List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.localPlayerIndexWithOrder];
+        List<DontDestroyObjects.items> controlPlayerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
+        if (playerCards.Count == 4 || controlPlayerCards.Count == 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    void setCardImageWithIndex(int index)
+    {
+        GameObject itemCardPrefab = Resources.Load<GameObject>("Prefabs/itemImage");
+        GameObject obj = Instantiate(itemCardPrefab);
+        obj.GetComponent<Image>().sprite = itemCardImages[index];
+        obj.transform.parent = transform.GetChild(2);
     }
 
     void OnDisable()

@@ -51,8 +51,7 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             if (isSelected == false && RpcManager.instance.currentTurnUsedItemOfLocalPlayer == "")
             {
                 canNotUse = false;
-                Color whiteColor = new Color(255 / 255f, 255 / 255f, 255 / 255f);
-                this.gameObject.GetComponent<Image>().color = whiteColor;
+                changeColorWhite();
             }
             if (RpcManager.instance.isSomeoneUseCardSteal == true)
             {
@@ -116,9 +115,8 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     {
         if (isSelected== true)
         {
-            Color whiteColor = new Color(255 / 255f, 255 / 255f, 255 / 255f);
-            this.gameObject.GetComponent<Image>().color = whiteColor;
-            isSelected= false;
+            changeColorWhite();
+            isSelected = false;
             transform.GetChild(0).gameObject.SetActive(false);
             RpcManager.instance.currentTurnUsedItemOfLocalPlayer = "";
             if (spriteName == "Ä«µå»©¾Ñ±â")
@@ -144,7 +142,9 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     bool canStealCard()
     {
-        if (DontDestroyObjects.instance.playerItems[GameManager.instance.localPlayerIndexWithOrder].Count == 4 || DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder].Count == 0)
+        List<DontDestroyObjects.items> playerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.localPlayerIndexWithOrder];
+        List<DontDestroyObjects.items> controlPlayerCards = DontDestroyObjects.instance.playerItems[GameManager.instance.controlPlayerIndexWithOrder];
+        if (playerCards.Count == 4 || controlPlayerCards.Count == 0)
         {
             return false;
         }
@@ -158,5 +158,11 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     {
         Color usedColor = new Color(100 / 255f, 100 / 255f, 100 / 255f);
         this.gameObject.GetComponent<Image>().color = usedColor;
+    }
+
+    void changeColorWhite()
+    {
+        Color whiteColor = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+        this.gameObject.GetComponent<Image>().color = whiteColor;
     }
 }
