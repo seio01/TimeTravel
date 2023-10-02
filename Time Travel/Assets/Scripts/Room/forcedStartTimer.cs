@@ -25,7 +25,7 @@ public class forcedStartTimer : MonoBehaviour
 
     void OnEnable()
     {
-        time = 30f;
+        time = 60f;
         check = false;
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {

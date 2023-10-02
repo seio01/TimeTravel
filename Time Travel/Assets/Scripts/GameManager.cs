@@ -66,8 +66,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public AudioClip newBGMClip;
     public TMP_Text controlPlayerNameText;
 
-    public TMP_Text testTMP;
-    public TMP_Text answerText;
     public int controlPlayerIndexWithOrder;
     public int localPlayerIndexWithOrder;
     public bool isThisTurnTimeSteal;
@@ -139,23 +137,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        
-        testTMP.text = "";
-
-        
         //게임 종료
         if (isOver)
             return;
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-        {
-            List<DontDestroyObjects.items> test = DontDestroyObjects.instance.playerItems[i];
-            testTMP.text += i + " : ";
-            for (int j = 0; j < test.Count; j++)
-            {
-                testTMP.text += test[j].ToString() + " ";
-            }
-            testTMP.text += "\n";
-        }
         //when to stop moving
         if (player[controlPlayerIndexWithOrder].curIndex > playerStartPoint[controlPlayerIndexWithOrder] + newDiceSide)
         {
@@ -503,11 +487,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         RpcManager.instance.eraseItem(controlPlayerIndexWithOrder, itemName);
     }
 
-    public void RpcCheck(string s)
-    {
-        testTMP.text = s;
-    }
-
     public void CheckCurPoint(int diceNum)
     {
         switch (diceNum)
@@ -664,11 +643,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if(DontDestroyObjects.instance.playerListWithOrder[i].NickName == PhotonNetwork.LocalPlayer.NickName)
             {
-                Debug.Log("incorrect");
                 checkIncorrectProblemSc.ShowIncorrectProblems(i);
             }
         }
-        Debug.Log("incorrect11");
     }
 
 
@@ -734,19 +711,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             setItemImage(DontDestroyObjects.items.pass, playerIndex, 2);
         }
-
-        // 이 밑에는 최종 버전 때 지우기
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-        {
-            List<DontDestroyObjects.items> test = DontDestroyObjects.instance.playerItems[i];
-            testTMP.text += i + " : ";
-            for (int j = 0; j < test.Count; j++)
-            {
-                testTMP.text += test[j].ToString() + " ";
-            }
-            testTMP.text += "\n";
-        }
-        //
     }
 
     void setItemImage(DontDestroyObjects.items item, int playerIndex, int index)

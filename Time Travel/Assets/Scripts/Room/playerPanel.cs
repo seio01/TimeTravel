@@ -44,7 +44,7 @@ public class playerPanel : MonoBehaviourPunCallbacks
         {
             transform.GetChild(2).gameObject.SetActive(true);
             roomManagerScript.readyCounts++;
-            if (roomManagerScript.readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)  //나중에 masterClient만 start하도록 수정.
+            if (roomManagerScript.readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)
             {
                 Invoke("StartGameWithTimer", 1f);
             }
@@ -66,7 +66,7 @@ public class playerPanel : MonoBehaviourPunCallbacks
         }
         roomManagerScript.playerListImg[index].transform.transform.Find("Ready Text").gameObject.SetActive(true);
         roomManagerScript.readyCounts++;
-        if (roomManagerScript.readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers)  //나중에 masterClient만 start하도록 수정.
+        if (roomManagerScript.readyCounts == PhotonNetwork.CurrentRoom.MaxPlayers) 
         {
             roomManagerScript.StartGame();
         }
