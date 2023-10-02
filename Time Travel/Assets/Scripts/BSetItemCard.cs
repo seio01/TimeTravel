@@ -92,7 +92,7 @@ public class BSetItemCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         }
         else if (spriteName == "운명공동체")
         {
-            itemText.text = "상대방이 문제를 맞힌다면 자신도 주사위 눈에 해당하는 칸만큼 이동합니다.\n";
+            itemText.text = "상대방이 문제를 맞힌다면 자신도 \n주사위 눈에 해당하는 칸만큼 이동합니다.\n";
         }
         else
         {

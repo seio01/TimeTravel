@@ -79,7 +79,7 @@ public class forcedStartTimer : MonoBehaviour
         {
             time -= Time.deltaTime;
             timeText.text = string.Format("{0:F0}초", time);
-            infoText.text = "시간이 지나면 자동으로 시작됩니다.\n 다른 사람이 들어와 레디를 하면 시간이 갱신됩니다.";
+            infoText.text = "시간이 지나면 자동으로 시작됩니다.\n 다른 사람이 들어와 ready상태가 되면 시간이 갱신됩니다.";
         }
     }
 
