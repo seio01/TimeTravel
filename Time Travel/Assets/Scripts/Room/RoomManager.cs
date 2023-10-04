@@ -442,6 +442,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
             return quitInTheMiddle.instance.isApplicationQuit;
         }
+        else if (scene.name == "Loading")
+        {
+            RoomManager.instance.gameQuit();
+            return true;
+        }
         else
         {
             return true;

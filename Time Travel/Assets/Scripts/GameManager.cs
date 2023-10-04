@@ -310,7 +310,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < playerCount; i++)
         {
             DontDestroyObjects.items[] arr = DontDestroyObjects.instance.playerItems[i].ToArray();
-            for (int j = 0; j< 4; j++)
+            for (int j = 0; j< arr.Length; j++)
             {
                 if (arr[j] == DontDestroyObjects.items.hint)
                 {
