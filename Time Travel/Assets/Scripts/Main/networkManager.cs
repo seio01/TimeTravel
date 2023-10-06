@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 
 public class networkManager : MonoBehaviourPunCallbacks
 {
@@ -112,7 +113,6 @@ public class networkManager : MonoBehaviourPunCallbacks
     {
         connectionInfoText.text = "빈 방이 없음, 새로운 방 생성...";
         PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = maxPlayer }); //2,3,4명 수용가능한 방 만들기
-
     }
 
 
@@ -137,15 +137,14 @@ public class networkManager : MonoBehaviourPunCallbacks
     //방 만들기 버튼
     public void CreateRoom()
     {
-        RoomOptions roomOptions = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = maxPlayer };
+        RoomOptions roomOptions = new RoomOptions() { IsVisible = false, IsOpen = true, MaxPlayers = maxPlayer };
         PhotonNetwork.CreateRoom(roomPassword, roomOptions);
     }
 
     //방 만들기 실패하면
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        connectionInfoText.text = "방 만들기 실패, 재시도중...";
-        CreateRoom();
+        connectionInfoText.text = "방 만들기 실패";
     }
 
     //Enter Room
@@ -160,6 +159,11 @@ public class networkManager : MonoBehaviourPunCallbacks
     public void EnterRoom()
     {
         PhotonNetwork.JoinRoom(enterRoomPassword);
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        connectionInfoText.text = "방 입장 실패";
     }
 
     public override void OnJoinedRoom()

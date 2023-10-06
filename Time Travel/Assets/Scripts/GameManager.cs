@@ -155,7 +155,6 @@ public class GameManager : MonoBehaviourPunCallbacks
                     UISmaller();
                 }
             }
-
             //정답 5번이면 주사위 한번 더 굴리기
             if (player[GameManager.instance.controlPlayerIndexWithOrder].correctCount == 5)
             {
@@ -613,9 +612,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void ReturnToLobby()
     {
         SoundManager.instance.SoundPlayer("Button");
-        PhotonNetwork.LeaveRoom();
-        Destroy(DontDestroyObjects.instance);
         quitScript.isApplicationQuit = true;
+        Destroy(DontDestroyObjects.instance);
+        PhotonNetwork.LeaveRoom();
     }
 
     public override void OnLeftRoom()

@@ -33,7 +33,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
             instance = this;
         }
         outPlayerIndex = new List<int>();
-        InitializeApplicationQuit();
+        //InitializeApplicationQuit();
     }
     void Start()
     {
@@ -44,10 +44,6 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            OnApplicationQuit();
-        }*/
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
@@ -184,6 +180,7 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
         MiddleQuitPanel.SetActive(false);
     }
 
+    /*
     void InitializeApplicationQuit()
     {
         quitEvent += () =>
@@ -204,4 +201,5 @@ public class quitInTheMiddle : MonoBehaviourPunCallbacks
 
         return isApplicationQuit;
     }
+    */
 }

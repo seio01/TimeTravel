@@ -7690,8 +7690,9 @@ MonoBehaviour:
   playerNameText: {fileID: 1379455023}
   problemID: 0
   prevDynasty: 0
-  problemScript: {fileID: 0}
+  problemScript: {fileID: 1223628119}
   PV: {fileID: 1223628120}
+  solvedProblems: 
 --- !u!114 &1223628119
 MonoBehaviour:
   m_ObjectHideFlags: 0

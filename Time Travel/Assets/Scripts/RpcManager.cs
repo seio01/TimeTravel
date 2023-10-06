@@ -304,31 +304,34 @@ public class RpcManager : MonoBehaviour
     {
         int problemID = 0;
         int prevDynasty = 0;
-        if (playerPosition >= 1 && playerPosition <= 8)
+        do
         {
-            problemID = Random.Range(1, 31);
-            prevDynasty = 0;
-        }
-        else if (playerPosition >= 9 && playerPosition <= 20)
-        {
-            problemID = Random.Range(1, 66) + 30;
-            prevDynasty = 30;
-        }
-        else if (playerPosition >= 21 && playerPosition <= 40)
-        {
-            problemID = Random.Range(1, 81) + 95;
-            prevDynasty = 95;
-        }
-        else if (playerPosition >= 41 && playerPosition <= 70)
-        {
-            problemID = Random.Range(1, 111) + 175;
-            prevDynasty = 175;
-        }
-        else
-        {
-            problemID = Random.Range(1, 121) + 285;
-            prevDynasty =285;
-        }
+            if (playerPosition >= 1 && playerPosition <= 8)
+            {
+                problemID = Random.Range(1, 31);
+                prevDynasty = 0;
+            }
+            else if (playerPosition >= 9 && playerPosition <= 20)
+            {
+                problemID = Random.Range(1, 66) + 30;
+                prevDynasty = 30;
+            }
+            else if (playerPosition >= 21 && playerPosition <= 40)
+            {
+                problemID = Random.Range(1, 81) + 95;
+                prevDynasty = 95;
+            }
+            else if (playerPosition >= 41 && playerPosition <= 70)
+            {
+                problemID = Random.Range(1, 111) + 175;
+                prevDynasty = 175;
+            }
+            else
+            {
+                problemID = Random.Range(1, 121) + 285;
+                prevDynasty = 285;
+            }
+        } while (problemScript.solvedProblems.Contains(playerPosition) == true);
         PV.RPC("setProblemIDToOThers", RpcTarget.AllViaServer, problemID, prevDynasty);
     }
 
