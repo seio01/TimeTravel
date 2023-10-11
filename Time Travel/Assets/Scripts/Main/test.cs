@@ -8,7 +8,7 @@ public class test : MonoBehaviour
 {
     public static MySqlConnection SqlConn;
 
-    static string ipAddress="192.168.0.19";
+    static string ipAddress= "183.96.251.147";
     string db_id = "root";
     string db_pw = "sm1906";
     string db_name = "timetravel";
