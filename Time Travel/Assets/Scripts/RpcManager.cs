@@ -331,7 +331,7 @@ public class RpcManager : MonoBehaviour
                 problemID = Random.Range(1, 121) + 285;
                 prevDynasty = 285;
             }
-        } while (problemScript.solvedProblems.Contains(playerPosition) == true);
+        } while (problemScript.solvedProblems.Contains(problemID) == true);
         PV.RPC("setProblemIDToOThers", RpcTarget.AllViaServer, problemID, prevDynasty);
     }
 
