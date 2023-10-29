@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 using System.Data;
 using MySql.Data;
 using MySql.Data.MySqlClient;
@@ -36,42 +37,50 @@ public class problemAddModifyMaker : MonoBehaviour
     string dynastyText;
     string problemNumText;
     string problemText;
+    string problemCategoryText;
     string selection1Text;
     string selection2Text;
     string selection3Text;
     string selection4Text;
     string haveHintText;
     string hintText;
+
+    string answerText;
     int currentDynastyProblemNumCount = 0;
 
     void Awake()
     {
         string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
         SqlConn = new MySqlConnection(strConn);
+        SqlConn.Open();
     }
 
     void Start()
     {
         dynastySelection.onValueChanged.AddListener(delegate { setProblemNumOption();  });
         problemCategory.onValueChanged.AddListener(delegate { makeSelectionChange(); });
+        haveHint.onValueChanged.AddListener(delegate { setHintInputPanel(); });
         addButton.onClick.AddListener(addProblemToDatabase);
-
+        addProblemButton.onClick.AddListener(setPanelToAddProblem);
+        modifyProblemButton.onClick.AddListener(setPanelToModifyProblem);
         setProblemNumOption();
-        
         //이후 구현해야 할 부분
 
-        //문제 번호 dropDown 값이 바뀌었을 때, DB의 problem 테이블 problem Text의 값이 NULL이면 문제 inputField setActive()시키고 해당 문제의 이미지 보여줌
+        //<문제 수정>
+        //문제 번호 dropDown 값이 바뀌었을 때, DB의 problem 테이블 problem Text의 값이 NULL이면 문제 inputField setActive(false)시키고 해당 문제의 이미지 보여줌
+        //**null값 확인: DBNull.Value.Equals()로 확인.
         //null이 아니면 inputField에 해당 값 읽어오기.
         //나머지 inputField와 dropDown에도 값 읽어오기.
 
-        //추가하기 버튼 누르면 해당 값을 DB에 저장.
         //수정하기 버튼 누르면 해당 값을 DB에 저장.
 
     }
 
+
     void setProblemNumOption()
     {
-        for (int i = 0; i < problemNum.options.Count; i++)
+        int optionNum = problemNum.options.Count;
+        for (int i = 0; i < optionNum; i++)
         {
             problemNum.options.RemoveAt(0);
         }
@@ -79,8 +88,7 @@ public class problemAddModifyMaker : MonoBehaviour
         string query = setQuery();
         DataTable dynasty = selectRequest(query);
         currentDynastyProblemNumCount = dynasty.Rows.Count;
-
-        if (addProblemButton.interactable== false)
+        if (isManageMenetTypeAddProblem() == true)
         {
             problemNum.interactable = false;
             string newProblemNum = (currentDynastyProblemNumCount + 1).ToString();
@@ -95,8 +103,21 @@ public class problemAddModifyMaker : MonoBehaviour
             {
                 addOptionAtProblemNum(i.ToString());
             }
+            selectedLabel.text = "1";
         }
         problemNum.value = 0;
+    }
+
+    bool isManageMenetTypeAddProblem()
+    {
+        if (addProblemButton.GetComponent<RectTransform>().sizeDelta == new Vector2(280, 80))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     void addOptionAtProblemNum(string valueText)
@@ -104,6 +125,25 @@ public class problemAddModifyMaker : MonoBehaviour
         TMP_Dropdown.OptionData newData = new TMP_Dropdown.OptionData();
         newData.text = valueText;
         problemNum.options.Add(newData);
+    }
+
+    void setHintInputPanel()
+    {
+        if (problemCategory.value == 0)
+        {
+            hint.interactable = false;
+        }
+        else
+        {
+            if (haveHint.value == 0)
+            {
+                hint.interactable = false;
+            }
+            else
+            {
+                hint.interactable = true;
+            }
+        }
     }
 
     string setQuery()
@@ -137,7 +177,10 @@ public class problemAddModifyMaker : MonoBehaviour
         if (inputFieldAllFilled() == true)
         {
             getTextFromDropDownsAndInputFields();
-            string insertQuery = string.Format("insert into problem values({0}, {1}, {2}, {3}, {4}) ;", dynastyText, problemNumText, problemText, haveHintText, hintText);
+            string insertQueryToProblem = string.Format("insert into problem values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}') ;", dynastyText, problemNumText, problemText, problemCategoryText, haveHintText, hintText);
+            //insertOrUpdateRequest(insertQueryToProblem);
+            string insertQueryToAnswer = string.Format("insert into answer values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}');", dynastyText, problemNumText, selection1Text, selection2Text, selection3Text, selection4Text, answerText);
+            //insertOrUpdateRequest(insertQueryToAnswer);
             setProblemNumOption();
             Debug.Log("문제 추가 성공");
         }
@@ -177,13 +220,17 @@ public class problemAddModifyMaker : MonoBehaviour
     {
         dynastyText = dynastySelection.options[dynastySelection.value].text;
         problemNumText = problemNum.options[problemNum.value].text;
+        problemCategoryText = problemCategory.options[problemNum.value].text;
         problemText = addedProblem.text;
+        haveHintText = haveHint.options[haveHint.value].text;
+        hintText = hint.text;
+
         selection1Text = selection1.text;
         selection2Text = selection2.text;
         selection3Text = selection3.text;
         selection4Text = selection4.text;
-        haveHintText = haveHint.options[haveHint.value].text;
-        hintText = hint.text;
+        answerText = (answer.value+1).ToString();
+        Debug.Log(answerText);
     }
 
     void makeSelectionChange()
@@ -196,6 +243,8 @@ public class problemAddModifyMaker : MonoBehaviour
             selection2.interactable = false;
             selection3.interactable = false;
             selection4.interactable = false;
+            hint.interactable = false;
+            haveHint.value = 0;
         }
         else
         {
@@ -212,7 +261,6 @@ public class problemAddModifyMaker : MonoBehaviour
     {
         try
         {
-            SqlConn.Open();
 
             MySqlCommand cmd = new MySqlCommand();
             cmd.Connection = SqlConn;
@@ -222,8 +270,6 @@ public class problemAddModifyMaker : MonoBehaviour
             MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
             DataTable dataTable = new DataTable();
             adapter.Fill(dataTable);
-
-            SqlConn.Close();
 
             return dataTable;
         }
@@ -241,13 +287,34 @@ public class problemAddModifyMaker : MonoBehaviour
             MySqlCommand sqlCommand = new MySqlCommand(query);
             sqlCommand.Connection = SqlConn;
             sqlCommand.CommandText = query;
-            SqlConn.Open();
             sqlCommand.ExecuteNonQuery();
-            SqlConn.Close();
         }
         catch (System.Exception e)
         {
             Debug.Log(e.ToString());
         }
+    }
+
+    void setPanelToAddProblem()
+    {
+        addProblemButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(802, 380);
+        addProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(280, 80);
+        modifyProblemButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(832, 260);
+        modifyProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(220, 80);
+        addProblemButton.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255/255f);
+        modifyProblemButton.GetComponent<Image>().color = new Color(118 / 255f, 118 / 255f, 118 / 255f, 200/255f);
+        setProblemNumOption();
+
+    }
+
+    void setPanelToModifyProblem()
+    {
+        addProblemButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(832, 380);
+        addProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(220, 80);
+        modifyProblemButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(802, 260);
+        modifyProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(280, 80);
+        addProblemButton.GetComponent<Image>().color = new Color(118 / 255f, 118 / 255f, 118 / 255f, 200/255f);
+        modifyProblemButton.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255/255f);
+        setProblemNumOption();
     }
 }

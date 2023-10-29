@@ -17,18 +17,6 @@ public class test : MonoBehaviour
     {
         string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress , db_id, db_pw, db_name);
         MySqlConnection conn = new MySqlConnection(strConn);
-
-        /*
-        SqlConn=new MySqlConnection(strConn);
-        string query = "insert into user values('noonsong', '5678', 'admin')";
-        OnInsertOrUpdateRequest(query);
-        query = "select * from user";
-        DataTable dataTable = OnSelectRequest(query);
-        foreach (DataRow row in dataTable.Rows)
-        {
-            Debug.Log(row["user_id"].ToString() +"  "+ row["user_pwd"].ToString());
-        }
-        */
     }
 
     // Update is called once per frame
