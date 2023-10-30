@@ -67,9 +67,8 @@ public class problemAddModifyMaker : MonoBehaviour
         //이후 구현해야 할 부분
 
         //<문제 수정>
-        //문제 번호 dropDown 값이 바뀌었을 때, DB의 problem 테이블 problem Text의 값이 NULL이면 문제 inputField setActive(false)시키고 해당 문제의 이미지 보여줌
-        //**null값 확인: DBNull.Value.Equals()로 확인.
-        //null이 아니면 inputField에 해당 값 읽어오기.
+        //문제 번호 dropDown 값이 바뀌었을 때, DB의 problem 테이블의 본문 column의 값이 NULL이면 문제 inputField setActive(false)시키고 해당 문제의 이미지 보여줌
+        //null이 아니면 문제 text 출력하는 inputField에 값 읽어오기.
         //나머지 inputField와 dropDown에도 값 읽어오기.
 
         //수정하기 버튼 누르면 해당 값을 DB에 저장.
