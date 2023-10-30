@@ -726,40 +726,46 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void eraseItemUI(int index, string itemName)
     {
         GameObject itemPanel = playerInformationUIs[index].transform.GetChild(1).gameObject;
-        string itemNameToSpirteName = "";
+        string itemSpriteName = changeItemNameToSpriteName(itemName);
 
-        if (itemName == "운명공동체")
-        {
-            itemNameToSpirteName = "운명공동체 UI";
-        }
-        else if (itemName == "카드빼앗기")
-        {
-            itemNameToSpirteName = "카드 빼앗기";
-        }
-        else if (itemName == "시간빼앗기")
-        {
-            itemNameToSpirteName = "시간 빼앗기 UI";
-        }
-        else if (itemName == "힌트" || itemName=="hint" )
-        {
-            itemNameToSpirteName = "힌트 UI";
-        }
-        else if (itemName == "선택지제거" || itemName == "erase" )
-        {
-            itemNameToSpirteName = "선택지 지우기 UI";
-        }
-        else
-        {
-            itemNameToSpirteName = "문제 스킵 UI";
-        }
         foreach (Transform child in itemPanel.transform)
         {
-            if (child.gameObject.GetComponent<Image>().sprite.name == itemNameToSpirteName)
+            if (child.gameObject.GetComponent<Image>().sprite.name == itemSpriteName)
             {
                 Destroy(child.gameObject);
                 break;
             }
         }
+    }
+
+    string changeItemNameToSpriteName(string itemName)
+    {
+        string itemSpriteName = "";
+        if (itemName == "운명공동체")
+        {
+            itemSpriteName = "운명공동체 UI";
+        }
+        else if (itemName == "카드빼앗기")
+        {
+            itemSpriteName = "카드 빼앗기";
+        }
+        else if (itemName == "시간빼앗기")
+        {
+            itemSpriteName = "시간 빼앗기 UI";
+        }
+        else if (itemName == "힌트" || itemName == "hint")
+        {
+            itemSpriteName = "힌트 UI";
+        }
+        else if (itemName == "선택지제거" || itemName == "erase")
+        {
+            itemSpriteName = "선택지 지우기 UI";
+        }
+        else
+        {
+            itemSpriteName = "문제 스킵 UI";
+        }
+        return itemSpriteName;
     }
 
     public void ChangeClothes(string age)
