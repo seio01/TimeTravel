@@ -119,8 +119,8 @@ public class CheckIncorrectProblems : MonoBehaviour
         for (int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemNumbers.Count; i++)
         {
             problemID = GameManager.instance.player[playerIndex].incorrectProblemNumbers[i];
-            problemType = problemScript.problemData[problemID - 1]["유형"].ToString();
-            dynasty = problemScript.problemData[problemID - 1]["시대"].ToString();
+            problemType = problemScript.problemDataCSV[problemID - 1]["유형"].ToString();
+            dynasty = problemScript.problemDataCSV[problemID - 1]["시대"].ToString();
 
             SetPrevDynasty();
             SetProblemImg(dynasty);

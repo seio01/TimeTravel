@@ -6,6 +6,8 @@ using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
 using Photon.Pun.UtilityScripts;
+using System.Data;
+using System;
 
 public class problem : MonoBehaviour
 {
@@ -18,17 +20,17 @@ public class problem : MonoBehaviour
     public Button hintButton;
     public TMP_Text TimeText;
     public TMP_Text dynastyText;
+    public TMP_Text problemText;
     public GameObject problemImage;
     public GameObject resultPanel;
     public GameObject hintPanel;
     public GameObject problemPassButton;
     public GameObject selectionEraseButton;
-    public List<Dictionary<string, object>> problemData;
+    public List<Dictionary<string, object>> problemDataCSV;
     public List<Dictionary<string, object>> answerData;
     public TMP_Text playerNameText;
 
     public int problemID;
-    public int prevDynasty;
     string dynasty;
     string problemType;
     string isHaveHint;
@@ -55,7 +57,6 @@ public class problem : MonoBehaviour
         resultText = resultPanel.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
         solvedProblems = new List<int>();
         problemID = 1;
-        prevDynasty = 0;
     }
 
     // Update is called once per frame
@@ -116,12 +117,10 @@ public class problem : MonoBehaviour
 
     }
 
-    public void setProblemPanel(int problemID, int prevDynasty)
+    public void setProblemPanel(int problemID)
     {
         this.problemID = problemID;
-        this.prevDynasty = prevDynasty;
         getInfoFromCSV();
-        setImage();
         controlButtons();
         if (PhotonNetwork.LocalPlayer == GameManager.instance.controlPlayer)
         {
@@ -168,11 +167,32 @@ public class problem : MonoBehaviour
 
     void getInfoFromCSV()
     {
-        dynasty = problemData[problemID - 1]["시대"].ToString();
-        problemType = problemData[problemID - 1]["유형"].ToString();
-        isHaveHint = problemData[problemID - 1]["힌트 여부"].ToString();
-        hintString = problemData[problemID - 1]["힌트"].ToString();
+        DataRow currentProblem = getCurrentProblem();
+
+        dynasty = currentProblem["시대"].ToString();
+        problemType = currentProblem["유형"].ToString();
+        isHaveHint = currentProblem["힌트 여부"].ToString();
+        hintString = currentProblem["힌트"].ToString();
         dynastyText.text = dynasty;
+        if (DBNull.Value.Equals(currentProblem["본문"]) == true)
+        {
+            problemText.gameObject.SetActive(false);
+            problemImage.SetActive(true);
+            setImage();
+        }
+        else
+        {
+            problemText.gameObject.SetActive(true);
+            problemImage.SetActive(false);
+            problemText.text = currentProblem["본문"].ToString();
+        }
+        /*
+        dynasty = problemDataCSV[problemID - 1]["시대"].ToString();
+        problemType = problemDataCSV[problemID - 1]["유형"].ToString();
+        isHaveHint = problemDataCSV[problemID - 1]["힌트 여부"].ToString();
+        hintString = problemDataCSV[problemID - 1]["힌트"].ToString();
+        dynastyText.text = dynasty;
+        */
     }
 
     void setImage()
@@ -198,7 +218,8 @@ public class problem : MonoBehaviour
                 break;
             default: break;
         }
-        Sprite sprite = dynastyImageGraph[problemID - 1 - prevDynasty];
+        Debug.Log(dynasty + "  " + problemID);
+        Sprite sprite = dynastyImageGraph[problemID - 1];
         problemImage.GetComponent<Image>().sprite = sprite;
         problemImage.GetComponent<Image>().SetNativeSize();
     }
@@ -344,7 +365,7 @@ public class problem : MonoBehaviour
         int eraseSelection;
         while (true)
         {
-            eraseSelection = Random.Range(1, 5);
+            eraseSelection = UnityEngine.Random.Range(1, 5);
             if (eraseSelection != correctAnswer)
             {
                 break;
@@ -419,4 +440,29 @@ public class problem : MonoBehaviour
         playerPosition = GameManager.instance.getPlayerNextPosition();
     }
 
+    DataRow getCurrentProblem()
+    {
+        DataRow currentProblem = null;
+        if (playerPosition >= 1 && playerPosition <= 8)
+        {
+            currentProblem = problemData.instance.dynasty1.Rows[problemID - 1];
+        }
+        else if (playerPosition >= 9 && playerPosition <= 20)
+        {
+            currentProblem = problemData.instance.dynasty2.Rows[problemID - 1];
+        }
+        else if (playerPosition >= 21 && playerPosition <= 40)
+        {
+            currentProblem = problemData.instance.dynasty3.Rows[problemID - 1];
+        }
+        else if (playerPosition >= 41 && playerPosition <= 70)
+        {
+            currentProblem = problemData.instance.dynasty4.Rows[problemID - 1];
+        }
+        else
+        {
+            currentProblem = problemData.instance.dynasty5.Rows[problemID - 1];
+        }
+        return currentProblem;
+    }
 }

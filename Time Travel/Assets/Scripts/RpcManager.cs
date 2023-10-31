@@ -303,36 +303,36 @@ public class RpcManager : MonoBehaviour
     public void setProblemID(int playerPosition)
     {
         int problemID = 0;
-        int prevDynasty = 0;
+        int dynastyNum = 0;
         do
         {
             if (playerPosition >= 1 && playerPosition <= 8)
             {
-                problemID = Random.Range(1, 31);
-                prevDynasty = 0;
+                dynastyNum = problemData.instance.dynasty1.Rows.Count;
+                problemID = Random.Range(1, dynastyNum+1);
             }
             else if (playerPosition >= 9 && playerPosition <= 20)
             {
-                problemID = Random.Range(1, 66) + 30;
-                prevDynasty = 30;
+                dynastyNum = problemData.instance.dynasty2.Rows.Count;
+                problemID = Random.Range(1, dynastyNum + 1);
             }
             else if (playerPosition >= 21 && playerPosition <= 40)
             {
-                problemID = Random.Range(1, 81) + 95;
-                prevDynasty = 95;
+                dynastyNum = problemData.instance.dynasty3.Rows.Count;
+                problemID = Random.Range(1, dynastyNum+1);
             }
             else if (playerPosition >= 41 && playerPosition <= 70)
             {
-                problemID = Random.Range(1, 111) + 175;
-                prevDynasty = 175;
+                dynastyNum = problemData.instance.dynasty4.Rows.Count;
+                problemID = Random.Range(1, dynastyNum+1);
             }
             else
             {
-                problemID = Random.Range(1, 121) + 285;
-                prevDynasty = 285;
+                dynastyNum = problemData.instance.dynasty5.Rows.Count;
+                problemID = Random.Range(1, dynastyNum+1);
             }
         } while (problemScript.solvedProblems.Contains(problemID) == true);
-        PV.RPC("setProblemIDToOThers", RpcTarget.AllViaServer, problemID, prevDynasty);
+        PV.RPC("setProblemIDToOThers", RpcTarget.AllViaServer, problemID);
     }
 
     [PunRPC]
@@ -342,11 +342,10 @@ public class RpcManager : MonoBehaviour
     }
 
     [PunRPC]
-    public void setProblemIDToOThers(int problemID, int prevDynasty)
+    public void setProblemIDToOThers( int problemID)
     {
         problemScript.problemID = problemID;
-        problemScript.prevDynasty = prevDynasty;
-        problemScript.setProblemPanel(problemID, prevDynasty);
+        problemScript.setProblemPanel(problemID);
     }
 
     //endgame

@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             instance = this;
         }
-        problemMaker.problemData= CSVReader.Read("문제");
+        problemMaker.problemDataCSV= CSVReader.Read("문제");
         problemMaker.answerData = CSVReader.Read("답");
         problemMaker.problemScript = problemMaker.gameObject.GetComponent<problemGraph>();
         playerStartPoint = new int[PhotonNetwork.CurrentRoom.PlayerCount];
