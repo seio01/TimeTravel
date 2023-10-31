@@ -33,6 +33,9 @@ public class problemAddModifyMaker : MonoBehaviour
     public Button addProblemButton;
     public Button modifyProblemButton;
     public Button addButton;
+    public Button modifyButton;
+
+    public problemGraph problemGraphScript;
 
     string dynastyText;
     string problemNumText;
@@ -47,6 +50,7 @@ public class problemAddModifyMaker : MonoBehaviour
 
     string answerText;
     int currentDynastyProblemNumCount = 0;
+
 
     void Awake()
     {
@@ -72,7 +76,8 @@ public class problemAddModifyMaker : MonoBehaviour
         //나머지 inputField와 dropDown에도 값 읽어오기.
 
         //수정하기 버튼 누르면 해당 값을 DB에 저장.
-
+        problemNum.onValueChanged.AddListener(delegate { getProblemForModify(); });
+        modifyButton.onClick.AddListener(modifyProblemToDatabase);
     }
 
 
@@ -189,6 +194,24 @@ public class problemAddModifyMaker : MonoBehaviour
         }
     }
 
+    void modifyProblemToDatabase()
+    {
+        if (inputFieldAllFilled() == true)
+        {
+            getTextFromDropDownsAndInputFields();
+            string insertQueryToProblem = string.Format("update into problem values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}') ;", dynastyText, problemNumText, problemText, problemCategoryText, haveHintText, hintText);
+            //insertOrUpdateRequest(insertQueryToProblem);
+            string insertQueryToAnswer = string.Format("update into answer values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}');", dynastyText, problemNumText, selection1Text, selection2Text, selection3Text, selection4Text, answerText);
+            //insertOrUpdateRequest(insertQueryToAnswer);
+            setProblemNumOption();
+            Debug.Log("문제 수정 성공");
+        }
+        else
+        {
+            Debug.Log("채워지지 않은 inputField가 있어 문제를 수정할 수 없습니다.\n");
+        }
+    }
+
     bool inputFieldAllFilled()
     {
         if (problemCategory.value == 0)
@@ -214,6 +237,7 @@ public class problemAddModifyMaker : MonoBehaviour
             }
         }
     }
+
 
     void getTextFromDropDownsAndInputFields()
     {
@@ -302,6 +326,8 @@ public class problemAddModifyMaker : MonoBehaviour
         modifyProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(220, 80);
         addProblemButton.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255/255f);
         modifyProblemButton.GetComponent<Image>().color = new Color(118 / 255f, 118 / 255f, 118 / 255f, 200/255f);
+        addButton.gameObject.SetActive(true);
+        modifyButton.gameObject.SetActive(false);
         setProblemNumOption();
 
     }
@@ -314,6 +340,90 @@ public class problemAddModifyMaker : MonoBehaviour
         modifyProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(280, 80);
         addProblemButton.GetComponent<Image>().color = new Color(118 / 255f, 118 / 255f, 118 / 255f, 200/255f);
         modifyProblemButton.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255/255f);
+        addButton.gameObject.SetActive(false);
+        modifyButton.gameObject.SetActive(true);
         setProblemNumOption();
     }
+
+    void getProblemForModify()
+    {
+        selection1.enabled = true;
+        selection2.enabled = true;
+        selection3.enabled = true;
+        selection4.enabled = true;
+
+        DataTable selectedProblem = selectRequest(string.Format("select 본문, 유형, 힌트 여부, 힌트 from problem where 시대 = '{0}' and ID = '{1}'", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
+        DataRow problemRow = selectedProblem.Rows[0];
+
+        DataTable selectedProblemAnswer = selectRequest(string.Format("select 선택지1, 선택지2, 선택지3, 선택지4, 답 from answer where 시대 = '{0}' and 문제ID = '{1}'", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
+        DataRow answerRow = selectedProblemAnswer.Rows[0];
+
+        if (problemRow["본문"] == DBNull.Value)
+        {
+            addedProblem.enabled = false;
+            addedProblem.gameObject.transform.GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = "";
+            addedProblem.GetComponent<Image>().sprite = getProblemImg(dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text);
+            addedProblem.GetComponent<Image>().SetNativeSize();
+        }
+        else
+        {
+            addedProblem.text = problemRow["본문"].ToString();
+        }
+
+        problemCategory.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = problemRow["유형"].ToString();
+        haveHint.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = problemRow["여부"].ToString();
+        hint.text = problemRow["힌트"].ToString();
+        selection1.text = answerRow["선택지1"].ToString();
+        selection2.text = answerRow["선택지2"].ToString();
+        selection3.text = answerRow["선택지3"].ToString();
+        selection4.text = answerRow["선택지4"].ToString();
+        answer.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = answerRow["답"].ToString();
+    }
+
+    Sprite getProblemImg(string dynasty, string problemID)
+    {
+        Sprite[] dynastyImageGraph = null;
+        Sprite problemImg;
+        int prevDynasty = SetPrevDynasty(int.Parse(problemID));
+
+        switch (dynasty)
+        {
+            case "고조선":
+                dynastyImageGraph = problemGraphScript.dynasty1;
+                break;
+            case "삼국시대":
+                dynastyImageGraph = problemGraphScript.dynasty2;
+                break;
+            case "고려":
+                dynastyImageGraph = problemGraphScript.dynasty3;
+                break;
+            case "조선시대":
+                dynastyImageGraph = problemGraphScript.dynasty4;
+                break;
+            case "근대이후":
+                dynastyImageGraph = problemGraphScript.dynasty5;
+                break;
+            default: break;
+        }
+         return problemImg = dynastyImageGraph[int.Parse(problemID) - 1 - prevDynasty];
+    }
+
+    int SetPrevDynasty(int problemID)
+    {
+        int prevDynasty;
+
+        if (problemID < 31)
+            prevDynasty = 0;
+        else if (problemID < 96)
+            prevDynasty = 30;
+        else if (problemID < 176)
+            prevDynasty = 95;
+        else if (problemID < 286)
+            prevDynasty = 175;
+        else
+            prevDynasty = 285;
+
+        return prevDynasty;
+    }
+
 }
