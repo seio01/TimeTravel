@@ -61,7 +61,7 @@ public class problemAddModifyMaker : MonoBehaviour
 
     void Start()
     {
-        dynastySelection.onValueChanged.AddListener(delegate { setProblemNumOption();  });
+        dynastySelection.onValueChanged.AddListener(delegate { setProblemNumOption(); });
         problemCategory.onValueChanged.AddListener(delegate { makeSelectionChange(); });
         haveHint.onValueChanged.AddListener(delegate { setHintInputPanel(); });
         addButton.onClick.AddListener(addProblemToDatabase);
@@ -70,10 +70,6 @@ public class problemAddModifyMaker : MonoBehaviour
         setProblemNumOption();
         //이후 구현해야 할 부분
 
-        //<문제 수정>
-        //문제 번호 dropDown 값이 바뀌었을 때, DB의 problem 테이블의 본문 column의 값이 NULL이면 문제 inputField setActive(false)시키고 해당 문제의 이미지 보여줌
-        //null이 아니면 문제 text 출력하는 inputField에 값 읽어오기.
-        //나머지 inputField와 dropDown에도 값 읽어오기.
 
         //수정하기 버튼 누르면 해당 값을 DB에 저장.
         problemNum.onValueChanged.AddListener(delegate { getProblemForModify(); });
@@ -196,20 +192,20 @@ public class problemAddModifyMaker : MonoBehaviour
 
     void modifyProblemToDatabase()
     {
-        if (inputFieldAllFilled() == true)
+        string updateQueryToProblem;
+        getTextFromDropDownsAndInputFields();
+        if (addedProblem.GetComponent<Image>().sprite.name != "InputFieldBackground")
         {
-            getTextFromDropDownsAndInputFields();
-            string insertQueryToProblem = string.Format("update into problem values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}') ;", dynastyText, problemNumText, problemText, problemCategoryText, haveHintText, hintText);
-            //insertOrUpdateRequest(insertQueryToProblem);
-            string insertQueryToAnswer = string.Format("update into answer values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}');", dynastyText, problemNumText, selection1Text, selection2Text, selection3Text, selection4Text, answerText);
-            //insertOrUpdateRequest(insertQueryToAnswer);
-            setProblemNumOption();
-            Debug.Log("문제 수정 성공");
+            updateQueryToProblem = string.Format("update problem set 유형= '{0}', `힌트 여부` = '{1}', 힌트 = '{2}' where 시대='{3}' and ID='{4}';", problemCategoryText, haveHintText, hintText, dynastyText, problemNumText);
         }
         else
         {
-            Debug.Log("채워지지 않은 inputField가 있어 문제를 수정할 수 없습니다.\n");
+            updateQueryToProblem = string.Format("update problem set 본문={0}, 유형= '{1}', `힌트 여부` = '{2}', 힌트 = '{3}' where 시대='{4}' and ID='{5}';", problemText, problemCategoryText, haveHintText, hintText, dynastyText, problemNumText);
         }
+        insertOrUpdateRequest(updateQueryToProblem);
+        string updateQueryToAnswer = string.Format("update answer set 선택지1 = '{0}', 선택지2 = '{1}', 선택지3 = '{2}', 선택지4 = '{3}', 답 = '{4}' where 시대 = '{5}' and 문제ID = '{6}';", selection1Text, selection2Text, selection3Text, selection4Text, answerText, dynastyText, problemNumText);
+        insertOrUpdateRequest(updateQueryToAnswer);
+        setProblemNumOption();
     }
 
     bool inputFieldAllFilled()
@@ -238,12 +234,11 @@ public class problemAddModifyMaker : MonoBehaviour
         }
     }
 
-
     void getTextFromDropDownsAndInputFields()
     {
         dynastyText = dynastySelection.options[dynastySelection.value].text;
         problemNumText = problemNum.options[problemNum.value].text;
-        problemCategoryText = problemCategory.options[problemNum.value].text;
+        problemCategoryText = problemCategory.options[problemCategory.value].text;
         problemText = addedProblem.text;
         haveHintText = haveHint.options[haveHint.value].text;
         hintText = hint.text;
@@ -252,7 +247,7 @@ public class problemAddModifyMaker : MonoBehaviour
         selection2Text = selection2.text;
         selection3Text = selection3.text;
         selection4Text = selection4.text;
-        answerText = (answer.value+1).ToString();
+        answerText = (answer.value + 1).ToString();
         Debug.Log(answerText);
     }
 
@@ -262,6 +257,8 @@ public class problemAddModifyMaker : MonoBehaviour
         {
             selection1.text = "o";
             selection2.text = "x";
+            selection3.text = "";
+            selection4.text = "";
             selection1.interactable = false;
             selection2.interactable = false;
             selection3.interactable = false;
@@ -324,8 +321,8 @@ public class problemAddModifyMaker : MonoBehaviour
         addProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(280, 80);
         modifyProblemButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(832, 260);
         modifyProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(220, 80);
-        addProblemButton.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255/255f);
-        modifyProblemButton.GetComponent<Image>().color = new Color(118 / 255f, 118 / 255f, 118 / 255f, 200/255f);
+        addProblemButton.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255 / 255f);
+        modifyProblemButton.GetComponent<Image>().color = new Color(118 / 255f, 118 / 255f, 118 / 255f, 200 / 255f);
         addButton.gameObject.SetActive(true);
         modifyButton.gameObject.SetActive(false);
         setProblemNumOption();
@@ -338,27 +335,50 @@ public class problemAddModifyMaker : MonoBehaviour
         addProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(220, 80);
         modifyProblemButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(802, 260);
         modifyProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(280, 80);
-        addProblemButton.GetComponent<Image>().color = new Color(118 / 255f, 118 / 255f, 118 / 255f, 200/255f);
-        modifyProblemButton.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255/255f);
+        addProblemButton.GetComponent<Image>().color = new Color(118 / 255f, 118 / 255f, 118 / 255f, 200 / 255f);
+        modifyProblemButton.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255 / 255f);
         addButton.gameObject.SetActive(false);
         modifyButton.gameObject.SetActive(true);
-        selection1.interactable = true;
-        selection2.interactable = true;
-        selection3.interactable = true;
-        selection4.interactable = true;
+
+        setProblemNumOption();
+        DataTable selectedProblem = selectRequest(string.Format("select 본문, 유형, 힌트 여부, 힌트 from problem where 시대 = '{0}' and ID = '{1}'", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
+        DataRow problemRow = selectedProblem.Rows[0];
+        if (problemRow["본문"] == DBNull.Value)
+        {
+            addedProblem.enabled = false;
+            addedProblem.gameObject.transform.GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = "";
+            addedProblem.GetComponent<Image>().sprite = getProblemImg(dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text);
+            addedProblem.GetComponent<Image>().SetNativeSize();
+        }
+        if (problemRow["유형"].ToString() == "ox")
+        {
+            selection1.interactable = false;
+            selection2.interactable = false;
+            selection3.interactable = false;
+            selection4.interactable = false;
+        }
+        else
+        {
+            selection1.interactable = true;
+            selection2.interactable = true;
+            selection3.interactable = true;
+            selection4.interactable = true;
+        }
         addedProblem.interactable = true;
         hint.interactable = true;
-        setProblemNumOption();
     }
 
     void getProblemForModify()
     {
-        
-
-        DataTable selectedProblem = selectRequest(string.Format("select 본문, 유형, 힌트 여부, 힌트 from problem where 시대 = '{0}' and ID = '{1}'", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
+        if (isManageMenetTypeAddProblem() == true)
+        {
+            //문제 수정 버튼 누른 후 문제 추가로 돌아갈 시 본문 inputField 원래대로(크기 조절, 이미지 없애기, 입력 가능하게) 돌려놓기.
+            return;
+        }
+        DataTable selectedProblem = selectRequest(string.Format("select * from problem where 시대 = '{0}' and ID = '{1}'", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
         DataRow problemRow = selectedProblem.Rows[0];
 
-        DataTable selectedProblemAnswer = selectRequest(string.Format("select 선택지1, 선택지2, 선택지3, 선택지4, 답 from answer where 시대 = '{0}' and 문제ID = '{1}'", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
+        DataTable selectedProblemAnswer = selectRequest(string.Format("select * from answer where 시대 = '{0}' and 문제ID = '{1}'", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
         DataRow answerRow = selectedProblemAnswer.Rows[0];
 
         if (problemRow["본문"] == DBNull.Value)
@@ -374,12 +394,26 @@ public class problemAddModifyMaker : MonoBehaviour
         }
 
         problemCategory.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = problemRow["유형"].ToString();
-        haveHint.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = problemRow["여부"].ToString();
+        haveHint.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = problemRow["힌트 여부"].ToString();
         hint.text = problemRow["힌트"].ToString();
         selection1.text = answerRow["선택지1"].ToString();
         selection2.text = answerRow["선택지2"].ToString();
         selection3.text = answerRow["선택지3"].ToString();
         selection4.text = answerRow["선택지4"].ToString();
+        if (problemRow["유형"].ToString() == "ox")
+        {
+            selection1.interactable = false;
+            selection2.interactable = false;
+            selection3.interactable = false;
+            selection4.interactable = false;
+        }
+        else
+        {
+            selection1.interactable = true;
+            selection2.interactable = true;
+            selection3.interactable = true;
+            selection4.interactable = true;
+        }
         answer.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = answerRow["답"].ToString();
     }
 
@@ -407,7 +441,7 @@ public class problemAddModifyMaker : MonoBehaviour
                 break;
             default: break;
         }
-         return problemImg = dynastyImageGraph[int.Parse(problemID) - 1];
+        return problemImg = dynastyImageGraph[int.Parse(problemID) - 1];
     }
 
 
