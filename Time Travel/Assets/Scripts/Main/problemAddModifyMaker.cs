@@ -342,15 +342,18 @@ public class problemAddModifyMaker : MonoBehaviour
         modifyProblemButton.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255/255f);
         addButton.gameObject.SetActive(false);
         modifyButton.gameObject.SetActive(true);
+        selection1.interactable = true;
+        selection2.interactable = true;
+        selection3.interactable = true;
+        selection4.interactable = true;
+        addedProblem.interactable = true;
+        hint.interactable = true;
         setProblemNumOption();
     }
 
     void getProblemForModify()
     {
-        selection1.enabled = true;
-        selection2.enabled = true;
-        selection3.enabled = true;
-        selection4.enabled = true;
+        
 
         DataTable selectedProblem = selectRequest(string.Format("select 본문, 유형, 힌트 여부, 힌트 from problem where 시대 = '{0}' and ID = '{1}'", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
         DataRow problemRow = selectedProblem.Rows[0];
@@ -384,7 +387,6 @@ public class problemAddModifyMaker : MonoBehaviour
     {
         Sprite[] dynastyImageGraph = null;
         Sprite problemImg;
-        int prevDynasty = SetPrevDynasty(int.Parse(problemID));
 
         switch (dynasty)
         {
@@ -405,25 +407,8 @@ public class problemAddModifyMaker : MonoBehaviour
                 break;
             default: break;
         }
-         return problemImg = dynastyImageGraph[int.Parse(problemID) - 1 - prevDynasty];
+         return problemImg = dynastyImageGraph[int.Parse(problemID) - 1];
     }
 
-    int SetPrevDynasty(int problemID)
-    {
-        int prevDynasty;
-
-        if (problemID < 31)
-            prevDynasty = 0;
-        else if (problemID < 96)
-            prevDynasty = 30;
-        else if (problemID < 176)
-            prevDynasty = 95;
-        else if (problemID < 286)
-            prevDynasty = 175;
-        else
-            prevDynasty = 285;
-
-        return prevDynasty;
-    }
 
 }
