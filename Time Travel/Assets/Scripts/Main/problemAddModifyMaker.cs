@@ -105,7 +105,10 @@ public class problemAddModifyMaker : MonoBehaviour
             }
             selectedLabel.text = "1";
         }
-        problemNum.value = 1000;
+
+        //고조선 1번 --> 조선 1번일때 문제 받아오지 못해서 한번 다른값으로 바꿈
+        if (!isManageMenetTypeAddProblem())
+            problemNum.value = -1;
         problemNum.value = 0;
     }
 
@@ -355,19 +358,13 @@ public class problemAddModifyMaker : MonoBehaviour
         modifyProblemButton.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255 / 255f);
         addButton.gameObject.SetActive(false);
         modifyButton.gameObject.SetActive(true);
-
         setProblemNumOption();
+        
         dynastySelection.value = 0;
-
     }
 
     void getProblemForModify()
     {
-        if (isManageMenetTypeAddProblem() == true)
-        {
-            //문제 수정 버튼 누른 후 문제 추가로 돌아갈 시 본문 inputField 원래대로(크기 조절, 이미지 없애기, 입력 가능하게) 돌려놓기.
-            return;
-        }
         DataTable selectedProblem = selectRequest(string.Format("select * from problem where 시대 = '{0}' and ID = '{1}'", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
         DataRow problemRow = selectedProblem.Rows[0];
 
@@ -405,29 +402,13 @@ public class problemAddModifyMaker : MonoBehaviour
             haveHint.value = 1;
             hint.interactable = true;
         }
-        //problemCategory.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = problemRow["유형"].ToString();
-        //haveHint.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = problemRow["힌트 여부"].ToString();
+
         hint.text = problemRow["힌트"].ToString();
         selection1.text = answerRow["선택지1"].ToString();
         selection2.text = answerRow["선택지2"].ToString();
         selection3.text = answerRow["선택지3"].ToString();
         selection4.text = answerRow["선택지4"].ToString();
-        if (problemRow["유형"].ToString() == "ox")
-        {
-            problemCategory.value = 0;
-            selection1.interactable = false;
-            selection2.interactable = false;
-            selection3.interactable = false;
-            selection4.interactable = false;
-        }
-        else
-        {
-            problemCategory.value = 1;
-            selection1.interactable = true;
-            selection2.interactable = true;
-            selection3.interactable = true;
-            selection4.interactable = true;
-        }
+        
         if(answerRow["답"].ToString() == "선택지 1/ o")
         {
             answer.value = 0;
@@ -444,7 +425,6 @@ public class problemAddModifyMaker : MonoBehaviour
         {
             answer.value = 3;
         }
-        //answer.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = answerRow["답"].ToString();
     }
 
     Sprite getProblemImg(string dynasty, string problemID)
