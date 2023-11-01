@@ -105,6 +105,7 @@ public class problemAddModifyMaker : MonoBehaviour
             }
             selectedLabel.text = "1";
         }
+        problemNum.value = 1000;
         problemNum.value = 0;
     }
 
@@ -138,12 +139,18 @@ public class problemAddModifyMaker : MonoBehaviour
             if (haveHint.value == 0)
             {
                 hint.interactable = false;
+                
             }
             else
             {
                 hint.interactable = true;
             }
         }
+        if(haveHint.value == 0)
+        {
+            hint.text = "";
+        }
+            
     }
 
     string setQuery()
@@ -270,6 +277,8 @@ public class problemAddModifyMaker : MonoBehaviour
         {
             selection1.text = "";
             selection2.text = "";
+            selection3.text = "";
+            selection4.text = "";
             selection1.interactable = true;
             selection2.interactable = true;
             selection3.interactable = true;
@@ -327,6 +336,13 @@ public class problemAddModifyMaker : MonoBehaviour
         modifyButton.gameObject.SetActive(false);
         setProblemNumOption();
 
+        addedProblem.enabled = true;
+        addedProblem.GetComponent<Image>().sprite = null;
+        addedProblem.gameObject.transform.GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = "문제를 입력하세요";
+        addedProblem.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 300);
+        problemCategory.value = 0;
+        haveHint.value = 0;
+        answer.value = 0;
     }
 
     void setPanelToModifyProblem()
@@ -341,31 +357,8 @@ public class problemAddModifyMaker : MonoBehaviour
         modifyButton.gameObject.SetActive(true);
 
         setProblemNumOption();
-        DataTable selectedProblem = selectRequest(string.Format("select 본문, 유형, 힌트 여부, 힌트 from problem where 시대 = '{0}' and ID = '{1}'", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
-        DataRow problemRow = selectedProblem.Rows[0];
-        if (problemRow["본문"] == DBNull.Value)
-        {
-            addedProblem.enabled = false;
-            addedProblem.gameObject.transform.GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = "";
-            addedProblem.GetComponent<Image>().sprite = getProblemImg(dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text);
-            addedProblem.GetComponent<Image>().SetNativeSize();
-        }
-        if (problemRow["유형"].ToString() == "ox")
-        {
-            selection1.interactable = false;
-            selection2.interactable = false;
-            selection3.interactable = false;
-            selection4.interactable = false;
-        }
-        else
-        {
-            selection1.interactable = true;
-            selection2.interactable = true;
-            selection3.interactable = true;
-            selection4.interactable = true;
-        }
-        addedProblem.interactable = true;
-        hint.interactable = true;
+        dynastySelection.value = 0;
+
     }
 
     void getProblemForModify()
@@ -393,8 +386,27 @@ public class problemAddModifyMaker : MonoBehaviour
             addedProblem.text = problemRow["본문"].ToString();
         }
 
-        problemCategory.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = problemRow["유형"].ToString();
-        haveHint.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = problemRow["힌트 여부"].ToString();
+        if(problemRow["유형"].ToString() == "ox")
+        {
+            problemCategory.value = 0;
+        }
+        else
+        {
+            problemCategory.value = 1;
+        }
+
+        if(problemRow["힌트 여부"].ToString() == "x")
+        {
+            haveHint.value = 0;
+            hint.interactable = false;
+        }
+        else
+        {
+            haveHint.value = 1;
+            hint.interactable = true;
+        }
+        //problemCategory.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = problemRow["유형"].ToString();
+        //haveHint.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = problemRow["힌트 여부"].ToString();
         hint.text = problemRow["힌트"].ToString();
         selection1.text = answerRow["선택지1"].ToString();
         selection2.text = answerRow["선택지2"].ToString();
@@ -402,6 +414,7 @@ public class problemAddModifyMaker : MonoBehaviour
         selection4.text = answerRow["선택지4"].ToString();
         if (problemRow["유형"].ToString() == "ox")
         {
+            problemCategory.value = 0;
             selection1.interactable = false;
             selection2.interactable = false;
             selection3.interactable = false;
@@ -409,12 +422,29 @@ public class problemAddModifyMaker : MonoBehaviour
         }
         else
         {
+            problemCategory.value = 1;
             selection1.interactable = true;
             selection2.interactable = true;
             selection3.interactable = true;
             selection4.interactable = true;
         }
-        answer.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = answerRow["답"].ToString();
+        if(answerRow["답"].ToString() == "선택지 1/ o")
+        {
+            answer.value = 0;
+        }
+        else if(answerRow["답"].ToString() == "선택지 2/ o")
+        {
+            answer.value = 1;
+        }
+        else if (answerRow["답"].ToString() == "선택지 3")
+        {
+            answer.value = 2;
+        }
+        else
+        {
+            answer.value = 3;
+        }
+        //answer.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = answerRow["답"].ToString();
     }
 
     Sprite getProblemImg(string dynasty, string problemID)
