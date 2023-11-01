@@ -361,6 +361,8 @@ public class problemAddModifyMaker : MonoBehaviour
         setProblemNumOption();
         
         dynastySelection.value = 0;
+        addedProblem.text = "";
+
     }
 
     void getProblemForModify()
