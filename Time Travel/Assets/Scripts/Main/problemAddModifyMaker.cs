@@ -225,7 +225,7 @@ public class problemAddModifyMaker : MonoBehaviour
     {
         string updateQueryToProblem;
         getTextFromDropDownsAndInputFields();
-        if (addedProblem.GetComponent<Image>().sprite == null)
+        if (addedProblem.GetComponent<Image>().sprite != null)
         {
             updateQueryToProblem = string.Format("update problem set 유형= '{0}', `힌트 여부` = '{1}', 힌트 = '{2}' where 시대='{3}' and ID='{4}';", problemCategoryText, haveHintText, hintText, dynastyText, problemNumText);
         }
