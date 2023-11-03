@@ -13,7 +13,11 @@ public class problemData : MonoBehaviour
     public DataTable dynasty3;
     public DataTable dynasty4;
     public DataTable dynasty5;
-
+    public DataTable answer1;
+    public DataTable answer2;
+    public DataTable answer3;
+    public DataTable answer4;
+    public DataTable answer5;
     public static MySqlConnection SqlConn;
 
     static string ipAddress = "183.96.251.147";
@@ -36,7 +40,7 @@ public class problemData : MonoBehaviour
 
     void Start()
     {
-        getAllProblemDatas();
+        getAllProblemAndAnswerDatas();
     }
 
     // Update is called once per frame
@@ -88,12 +92,17 @@ public class problemData : MonoBehaviour
         }
     }
 
-    void getAllProblemDatas()
+    void getAllProblemAndAnswerDatas()
     {
         dynasty1 = selectQuery("select * from problem where 시대='고조선'");
         dynasty2=selectQuery("select * from problem where 시대='삼국시대'");
         dynasty3 = selectQuery("select * from problem where 시대='고려'");
         dynasty4 = selectQuery("select * from problem where 시대='조선시대'");
         dynasty5 = selectQuery("select * from problem where 시대='근대이후'");
+        answer1 = selectQuery("select * from answer where 시대='고조선'");
+        answer2 = selectQuery("select * from answer where 시대='삼국시대'");
+        answer3 = selectQuery("select * from answer where 시대='고려");
+        answer4 = selectQuery("select * from answer where 시대='조선시대'");
+        answer5 = selectQuery("select * from answer where 시대='근대이후'");
     }
 }

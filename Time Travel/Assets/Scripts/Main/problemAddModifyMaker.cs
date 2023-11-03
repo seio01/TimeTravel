@@ -68,10 +68,6 @@ public class problemAddModifyMaker : MonoBehaviour
         addProblemButton.onClick.AddListener(setPanelToAddProblem);
         modifyProblemButton.onClick.AddListener(setPanelToModifyProblem);
         setProblemNumOption();
-        //이후 구현해야 할 부분
-
-
-        //수정하기 버튼 누르면 해당 값을 DB에 저장.
         problemNum.onValueChanged.AddListener(delegate { getProblemForModify(); });
         modifyButton.onClick.AddListener(modifyProblemToDatabase);
     }
@@ -79,22 +75,18 @@ public class problemAddModifyMaker : MonoBehaviour
 
     void setProblemNumOption()
     {
-        int optionNum = problemNum.options.Count;
-        for (int i = 0; i < optionNum; i++)
-        {
-            problemNum.options.RemoveAt(0);
-        }
-        TMP_Text selectedLabel = problemNum.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
+        removeCurrentOptions();
         string query = setQuery();
         DataTable dynasty = selectRequest(query);
         currentDynastyProblemNumCount = dynasty.Rows.Count;
+        TMP_Text selectedLabel = problemNum.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
         if (isManageMenetTypeAddProblem() == true)
         {
             problemNum.interactable = false;
             string newProblemNum = (currentDynastyProblemNumCount + 1).ToString();
             addOptionAtProblemNum(newProblemNum);
-
             selectedLabel.text = newProblemNum;
+            resetOXSelectionInputFields();
         }
         else
         {
@@ -104,12 +96,18 @@ public class problemAddModifyMaker : MonoBehaviour
                 addOptionAtProblemNum(i.ToString());
             }
             selectedLabel.text = "1";
-        }
-
-        //고조선 1번 --> 조선 1번일때 문제 받아오지 못해서 한번 다른값으로 바꿈
-        if (!isManageMenetTypeAddProblem())
             problemNum.value = -1;
+        }
         problemNum.value = 0;
+    }
+
+    void removeCurrentOptions()
+    {
+        int optionNum = problemNum.options.Count;
+        for (int i = 0; i < optionNum; i++)
+        {
+            problemNum.options.RemoveAt(0);
+        }
     }
 
     bool isManageMenetTypeAddProblem()
@@ -122,6 +120,29 @@ public class problemAddModifyMaker : MonoBehaviour
         {
             return false;
         }
+    }
+    void resetOXSelectionInputFields()
+    {
+        selection1.interactable = false;
+        selection2.interactable = false;
+        selection3.interactable = false;
+        selection4.interactable = false;
+        selection1.text = "o";
+        selection2.text = "x";
+        selection3.text = "";
+        selection4.text = "";
+    }
+
+    void resetAllSelectionInputFields()
+    {
+        selection1.interactable = true;
+        selection2.interactable = true;
+        selection3.interactable = true;
+        selection4.interactable = true;
+        selection1.text = "";
+        selection2.text = "";
+        selection3.text = "";
+        selection4.text = "";
     }
 
     void addOptionAtProblemNum(string valueText)
@@ -204,7 +225,7 @@ public class problemAddModifyMaker : MonoBehaviour
     {
         string updateQueryToProblem;
         getTextFromDropDownsAndInputFields();
-        if (addedProblem.GetComponent<Image>().sprite.name != "InputFieldBackground")
+        if (addedProblem.GetComponent<Image>().sprite != null)
         {
             updateQueryToProblem = string.Format("update problem set 유형= '{0}', `힌트 여부` = '{1}', 힌트 = '{2}' where 시대='{3}' and ID='{4}';", problemCategoryText, haveHintText, hintText, dynastyText, problemNumText);
         }
@@ -258,34 +279,19 @@ public class problemAddModifyMaker : MonoBehaviour
         selection3Text = selection3.text;
         selection4Text = selection4.text;
         answerText = (answer.value + 1).ToString();
-        Debug.Log(answerText);
     }
 
     void makeSelectionChange()
     {
         if (problemCategory.value == 0)
         {
-            selection1.text = "o";
-            selection2.text = "x";
-            selection3.text = "";
-            selection4.text = "";
-            selection1.interactable = false;
-            selection2.interactable = false;
-            selection3.interactable = false;
-            selection4.interactable = false;
+            resetOXSelectionInputFields();
             hint.interactable = false;
             haveHint.value = 0;
         }
         else
         {
-            selection1.text = "";
-            selection2.text = "";
-            selection3.text = "";
-            selection4.text = "";
-            selection1.interactable = true;
-            selection2.interactable = true;
-            selection3.interactable = true;
-            selection4.interactable = true;
+            resetAllSelectionInputFields();
         }
     }
 
@@ -293,11 +299,9 @@ public class problemAddModifyMaker : MonoBehaviour
     {
         try
         {
-
             MySqlCommand cmd = new MySqlCommand();
             cmd.Connection = SqlConn;
             cmd.CommandText = query;
-
 
             MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
             DataTable dataTable = new DataTable();
@@ -329,16 +333,11 @@ public class problemAddModifyMaker : MonoBehaviour
 
     void setPanelToAddProblem()
     {
-        addProblemButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(802, 380);
-        addProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(280, 80);
-        modifyProblemButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(832, 260);
-        modifyProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(220, 80);
-        addProblemButton.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255 / 255f);
-        modifyProblemButton.GetComponent<Image>().color = new Color(118 / 255f, 118 / 255f, 118 / 255f, 200 / 255f);
+        setButtonActiveAndBigger(addProblemButton);
+        setButtonInActiveAndSmaller(modifyProblemButton);
         addButton.gameObject.SetActive(true);
         modifyButton.gameObject.SetActive(false);
         setProblemNumOption();
-
         addedProblem.enabled = true;
         addedProblem.GetComponent<Image>().sprite = null;
         addedProblem.gameObject.transform.GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = "문제를 입력하세요";
@@ -350,26 +349,41 @@ public class problemAddModifyMaker : MonoBehaviour
 
     void setPanelToModifyProblem()
     {
-        addProblemButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(832, 380);
-        addProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(220, 80);
-        modifyProblemButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(802, 260);
-        modifyProblemButton.GetComponent<RectTransform>().sizeDelta = new Vector2(280, 80);
-        addProblemButton.GetComponent<Image>().color = new Color(118 / 255f, 118 / 255f, 118 / 255f, 200 / 255f);
-        modifyProblemButton.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255 / 255f);
+        setButtonActiveAndBigger(modifyProblemButton);
+        setButtonInActiveAndSmaller(addProblemButton);
         addButton.gameObject.SetActive(false);
         modifyButton.gameObject.SetActive(true);
         setProblemNumOption();
         dynastySelection.value = 0;
         addedProblem.text = "";
+    }
 
+    void setButtonActiveAndBigger(Button button)
+    {
+        Vector2 currentPos = button.GetComponent<RectTransform>().anchoredPosition;
+        button.GetComponent<RectTransform>().anchoredPosition = new Vector2(802, currentPos.y);
+        button.GetComponent<RectTransform>().sizeDelta = new Vector2(280, 80);
+        button.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255 / 255f);
+    }
+
+    void setButtonInActiveAndSmaller(Button button)
+    {
+        Vector2 currentPos = button.GetComponent<RectTransform>().anchoredPosition;
+        button.GetComponent<RectTransform>().anchoredPosition = new Vector2(832, currentPos.y);
+        button.GetComponent<RectTransform>().sizeDelta = new Vector2(220, 80);
+        button.GetComponent<Image>().color = new Color(118 / 255f, 118 / 255f, 118 / 255f, 200 / 255f);
     }
 
     void getProblemForModify()
     {
-        DataTable selectedProblem = selectRequest(string.Format("select * from problem where 시대 = '{0}' and ID = '{1}'", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
+        if (isManageMenetTypeAddProblem() == true)
+        {
+            return;
+        }
+        DataTable selectedProblem = selectRequest(string.Format("select * from problem where 시대 = '{0}' and ID = '{1}';", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
         DataRow problemRow = selectedProblem.Rows[0];
 
-        DataTable selectedProblemAnswer = selectRequest(string.Format("select * from answer where 시대 = '{0}' and 문제ID = '{1}'", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
+        DataTable selectedProblemAnswer = selectRequest(string.Format("select * from answer where 시대 = '{0}' and 문제ID = '{1}';", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
         DataRow answerRow = selectedProblemAnswer.Rows[0];
 
         if (problemRow["본문"] == DBNull.Value)
@@ -409,23 +423,7 @@ public class problemAddModifyMaker : MonoBehaviour
         selection2.text = answerRow["선택지2"].ToString();
         selection3.text = answerRow["선택지3"].ToString();
         selection4.text = answerRow["선택지4"].ToString();
-        
-        if(answerRow["답"].ToString() == "선택지 1/ o")
-        {
-            answer.value = 0;
-        }
-        else if(answerRow["답"].ToString() == "선택지 2/ o")
-        {
-            answer.value = 1;
-        }
-        else if (answerRow["답"].ToString() == "선택지 3")
-        {
-            answer.value = 2;
-        }
-        else
-        {
-            answer.value = 3;
-        }
+        answer.value = int.Parse(answerRow["답"].ToString()) - 1;
     }
 
     Sprite getProblemImg(string dynasty, string problemID)
@@ -454,6 +452,5 @@ public class problemAddModifyMaker : MonoBehaviour
         }
         return problemImg = dynastyImageGraph[int.Parse(problemID) - 1];
     }
-
 
 }

@@ -48,6 +48,8 @@ public class problem : MonoBehaviour
 
     public PhotonView PV;
     public List<int> solvedProblems;
+    DataRow currentProblemRow;
+    DataRow currentAnswerRow;
     // Start is called before the first frame update
     void Awake()
     {
@@ -167,14 +169,14 @@ public class problem : MonoBehaviour
 
     void getInfoFromCSV()
     {
-        DataRow currentProblem = getCurrentProblem();
+        getCurrentProblem();
 
-        dynasty = currentProblem["시대"].ToString();
-        problemType = currentProblem["유형"].ToString();
-        isHaveHint = currentProblem["힌트 여부"].ToString();
-        hintString = currentProblem["힌트"].ToString();
+        dynasty = currentProblemRow["시대"].ToString();
+        problemType = currentProblemRow["유형"].ToString();
+        isHaveHint = currentProblemRow["힌트 여부"].ToString();
+        hintString = currentProblemRow["힌트"].ToString();
         dynastyText.text = dynasty;
-        if (DBNull.Value.Equals(currentProblem["본문"]) == true)
+        if (DBNull.Value.Equals(currentProblemRow["본문"]) == true)
         {
             problemText.gameObject.SetActive(false);
             problemImage.SetActive(true);
@@ -184,7 +186,7 @@ public class problem : MonoBehaviour
         {
             problemText.gameObject.SetActive(true);
             problemImage.SetActive(false);
-            problemText.text = currentProblem["본문"].ToString();
+            problemText.text = currentProblemRow["본문"].ToString();
         }
         /*
         dynasty = problemDataCSV[problemID - 1]["시대"].ToString();
@@ -261,7 +263,7 @@ public class problem : MonoBehaviour
     void setSelectionText(Button button, string selectionName)
     {
         TMP_Text selectionText = button.transform.GetChild(0).GetComponent<TMP_Text>();
-        selectionText.text = answerData[problemID - 1][selectionName].ToString();
+        selectionText.text =currentAnswerRow[selectionName].ToString();
     }
 
     public void selectAnswer(int selectionNum)
@@ -279,7 +281,7 @@ public class problem : MonoBehaviour
         StopCoroutine("setTimer");
         SoundManager.instance.SoundPlayerStop();
         resultPanel.SetActive(true);
-        int correctAnswer = int.Parse(answerData[problemID - 1]["답"].ToString());
+        int correctAnswer = int.Parse(currentAnswerRow["답"].ToString());
         if (selectionNum == correctAnswer)
         {
             resultText.text = "정답입니다!";
@@ -384,7 +386,7 @@ public class problem : MonoBehaviour
         RpcManager.instance.useAsetItemCard(DontDestroyObjects.items.erase);
         selectionEraseButton.gameObject.SetActive(false);
         GameManager.instance.currentTurnASetItem = 1;
-        int correctAnswer = int.Parse(answerData[problemID - 1]["답"].ToString());
+        int correctAnswer = int.Parse(currentProblemRow["답"].ToString());
         int eraseSelection;
         while (true)
         {
@@ -438,7 +440,7 @@ public class problem : MonoBehaviour
         SoundManager.instance.SoundPlayer("Button1");
         resultPanel.SetActive(true);
         resultText.text = "문제를 패스했습니다. \n";
-        string correctAnswer = answerData[problemID - 1]["답"].ToString();
+        string correctAnswer = currentAnswerRow["답"].ToString();
         if (problemType == "ox")
         {
             if (correctAnswer == "1")
@@ -463,29 +465,32 @@ public class problem : MonoBehaviour
         playerPosition = GameManager.instance.getPlayerNextPosition();
     }
 
-    DataRow getCurrentProblem()
+    void  getCurrentProblem()
     {
-        DataRow currentProblem = null;
         if (playerPosition >= 1 && playerPosition <= 8)
         {
-            currentProblem = problemData.instance.dynasty1.Rows[problemID - 1];
+            currentProblemRow = problemData.instance.dynasty1.Rows[problemID - 1];
+            currentAnswerRow = problemData.instance.answer1.Rows[problemID - 1];
         }
         else if (playerPosition >= 9 && playerPosition <= 20)
         {
-            currentProblem = problemData.instance.dynasty2.Rows[problemID - 1];
+            currentProblemRow = problemData.instance.dynasty2.Rows[problemID - 1];
+            currentAnswerRow = problemData.instance.answer2.Rows[problemID - 1];
         }
         else if (playerPosition >= 21 && playerPosition <= 40)
         {
-            currentProblem = problemData.instance.dynasty3.Rows[problemID - 1];
+            currentProblemRow = problemData.instance.dynasty3.Rows[problemID - 1];
+            currentAnswerRow = problemData.instance.answer3.Rows[problemID - 1];
         }
         else if (playerPosition >= 41 && playerPosition <= 70)
         {
-            currentProblem = problemData.instance.dynasty4.Rows[problemID - 1];
+            currentProblemRow = problemData.instance.dynasty4.Rows[problemID - 1];
+            currentAnswerRow = problemData.instance.answer4.Rows[problemID - 1];
         }
         else
         {
-            currentProblem = problemData.instance.dynasty5.Rows[problemID - 1];
+            currentProblemRow = problemData.instance.dynasty5.Rows[problemID - 1];
+            currentAnswerRow = problemData.instance.answer5.Rows[problemID - 1];
         }
-        return currentProblem;
     }
 }
