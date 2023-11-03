@@ -29,6 +29,9 @@ public class CheckIncorrectProblems : MonoBehaviour
     public Sprite problemImg;
     public Canvas incorrectProblemPanel;
 
+    DataRow currentProblem;
+    DataRow currentAnswer;
+
     /*string dynasty;
     string problemType;*/
     int problemID;
@@ -137,8 +140,9 @@ public class CheckIncorrectProblems : MonoBehaviour
         for(int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty1.Count; i++)
         {
             problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty1[i];
-            DataRow currentProblem = problemData.instance.dynasty1.Rows[problemID - 1];
-            SetProblems(currentProblem, i);
+            currentProblem = problemData.instance.dynasty1.Rows[problemID - 1];
+            currentAnswer = problemData.instance.answer1.Rows[problemID - 1];
+            SetProblems(i);
 
         }
     }
@@ -148,8 +152,9 @@ public class CheckIncorrectProblems : MonoBehaviour
         for (int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty2.Count; i++)
         {
             problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty2[i];
-            DataRow currentProblem = problemData.instance.dynasty2.Rows[problemID - 1];
-            SetProblems(currentProblem, i);
+            currentProblem = problemData.instance.dynasty2.Rows[problemID - 1];
+            currentAnswer = problemData.instance.answer2.Rows[problemID - 1];
+            SetProblems(i);
 
         }
     }
@@ -158,9 +163,10 @@ public class CheckIncorrectProblems : MonoBehaviour
     {
         for (int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty3.Count; i++)
         {
-            problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty1[i];
-            DataRow currentProblem = problemData.instance.dynasty3.Rows[problemID - 1];
-            SetProblems(currentProblem, i);
+            problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty3[i];
+            currentProblem = problemData.instance.dynasty3.Rows[problemID - 1];
+            currentAnswer = problemData.instance.answer3.Rows[problemID - 1];
+            SetProblems(i);
 
         }
     }
@@ -169,9 +175,10 @@ public class CheckIncorrectProblems : MonoBehaviour
     {
         for (int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty4.Count; i++)
         {
-            problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty1[i];
-            DataRow currentProblem = problemData.instance.dynasty4.Rows[problemID - 1];
-            SetProblems(currentProblem, i);
+            problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty4[i];
+            currentProblem = problemData.instance.dynasty4.Rows[problemID - 1];
+            currentAnswer = problemData.instance.answer4.Rows[problemID - 1];
+            SetProblems(i);
 
         }
     }
@@ -180,14 +187,15 @@ public class CheckIncorrectProblems : MonoBehaviour
     {
         for (int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty5.Count; i++)
         {
-            problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty1[i];
-            DataRow currentProblem = problemData.instance.dynasty5.Rows[problemID - 1];
-            SetProblems(currentProblem, i);
+            problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty5[i];
+            currentProblem = problemData.instance.dynasty5.Rows[problemID - 1];
+            currentAnswer = problemData.instance.answer5.Rows[problemID - 1];
+            SetProblems(i);
 
         }
     }
 
-    void SetProblems(DataRow currentProblem, int index)
+    void SetProblems(int index)
     {
         string curDynasty = currentProblem["시대"].ToString();
         int curProblemID = int.Parse(currentProblem["ID"].ToString());
@@ -199,12 +207,14 @@ public class CheckIncorrectProblems : MonoBehaviour
         problemPage.transform.GetChild(0).GetComponent<TMP_Text>().text = curDynasty;
         if (currentProblem["본문"] == DBNull.Value)
         {
-            SetProblemImg("고조선");
+            SetProblemImg(curDynasty);
             problemPage.transform.GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().sprite = problemImg;
             problemPage.transform.GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().SetNativeSize();
         }
         else
         {
+            problemPage.transform.GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().sprite = null;
+            problemPage.transform.GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(850, 350);
             problemPage.transform.GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = currentProblem["본문"].ToString();
         }
         selection1 = problemPage.transform.GetChild(2).GetChild(0).gameObject;
@@ -241,7 +251,8 @@ public class CheckIncorrectProblems : MonoBehaviour
 
     void CompareWithCorrectAnswer(int selectionNum, GameObject selection)
     {
-        int correctAnswer = int.Parse(problemScript.answerData[problemID - 1]["답"].ToString());
+
+        int correctAnswer = int.Parse(currentAnswer["답"].ToString());
         if (correctAnswer == selectionNum)
         {
             selection.transform.GetChild(0).GetComponent<TMP_Text>().color = Color.red;
@@ -284,7 +295,7 @@ public class CheckIncorrectProblems : MonoBehaviour
     void setSelectionText(GameObject selection, string selectionName)
     {
         TMP_Text selectionText = selection.transform.GetChild(0).GetComponent<TMP_Text>();
-        selectionText.text = problemScript.answerData[problemID - 1][selectionName].ToString();
+        selectionText.text = currentAnswer[selectionName].ToString();
     }
 
 }
