@@ -360,8 +360,7 @@ public class problemAddModifyMaker : MonoBehaviour
         modifyButton.gameObject.SetActive(true);
         setProblemNumOption();
 
-        int curDynastySelectionValue = dynastySelection.value;
-        dynastySelection.value = curDynastySelectionValue;
+        dynastySelection.value = 0;
         addedProblem.text = "";
 
     }
