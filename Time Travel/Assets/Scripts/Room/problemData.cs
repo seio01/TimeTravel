@@ -29,10 +29,6 @@ public class problemData : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
-        MySqlConnection conn = new MySqlConnection(strConn);
-
-        SqlConn = new MySqlConnection(strConn);
         DontDestroyOnLoad(gameObject);
         if (instance == null)
         {
@@ -42,7 +38,7 @@ public class problemData : MonoBehaviour
 
     void Start()
     {
-        getAllProblemAndAnswerDatas();
+        Invoke("connectServer", 1f);
     }
 
     // Update is called once per frame
@@ -90,16 +86,24 @@ public class problemData : MonoBehaviour
         answer5 = selectQuery("select * from answer where 시대='근대이후'");
         if (dynasty1 == null)
         {
-            canNotConnectServerPanel.SetActive(true);
-            StartCoroutine("setTimerForPanel");
+            return;
         }
     }
 
-    IEnumerator setTimerForPanel()
+    void connectServer()
     {
-        yield return new WaitForSeconds(1.5f);
-        canNotConnectServerPanel.SetActive(false);
-        RoomManager.instance.LeaveRoom();
-        yield return null;
+        string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
+        MySqlConnection conn = new MySqlConnection(strConn);
+
+        SqlConn = new MySqlConnection(strConn);
+        try
+        {
+            SqlConn.Open();
+            getAllProblemAndAnswerDatas();
+        }
+        catch
+        {
+            canNotConnectServerPanel.SetActive(true);
+        }
     }
 }

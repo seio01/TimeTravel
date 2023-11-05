@@ -23,13 +23,10 @@ public class adminLogin : MonoBehaviour
     public GameObject problemAddModifyPanel;
     public GameObject canNotConnectServerPanel;
     // Start is called before the first frame update
+
     void Start()
     {
-        string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
-        SqlConn = new MySqlConnection(strConn);
-        SqlConn.Open();
-        inCorrectText.gameObject.SetActive(false);
-        loginButton.onClick.AddListener(loginToSQLServer);
+        Invoke("connectServer", 1f);
     }
 
     void loginToSQLServer()
@@ -40,8 +37,7 @@ public class adminLogin : MonoBehaviour
         DataTable queryData = selectRequest(loginQuery);
         if (queryData == null)
         {
-            canNotConnectServerPanel.SetActive(true);
-            StartCoroutine("setTimerForPanel");
+            return;
         }
         else if (queryData.Rows.Count == 0)
         {
@@ -70,14 +66,27 @@ public class adminLogin : MonoBehaviour
         }
         catch (System.Exception e)
         {
+            GameObject canvas = GameObject.Find("Canvas");
+            GameObject canNotConnectServerPanel = canvas.transform.GetChild(19).gameObject;
+            canNotConnectServerPanel.SetActive(true);
             return null;
         }
     }
 
-    IEnumerator setTimerForPanel()
+    void connectServer()
     {
-        yield return new WaitForSeconds(1.5f);
-        canNotConnectServerPanel.SetActive(false);
-        yield return null;
+        string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
+        SqlConn = new MySqlConnection(strConn);
+        try
+        {
+            SqlConn.Open();
+            inCorrectText.gameObject.SetActive(false);
+            loginButton.onClick.AddListener(loginToSQLServer);
+        }
+        catch
+        {
+            canNotConnectServerPanel.SetActive(true);
+            this.gameObject.SetActive(false);
+        }
     }
 }

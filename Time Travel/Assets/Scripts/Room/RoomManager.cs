@@ -297,6 +297,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
 
         Destroy(DontDestroyObjects.instance);
+        Destroy(problemData.instance);
         PhotonNetwork.LeaveRoom();
     }
 
