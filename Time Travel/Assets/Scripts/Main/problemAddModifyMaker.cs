@@ -51,7 +51,7 @@ public class problemAddModifyMaker : MonoBehaviour
     string answerText;
     int currentDynastyProblemNumCount = 0;
 
-
+    public GameObject canNotConnectServerPanel;
     void Awake()
     {
         string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
@@ -78,6 +78,11 @@ public class problemAddModifyMaker : MonoBehaviour
         removeCurrentOptions();
         string query = setQuery();
         DataTable dynasty = selectRequest(query);
+        if (dynasty == null)
+        {
+            canNotConnectServerPanel.SetActive(true);
+            StartCoroutine("setTimerForPanel");
+        }
         currentDynastyProblemNumCount = dynasty.Rows.Count;
         TMP_Text selectedLabel = problemNum.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
         if (isManageMenetTypeAddProblem() == true)
@@ -213,11 +218,6 @@ public class problemAddModifyMaker : MonoBehaviour
             string insertQueryToAnswer = string.Format("insert into answer values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}');", dynastyText, problemNumText, selection1Text, selection2Text, selection3Text, selection4Text, answerText);
             insertOrUpdateRequest(insertQueryToAnswer);
             setProblemNumOption();
-            Debug.Log("문제 추가 성공");
-        }
-        else
-        {
-            Debug.Log("채워지지 않은 inputField가 있어 문제를 추가할 수 없습니다.\n");
         }
     }
 
@@ -454,4 +454,11 @@ public class problemAddModifyMaker : MonoBehaviour
         return problemImg = dynastyImageGraph[int.Parse(problemID) - 1];
     }
 
+    IEnumerator setTimerForPanel()
+    {
+        yield return new WaitForSeconds(1.5f);
+        canNotConnectServerPanel.SetActive(false);
+        this.gameObject.SetActive(false);
+        yield return null;
+    }
 }

@@ -74,11 +74,11 @@ public class Main : MonoBehaviour
             long currentTime = (long)timeSpan.TotalSeconds;
 
             //최종 버전때 수정하기!
-            if (banType=="room"  && currentTime >= bannedTime + 1)
+            if (banType=="room"  && currentTime >= bannedTime + 600)
             {
                 eraseBan();
             }
-            if (banType == "game" && currentTime >= bannedTime + 1) 
+            if (banType == "game" && currentTime >= bannedTime + 3600)
             {
                 eraseBan();
             }

@@ -10797,7 +10797,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 700, y: 50}
+  m_SizeDelta: {x: 700, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &738080692
 MonoBehaviour:
@@ -10819,7 +10819,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC624\uB958\uB85C \uC11C\uBC84\uC640 \uC5F0\uACB0\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
+  m_text: "\uC624\uB958\uB85C \uC11C\uBC84\uC640 \uC5F0\uACB0\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.\n(\uC11C\uBC84\uC758
+    IP\uC8FC\uC18C\uAC00 \uBCC0\uACBD\uB418\uC5C8\uAC70\uB098 \uAEBC\uC838\uC788\uC2B5\uB2C8\uB2E4.)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7ee486d66f2c4c743b47df2de5c6b228, type: 2}
   m_sharedMaterial: {fileID: -5346071677025868190, guid: 7ee486d66f2c4c743b47df2de5c6b228, type: 2}
@@ -13847,6 +13848,7 @@ MonoBehaviour:
   addButton: {fileID: 880641623}
   modifyButton: {fileID: 616299240}
   problemGraphScript: {fileID: 872449824}
+  canNotConnectServerPanel: {fileID: 1999272853}
 --- !u!114 &872449824
 MonoBehaviour:
   m_ObjectHideFlags: 0
