@@ -5,6 +5,8 @@ using System.Data;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Threading;
+using UnityEngine.UI;
+using TMPro;
 
 public class problemData : MonoBehaviour
 {
@@ -27,7 +29,7 @@ public class problemData : MonoBehaviour
     string db_name = "timetravel";
 
     public GameObject canNotConnectServerPanel;
-
+    public TMP_Text connectServerText;
     bool haveServerError = true;
     // Start is called before the first frame update
     void Awake()
@@ -42,6 +44,7 @@ public class problemData : MonoBehaviour
     void Start()
     {
         haveServerError = true;
+        connectServerText.gameObject.SetActive(true);
         Invoke("connectServer", 1.0f);
     }
 
@@ -50,6 +53,7 @@ public class problemData : MonoBehaviour
         if (haveServerError == false)
         {
             haveServerError = true;
+            connectServerText.gameObject.SetActive(false);
             getAllProblemAndAnswerDatas();
         }
     }
