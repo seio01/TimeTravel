@@ -51,7 +51,7 @@ public class problemAddModifyMaker : MonoBehaviour
     string answerText;
     int currentDynastyProblemNumCount = 0;
 
-    public GameObject canNotConnectServerPanel;
+    public static GameObject canNotConnectServerPanel;
     void Awake()
     {
         string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
@@ -80,8 +80,8 @@ public class problemAddModifyMaker : MonoBehaviour
         DataTable dynasty = selectRequest(query);
         if (dynasty == null)
         {
-            canNotConnectServerPanel.SetActive(true);
-            StartCoroutine("setTimerForPanel");
+            this.gameObject.SetActive(false);
+            return;
         }
         currentDynastyProblemNumCount = dynasty.Rows.Count;
         TMP_Text selectedLabel = problemNum.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
@@ -311,7 +311,8 @@ public class problemAddModifyMaker : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.Log(e.ToString());
+            GameObject canvas = GameObject.Find("Canvas");
+            canNotConnectServerPanel = canvas.transform.GetChild(19).gameObject;
             return null;
         }
     }
@@ -327,7 +328,9 @@ public class problemAddModifyMaker : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.Log(e.ToString());
+            GameObject canvas = GameObject.Find("Canvas");
+            canNotConnectServerPanel = canvas.transform.GetChild(19).gameObject;
+            //canNotConnectServerPanel.SetActive(true);
         }
     }
 
@@ -452,13 +455,5 @@ public class problemAddModifyMaker : MonoBehaviour
             default: break;
         }
         return problemImg = dynastyImageGraph[int.Parse(problemID) - 1];
-    }
-
-    IEnumerator setTimerForPanel()
-    {
-        yield return new WaitForSeconds(1.5f);
-        canNotConnectServerPanel.SetActive(false);
-        this.gameObject.SetActive(false);
-        yield return null;
     }
 }

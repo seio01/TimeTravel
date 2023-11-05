@@ -72,6 +72,8 @@ public class problemData : MonoBehaviour
         }
         catch (System.Exception e)
         {
+            GameObject canvas = GameObject.Find("Canvas");
+            GameObject canNotConnectServerPanel = canvas.transform.GetChild(6).gameObject;
             return null;
         }
     }
@@ -90,16 +92,7 @@ public class problemData : MonoBehaviour
         answer5 = selectQuery("select * from answer where 시대='근대이후'");
         if (dynasty1 == null)
         {
-            canNotConnectServerPanel.SetActive(true);
-            StartCoroutine("setTimerForPanel");
+            return;
         }
-    }
-
-    IEnumerator setTimerForPanel()
-    {
-        yield return new WaitForSeconds(1.5f);
-        canNotConnectServerPanel.SetActive(false);
-        RoomManager.instance.LeaveRoom();
-        yield return null;
     }
 }

@@ -13848,7 +13848,6 @@ MonoBehaviour:
   addButton: {fileID: 880641623}
   modifyButton: {fileID: 616299240}
   problemGraphScript: {fileID: 872449824}
-  canNotConnectServerPanel: {fileID: 1999272853}
 --- !u!114 &872449824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19633,7 +19632,6 @@ MonoBehaviour:
   loginButton: {fileID: 423779325}
   inCorrectText: {fileID: 1481832901}
   problemAddModifyPanel: {fileID: 872449819}
-  canNotConnectServerPanel: {fileID: 1999272853}
 --- !u!1 &1297260379
 GameObject:
   m_ObjectHideFlags: 0
@@ -30781,6 +30779,7 @@ GameObject:
   - component: {fileID: 1999272854}
   - component: {fileID: 1999272856}
   - component: {fileID: 1999272855}
+  - component: {fileID: 1999272857}
   m_Layer: 5
   m_Name: "\uC11C\uBC84 \uC5F0\uACB0 \uBD88\uAC00 panel"
   m_TagString: Untagged
@@ -30847,6 +30846,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1999272853}
   m_CullTransparentMesh: 1
+--- !u!114 &1999272857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999272853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e8804e43ae168a4a947d5d27ad251ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2005982641
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,7 +21,6 @@ public class adminLogin : MonoBehaviour
     public Button loginButton;
     public TMP_Text inCorrectText;
     public GameObject problemAddModifyPanel;
-    public GameObject canNotConnectServerPanel;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,8 +39,7 @@ public class adminLogin : MonoBehaviour
         DataTable queryData = selectRequest(loginQuery);
         if (queryData == null)
         {
-            canNotConnectServerPanel.SetActive(true);
-            StartCoroutine("setTimerForPanel");
+            return;
         }
         else if (queryData.Rows.Count == 0)
         {
@@ -70,14 +68,11 @@ public class adminLogin : MonoBehaviour
         }
         catch (System.Exception e)
         {
+            GameObject canvas = GameObject.Find("Canvas");
+            GameObject canNotConnectServerPanel = canvas.transform.GetChild(19).gameObject;
+            canNotConnectServerPanel.SetActive(true);
             return null;
         }
     }
 
-    IEnumerator setTimerForPanel()
-    {
-        yield return new WaitForSeconds(1.5f);
-        canNotConnectServerPanel.SetActive(false);
-        yield return null;
-    }
 }
