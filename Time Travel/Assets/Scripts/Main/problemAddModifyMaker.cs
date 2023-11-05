@@ -209,9 +209,9 @@ public class problemAddModifyMaker : MonoBehaviour
         {
             getTextFromDropDownsAndInputFields();
             string insertQueryToProblem = string.Format("insert into problem values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}') ;", dynastyText, problemNumText, problemText, problemCategoryText, haveHintText, hintText);
-            //insertOrUpdateRequest(insertQueryToProblem);
+            insertOrUpdateRequest(insertQueryToProblem);
             string insertQueryToAnswer = string.Format("insert into answer values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}');", dynastyText, problemNumText, selection1Text, selection2Text, selection3Text, selection4Text, answerText);
-            //insertOrUpdateRequest(insertQueryToAnswer);
+            insertOrUpdateRequest(insertQueryToAnswer);
             setProblemNumOption();
             Debug.Log("문제 추가 성공");
         }
@@ -362,7 +362,7 @@ public class problemAddModifyMaker : MonoBehaviour
     void setButtonActiveAndBigger(Button button)
     {
         Vector2 currentPos = button.GetComponent<RectTransform>().anchoredPosition;
-        button.GetComponent<RectTransform>().anchoredPosition = new Vector2(802, currentPos.y);
+        button.GetComponent<RectTransform>().anchoredPosition = new Vector2(782, currentPos.y);
         button.GetComponent<RectTransform>().sizeDelta = new Vector2(280, 80);
         button.GetComponent<Image>().color = new Color(209 / 255f, 72 / 255f, 89 / 255f, 255 / 255f);
     }
@@ -370,7 +370,7 @@ public class problemAddModifyMaker : MonoBehaviour
     void setButtonInActiveAndSmaller(Button button)
     {
         Vector2 currentPos = button.GetComponent<RectTransform>().anchoredPosition;
-        button.GetComponent<RectTransform>().anchoredPosition = new Vector2(832, currentPos.y);
+        button.GetComponent<RectTransform>().anchoredPosition = new Vector2(812, currentPos.y);
         button.GetComponent<RectTransform>().sizeDelta = new Vector2(220, 80);
         button.GetComponent<Image>().color = new Color(118 / 255f, 118 / 255f, 118 / 255f, 200 / 255f);
     }
