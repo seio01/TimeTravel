@@ -24,6 +24,8 @@ public class problemData : MonoBehaviour
     string db_id = "root";
     string db_pw = "sm1906";
     string db_name = "timetravel";
+
+    public GameObject canNotConnectServerPanel;
     // Start is called before the first frame update
     void Awake()
     {
@@ -70,25 +72,7 @@ public class problemData : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.Log(e.ToString());
             return null;
-        }
-    }
-
-    public static void insertOrUpdateQuery(string query)
-    {
-        try
-        {
-            MySqlCommand sqlCommand = new MySqlCommand(query);
-            sqlCommand.Connection = SqlConn;
-            sqlCommand.CommandText = query;
-            SqlConn.Open();
-            sqlCommand.ExecuteNonQuery();
-            SqlConn.Close();
-        }
-        catch (System.Exception e)
-        {
-            Debug.Log(e.ToString());
         }
     }
 
@@ -101,8 +85,21 @@ public class problemData : MonoBehaviour
         dynasty5 = selectQuery("select * from problem where 시대='근대이후'");
         answer1 = selectQuery("select * from answer where 시대='고조선'");
         answer2 = selectQuery("select * from answer where 시대='삼국시대'");
-        answer3 = selectQuery("select * from answer where 시대='고려");
+        answer3 = selectQuery("select * from answer where 시대='고려'");
         answer4 = selectQuery("select * from answer where 시대='조선시대'");
         answer5 = selectQuery("select * from answer where 시대='근대이후'");
+        if (dynasty1 == null)
+        {
+            canNotConnectServerPanel.SetActive(true);
+            StartCoroutine("setTimerForPanel");
+        }
+    }
+
+    IEnumerator setTimerForPanel()
+    {
+        yield return new WaitForSeconds(1.5f);
+        canNotConnectServerPanel.SetActive(false);
+        RoomManager.instance.LeaveRoom();
+        yield return null;
     }
 }
