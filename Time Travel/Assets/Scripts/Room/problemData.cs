@@ -29,10 +29,6 @@ public class problemData : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
-        MySqlConnection conn = new MySqlConnection(strConn);
-
-        SqlConn = new MySqlConnection(strConn);
         DontDestroyOnLoad(gameObject);
         if (instance == null)
         {
@@ -42,7 +38,7 @@ public class problemData : MonoBehaviour
 
     void Start()
     {
-        getAllProblemAndAnswerDatas();
+        Invoke("connectServer", 1f);
     }
 
     // Update is called once per frame
@@ -72,8 +68,6 @@ public class problemData : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            GameObject canvas = GameObject.Find("Canvas");
-            GameObject canNotConnectServerPanel = canvas.transform.GetChild(6).gameObject;
             return null;
         }
     }
@@ -93,6 +87,23 @@ public class problemData : MonoBehaviour
         if (dynasty1 == null)
         {
             return;
+        }
+    }
+
+    void connectServer()
+    {
+        string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
+        MySqlConnection conn = new MySqlConnection(strConn);
+
+        SqlConn = new MySqlConnection(strConn);
+        try
+        {
+            SqlConn.Open();
+            getAllProblemAndAnswerDatas();
+        }
+        catch
+        {
+            canNotConnectServerPanel.SetActive(true);
         }
     }
 }

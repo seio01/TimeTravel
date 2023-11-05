@@ -56,7 +56,15 @@ public class problemAddModifyMaker : MonoBehaviour
     {
         string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
         SqlConn = new MySqlConnection(strConn);
-        SqlConn.Open();
+        try
+        {
+            SqlConn.Open();
+        }
+        catch
+        {
+            canNotConnectServerPanel.SetActive(true);
+            this.gameObject.SetActive(false);
+        }
     }
 
     void Start()
@@ -330,7 +338,7 @@ public class problemAddModifyMaker : MonoBehaviour
         {
             GameObject canvas = GameObject.Find("Canvas");
             canNotConnectServerPanel = canvas.transform.GetChild(19).gameObject;
-            //canNotConnectServerPanel.SetActive(true);
+            canNotConnectServerPanel.SetActive(true);
         }
     }
 

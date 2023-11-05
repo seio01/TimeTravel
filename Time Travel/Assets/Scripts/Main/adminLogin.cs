@@ -21,14 +21,12 @@ public class adminLogin : MonoBehaviour
     public Button loginButton;
     public TMP_Text inCorrectText;
     public GameObject problemAddModifyPanel;
+    public GameObject canNotConnectServerPanel;
     // Start is called before the first frame update
+
     void Start()
     {
-        string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
-        SqlConn = new MySqlConnection(strConn);
-        SqlConn.Open();
-        inCorrectText.gameObject.SetActive(false);
-        loginButton.onClick.AddListener(loginToSQLServer);
+        Invoke("connectServer", 1f);
     }
 
     void loginToSQLServer()
@@ -75,4 +73,20 @@ public class adminLogin : MonoBehaviour
         }
     }
 
+    void connectServer()
+    {
+        string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
+        SqlConn = new MySqlConnection(strConn);
+        try
+        {
+            SqlConn.Open();
+            inCorrectText.gameObject.SetActive(false);
+            loginButton.onClick.AddListener(loginToSQLServer);
+        }
+        catch
+        {
+            canNotConnectServerPanel.SetActive(true);
+            this.gameObject.SetActive(false);
+        }
+    }
 }

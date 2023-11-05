@@ -614,6 +614,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         SoundManager.instance.SoundPlayer("Button");
         quitScript.isApplicationQuit = true;
         Destroy(DontDestroyObjects.instance);
+        Destroy(problemData.instance);
         PhotonNetwork.LeaveRoom();
     }
 

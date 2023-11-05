@@ -12,7 +12,7 @@ public class roomErrorMessage : MonoBehaviour
 
     IEnumerator setTimerForPanel()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(3f);
         RoomManager.instance.LeaveRoom();
         this.gameObject.SetActive(false);
         yield return null;
