@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
+using System.Data;
 
 public class CheckIncorrectProblems : MonoBehaviour
 {
+
     public List<GameObject> pages;
     public int currentPage = 0;
     public int totalPage;
@@ -26,15 +29,17 @@ public class CheckIncorrectProblems : MonoBehaviour
     public Sprite problemImg;
     public Canvas incorrectProblemPanel;
 
-    string dynasty;
-    string problemType;
+    DataRow currentProblem;
+    DataRow currentAnswer;
+
+    /*string dynasty;
+    string problemType;*/
     int problemID;
-    int prevDynasty;
 
 
     void Awake()
     {
-        problemScript = problem.instance;
+        //problemScript = problem.instance;
         problemGraphScript = problem.instance.problemScript;
 
     }
@@ -101,74 +106,153 @@ public class CheckIncorrectProblems : MonoBehaviour
         incorrectProblemPanel.gameObject.SetActive(false);
     }
 
+
     public void ShowIncorrectProblems(int playerIndex)
     {
-        if (GameManager.instance.player[playerIndex].incorrectProblemNumbers.Count == 0)
+        int totalIncorrectProblems = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty1.Count + GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty2.Count
+            + GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty3.Count + GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty4.Count
+            + GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty5.Count;
+
+        if (totalIncorrectProblems == 0)
         {
             noIncorrectText.SetActive(true);
             return;
         }
 
         incorrectProblemPanel.gameObject.SetActive(true);
-        totalPage = GameManager.instance.player[playerIndex].incorrectProblemNumbers.Count;
+        totalPage = totalIncorrectProblems;
         if (totalPage <= 1)
         {
             leftBtn.interactable = false;
             rightBtn.interactable = false;
         }
-        for (int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemNumbers.Count; i++)
+
+        ShowIncorrectProblemsFromDynasty1(playerIndex);
+        ShowIncorrectProblemsFromDynasty2(playerIndex);
+        ShowIncorrectProblemsFromDynasty3(playerIndex);
+        ShowIncorrectProblemsFromDynasty4(playerIndex);
+        ShowIncorrectProblemsFromDynasty5(playerIndex);
+
+    }
+
+    void ShowIncorrectProblemsFromDynasty1(int playerIndex)
+    {
+        for(int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty1.Count; i++)
         {
-            problemID = GameManager.instance.player[playerIndex].incorrectProblemNumbers[i];
-            problemType = problemScript.problemDataCSV[problemID - 1]["유형"].ToString();
-            dynasty = problemScript.problemDataCSV[problemID - 1]["시대"].ToString();
+            problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty1[i];
+            currentProblem = problemData.instance.dynasty1.Rows[problemID - 1];
+            currentAnswer = problemData.instance.answer1.Rows[problemID - 1];
+            SetProblems(i);
 
-            SetPrevDynasty();
-            SetProblemImg(dynasty);
+        }
+    }
 
-            GameObject problemPage = Instantiate(problemPrefab, incorrectProblemPanel.transform.GetChild(0).gameObject.transform);
-            problemPage.name = "ProblemNumber" + problemID; 
-            problemPage.transform.GetChild(0).GetComponent<TMP_Text>().text = dynasty;
+    void ShowIncorrectProblemsFromDynasty2(int playerIndex)
+    {
+        for (int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty2.Count; i++)
+        {
+            problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty2[i];
+            currentProblem = problemData.instance.dynasty2.Rows[problemID - 1];
+            currentAnswer = problemData.instance.answer2.Rows[problemID - 1];
+            SetProblems(i);
+
+        }
+    }
+
+    void ShowIncorrectProblemsFromDynasty3(int playerIndex)
+    {
+        for (int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty3.Count; i++)
+        {
+            problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty3[i];
+            currentProblem = problemData.instance.dynasty3.Rows[problemID - 1];
+            currentAnswer = problemData.instance.answer3.Rows[problemID - 1];
+            SetProblems(i);
+
+        }
+    }
+
+    void ShowIncorrectProblemsFromDynasty4(int playerIndex)
+    {
+        for (int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty4.Count; i++)
+        {
+            problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty4[i];
+            currentProblem = problemData.instance.dynasty4.Rows[problemID - 1];
+            currentAnswer = problemData.instance.answer4.Rows[problemID - 1];
+            SetProblems(i);
+
+        }
+    }
+
+    void ShowIncorrectProblemsFromDynasty5(int playerIndex)
+    {
+        for (int i = 0; i < GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty5.Count; i++)
+        {
+            problemID = GameManager.instance.player[playerIndex].incorrectProblemsFromDynasty5[i];
+            currentProblem = problemData.instance.dynasty5.Rows[problemID - 1];
+            currentAnswer = problemData.instance.answer5.Rows[problemID - 1];
+            SetProblems(i);
+
+        }
+    }
+
+    void SetProblems(int index)
+    {
+        string curDynasty = currentProblem["시대"].ToString();
+        int curProblemID = int.Parse(currentProblem["ID"].ToString());
+        GameObject problemPage = Instantiate(problemPrefab, incorrectProblemPanel.transform.GetChild(0).gameObject.transform);
+        problemPage.name = curDynasty + " " + curProblemID;
+        if (index != 0)
+            problemPage.SetActive(false);
+
+        problemPage.transform.GetChild(0).GetComponent<TMP_Text>().text = curDynasty;
+        if (currentProblem["본문"] == DBNull.Value)
+        {
+            SetProblemImg(curDynasty);
             problemPage.transform.GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().sprite = problemImg;
             problemPage.transform.GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().SetNativeSize();
-            if(i != 0)
-                problemPage.SetActive(false);
-            selection1 = problemPage.transform.GetChild(2).GetChild(0).gameObject;
-            selection2 = problemPage.transform.GetChild(2).GetChild(1).gameObject;
-            selection1.SetActive(true);
-            selection2.SetActive(true);
-            
-            if (problemType == "ox")
-            {
-                TMP_Text selectionText = selection1.transform.GetChild(0).GetComponent<TMP_Text>();
-                selectionText.text = "o";
-                CompareWithCorrectAnswer(1, selection1);
-                selectionText = selection2.transform.GetChild(0).GetComponent<TMP_Text>();
-                selectionText.text = "x";
-                CompareWithCorrectAnswer(2, selection2);
-            }
-            else
-            {
-                selection3 = problemPage.transform.GetChild(2).GetChild(2).gameObject;
-                selection4 = problemPage.transform.GetChild(2).GetChild(3).gameObject;
-                selection3.SetActive(true);
-                selection4.SetActive(true);
-                setSelectionText(problemPage.transform.GetChild(2).GetChild(0).gameObject, "선택지1");
-                CompareWithCorrectAnswer(1, selection1);
-                setSelectionText(problemPage.transform.GetChild(2).GetChild(1).gameObject, "선택지2");
-                CompareWithCorrectAnswer(2, selection2);
-                setSelectionText(problemPage.transform.GetChild(2).GetChild(2).gameObject, "선택지3");
-                CompareWithCorrectAnswer(3, selection3);
-                setSelectionText(problemPage.transform.GetChild(2).GetChild(3).gameObject, "선택지4");
-                CompareWithCorrectAnswer(4, selection4);
-            }
-            pages.Add(problemPage);
-            
         }
+        else
+        {
+            problemPage.transform.GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().sprite = null;
+            problemPage.transform.GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(850, 350);
+            problemPage.transform.GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = currentProblem["본문"].ToString();
+        }
+        selection1 = problemPage.transform.GetChild(2).GetChild(0).gameObject;
+        selection2 = problemPage.transform.GetChild(2).GetChild(1).gameObject;
+        selection1.SetActive(true);
+        selection2.SetActive(true);
+
+        if (currentProblem["유형"].ToString() == "ox")
+        {
+            TMP_Text selectionText = selection1.transform.GetChild(0).GetComponent<TMP_Text>();
+            selectionText.text = "o";
+            CompareWithCorrectAnswer(1, selection1);
+            selectionText = selection2.transform.GetChild(0).GetComponent<TMP_Text>();
+            selectionText.text = "x";
+            CompareWithCorrectAnswer(2, selection2);
+        }
+        else
+        {
+            selection3 = problemPage.transform.GetChild(2).GetChild(2).gameObject;
+            selection4 = problemPage.transform.GetChild(2).GetChild(3).gameObject;
+            selection3.SetActive(true);
+            selection4.SetActive(true);
+            setSelectionText(problemPage.transform.GetChild(2).GetChild(0).gameObject, "선택지1");
+            CompareWithCorrectAnswer(1, selection1);
+            setSelectionText(problemPage.transform.GetChild(2).GetChild(1).gameObject, "선택지2");
+            CompareWithCorrectAnswer(2, selection2);
+            setSelectionText(problemPage.transform.GetChild(2).GetChild(2).gameObject, "선택지3");
+            CompareWithCorrectAnswer(3, selection3);
+            setSelectionText(problemPage.transform.GetChild(2).GetChild(3).gameObject, "선택지4");
+            CompareWithCorrectAnswer(4, selection4);
+        }
+        pages.Add(problemPage);
     }
 
     void CompareWithCorrectAnswer(int selectionNum, GameObject selection)
     {
-        int correctAnswer = int.Parse(problemScript.answerData[problemID - 1]["답"].ToString());
+
+        int correctAnswer = int.Parse(currentAnswer["답"].ToString());
         if (correctAnswer == selectionNum)
         {
             selection.transform.GetChild(0).GetComponent<TMP_Text>().color = Color.red;
@@ -182,23 +266,10 @@ public class CheckIncorrectProblems : MonoBehaviour
             
     }
 
-    void SetPrevDynasty()
-    {
-        if (problemID < 31)
-            prevDynasty = 0;
-        else if (problemID < 96)
-            prevDynasty = 30;
-        else if (problemID < 176)
-            prevDynasty = 95;
-        else if (problemID < 286)
-            prevDynasty = 175;
-        else
-            prevDynasty = 285;
-    }
-
     void SetProblemImg(string dynasty)
     {
         Sprite[] dynastyImageGraph = null;
+
         switch (dynasty)
         {
             case "고조선":
@@ -218,13 +289,13 @@ public class CheckIncorrectProblems : MonoBehaviour
                 break;
             default: break;
         }
-        problemImg = dynastyImageGraph[problemID - 1 - prevDynasty];
+        problemImg = dynastyImageGraph[problemID - 1];
     }
 
     void setSelectionText(GameObject selection, string selectionName)
     {
         TMP_Text selectionText = selection.transform.GetChild(0).GetComponent<TMP_Text>();
-        selectionText.text = problemScript.answerData[problemID - 1][selectionName].ToString();
+        selectionText.text = currentAnswer[selectionName].ToString();
     }
 
 }

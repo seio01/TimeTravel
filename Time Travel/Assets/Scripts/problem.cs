@@ -303,8 +303,31 @@ public class problem : MonoBehaviour
         else
         {
             //오답 저장
-            if (!GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemNumbers.Contains(problemID))
-                GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemNumbers.Add(problemID);
+            switch (dynasty)
+            {
+                case "고조선":
+                    if (!GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemsFromDynasty1.Contains(problemID))
+                        GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemsFromDynasty1.Add(problemID);
+                    break;
+                case "삼국시대":
+                    if (!GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemsFromDynasty2.Contains(problemID))
+                        GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemsFromDynasty2.Add(problemID);
+                    break;
+                case "고려":
+                    if (!GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemsFromDynasty3.Contains(problemID))
+                        GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemsFromDynasty3.Add(problemID);
+                    break;
+                case "조선시대":
+                    if (!GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemsFromDynasty4.Contains(problemID))
+                        GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemsFromDynasty4.Add(problemID);
+                    break;
+                case "근대이후":
+                    if (!GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemsFromDynasty5.Contains(problemID))
+                        GameManager.instance.player[GameManager.instance.controlPlayerIndexWithOrder].incorrectProblemsFromDynasty5.Add(problemID);
+                    break;
+
+            }
+            
             resultText.text = "틀렸습니다...";
             isPlayerCorrect = false;
             SoundManager.instance.SoundPlayer("Wrong");

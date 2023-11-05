@@ -9,7 +9,12 @@ public class Player : MonoBehaviour
 {
     public GameManager manager;
     public Transform[] points;
-    public List<int> incorrectProblemNumbers;
+    public List<int> incorrectProblemsFromDynasty1;
+    public List<int> incorrectProblemsFromDynasty2;
+    public List<int> incorrectProblemsFromDynasty3;
+    public List<int> incorrectProblemsFromDynasty4;
+    public List<int> incorrectProblemsFromDynasty5;
+
 
     public float speed = 15f;
     public bool movingAllowed;

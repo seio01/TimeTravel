@@ -354,7 +354,8 @@ public class problemAddModifyMaker : MonoBehaviour
         addButton.gameObject.SetActive(false);
         modifyButton.gameObject.SetActive(true);
         setProblemNumOption();
-        dynastySelection.value = 0;
+        int curDynastySelectionValue = dynastySelection.value;
+        dynastySelection.value = curDynastySelectionValue;
         addedProblem.text = "";
     }
 
