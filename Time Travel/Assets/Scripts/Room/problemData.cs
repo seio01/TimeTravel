@@ -28,7 +28,7 @@ public class problemData : MonoBehaviour
 
     public GameObject canNotConnectServerPanel;
 
-    static bool? haveServerError=null;
+    bool haveServerError = true;
     // Start is called before the first frame update
     void Awake()
     {
@@ -41,22 +41,15 @@ public class problemData : MonoBehaviour
 
     void Start()
     {
-        haveServerError = null;
-        Thread thread = new Thread(Run);
-        thread.Start();
+        haveServerError = true;
+        Invoke("connectServer", 1.0f);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (haveServerError == true)
-        {
-            haveServerError = null;
-            canNotConnectServerPanel.SetActive(true);
-        }
         if (haveServerError == false)
         {
-            haveServerError = null;
+            haveServerError = true;
             getAllProblemAndAnswerDatas();
         }
     }
@@ -73,7 +66,6 @@ public class problemData : MonoBehaviour
             adapter.Fill(dataTable);
 
             SqlConn.Close();
-
             return dataTable;
         }
         catch (System.Exception e)
@@ -101,7 +93,7 @@ public class problemData : MonoBehaviour
         }
     }
 
-    void Run()
+    void connectServer()
     {
         string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
         MySqlConnection conn = new MySqlConnection(strConn);
@@ -114,7 +106,7 @@ public class problemData : MonoBehaviour
         }
         catch
         {
-            haveServerError = true;
+            canNotConnectServerPanel.SetActive(true);
         }
     }
 }
