@@ -9,6 +9,17 @@ using Photon.Pun.UtilityScripts;
 using System.Data;
 using System;
 
+public class solvedProblem
+{
+    string dynasty;
+    int problemID;
+    public solvedProblem(string dynastyText, int problemID)
+    {
+        dynasty=dynastyText;
+        this.problemID=problemID;
+    }
+}
+
 public class problem : MonoBehaviour
 {
     public static problem instance;
@@ -47,7 +58,7 @@ public class problem : MonoBehaviour
     bool usePassItem;
 
     public PhotonView PV;
-    public List<int> solvedProblems;
+    public List<solvedProblem> solvedProblems;
     DataRow currentProblemRow;
     DataRow currentAnswerRow;
     // Start is called before the first frame update
@@ -57,7 +68,7 @@ public class problem : MonoBehaviour
             instance = this;
 
         resultText = resultPanel.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
-        solvedProblems = new List<int>();
+        solvedProblems = new List<solvedProblem>();
         problemID = 1;
     }
 
@@ -126,7 +137,8 @@ public class problem : MonoBehaviour
         controlButtons();
         if (PhotonNetwork.LocalPlayer == GameManager.instance.controlPlayer)
         {
-            solvedProblems.Add(problemID);
+            solvedProblem currentProblem = new solvedProblem(dynasty, problemID);
+            solvedProblems.Add(currentProblem);
         }
         if (problemType == "ox")
         {

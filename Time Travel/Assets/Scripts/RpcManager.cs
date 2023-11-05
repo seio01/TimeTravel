@@ -304,34 +304,42 @@ public class RpcManager : MonoBehaviour
     {
         int problemID = 0;
         int dynastyNum = 0;
+        string dynastyText;
+        solvedProblem currentProblem;
         do
         {
             if (playerPosition >= 1 && playerPosition <= 8)
             {
+                dynastyText = "고조선";
                 dynastyNum = problemData.instance.dynasty1.Rows.Count;
                 problemID = Random.Range(1, dynastyNum+1);
             }
             else if (playerPosition >= 9 && playerPosition <= 20)
             {
+                dynastyText = "삼국시대";
                 dynastyNum = problemData.instance.dynasty2.Rows.Count;
                 problemID = Random.Range(1, dynastyNum + 1);
             }
             else if (playerPosition >= 21 && playerPosition <= 40)
             {
+                dynastyText = "고려";
                 dynastyNum = problemData.instance.dynasty3.Rows.Count;
                 problemID = Random.Range(1, dynastyNum+1);
             }
             else if (playerPosition >= 41 && playerPosition <= 70)
             {
+                dynastyText = "조선시대";
                 dynastyNum = problemData.instance.dynasty4.Rows.Count;
                 problemID = Random.Range(1, dynastyNum+1);
             }
             else
             {
+                dynastyText = "근대이후";
                 dynastyNum = problemData.instance.dynasty5.Rows.Count;
                 problemID = Random.Range(1, dynastyNum+1);
             }
-        } while (problemScript.solvedProblems.Contains(problemID) == true);
+            currentProblem = new solvedProblem(dynastyText, problemID);
+        } while (problemScript.solvedProblems.Contains(currentProblem) == true);
         PV.RPC("setProblemIDToOThers", RpcTarget.AllViaServer, problemID);
     }
 
