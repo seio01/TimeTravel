@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Data;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using System.Threading;
 
 public class problemData : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class problemData : MonoBehaviour
     string db_name = "timetravel";
 
     public GameObject canNotConnectServerPanel;
+
+    static bool? haveServerError=null;
     // Start is called before the first frame update
     void Awake()
     {
@@ -38,26 +41,33 @@ public class problemData : MonoBehaviour
 
     void Start()
     {
-        Invoke("connectServer", 1f);
+        haveServerError = null;
+        Thread thread = new Thread(Run);
+        thread.Start();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (haveServerError == true)
+        {
+            haveServerError = null;
+            canNotConnectServerPanel.SetActive(true);
+        }
+        if (haveServerError == false)
+        {
+            haveServerError = null;
+            getAllProblemAndAnswerDatas();
+        }
     }
 
-    public static DataTable selectQuery(string query)
+    public DataTable selectQuery(string query)
     {
         try
         {
-            SqlConn.Open();
-
             MySqlCommand cmd = new MySqlCommand();
             cmd.Connection = SqlConn;
             cmd.CommandText = query;
-
-
             MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
             DataTable dataTable = new DataTable();
             adapter.Fill(dataTable);
@@ -68,6 +78,7 @@ public class problemData : MonoBehaviour
         }
         catch (System.Exception e)
         {
+            haveServerError = true;
             return null;
         }
     }
@@ -86,11 +97,11 @@ public class problemData : MonoBehaviour
         answer5 = selectQuery("select * from answer where 시대='근대이후'");
         if (dynasty1 == null)
         {
-            return;
+            haveServerError = true;
         }
     }
 
-    void connectServer()
+    void Run()
     {
         string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
         MySqlConnection conn = new MySqlConnection(strConn);
@@ -99,11 +110,11 @@ public class problemData : MonoBehaviour
         try
         {
             SqlConn.Open();
-            getAllProblemAndAnswerDatas();
+            haveServerError = false;
         }
         catch
         {
-            canNotConnectServerPanel.SetActive(true);
+            haveServerError = true;
         }
     }
 }

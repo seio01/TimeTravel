@@ -7,6 +7,7 @@ using System;
 using System.Data;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using System.Threading;
 
 public class problemAddModifyMaker : MonoBehaviour
 {
@@ -51,21 +52,8 @@ public class problemAddModifyMaker : MonoBehaviour
     string answerText;
     int currentDynastyProblemNumCount = 0;
 
-    public static GameObject canNotConnectServerPanel;
-    void Awake()
-    {
-        string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
-        SqlConn = new MySqlConnection(strConn);
-        try
-        {
-            SqlConn.Open();
-        }
-        catch
-        {
-            canNotConnectServerPanel.SetActive(true);
-            this.gameObject.SetActive(false);
-        }
-    }
+    public GameObject canNotConnectServerPanel;
+    bool? haveServerError;
 
     void Start()
     {
@@ -75,11 +63,30 @@ public class problemAddModifyMaker : MonoBehaviour
         addButton.onClick.AddListener(addProblemToDatabase);
         addProblemButton.onClick.AddListener(setPanelToAddProblem);
         modifyProblemButton.onClick.AddListener(setPanelToModifyProblem);
-        setProblemNumOption();
         problemNum.onValueChanged.AddListener(delegate { getProblemForModify(); });
         modifyButton.onClick.AddListener(modifyProblemToDatabase);
     }
 
+    void OnEnable()
+    {
+        haveServerError = null;
+        Thread thread = new Thread(Run);
+        thread.Start();
+    }
+
+    void Update()
+    {
+        if (haveServerError == true)
+        {
+            haveServerError = null;
+            canNotConnectServerPanel.SetActive(true);
+        }
+        if (haveServerError == false)
+        {
+            haveServerError = null;
+            setProblemNumOption();
+        }
+    }
 
     void setProblemNumOption()
     {
@@ -303,7 +310,7 @@ public class problemAddModifyMaker : MonoBehaviour
         }
     }
 
-    public static DataTable selectRequest(string query)
+    public DataTable selectRequest(string query)
     {
         try
         {
@@ -319,13 +326,12 @@ public class problemAddModifyMaker : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            GameObject canvas = GameObject.Find("Canvas");
-            canNotConnectServerPanel = canvas.transform.GetChild(19).gameObject;
+            haveServerError = true;
             return null;
         }
     }
 
-    public static void insertOrUpdateRequest(string query)
+    public void insertOrUpdateRequest(string query)
     {
         try
         {
@@ -336,9 +342,7 @@ public class problemAddModifyMaker : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            GameObject canvas = GameObject.Find("Canvas");
-            canNotConnectServerPanel = canvas.transform.GetChild(19).gameObject;
-            canNotConnectServerPanel.SetActive(true);
+            haveServerError = true;
         }
     }
 
@@ -393,6 +397,10 @@ public class problemAddModifyMaker : MonoBehaviour
             return;
         }
         DataTable selectedProblem = selectRequest(string.Format("select * from problem where 시대 = '{0}' and ID = '{1}';", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
+        if (selectedProblem == null)
+        {
+            return;
+        }
         DataRow problemRow = selectedProblem.Rows[0];
 
         DataTable selectedProblemAnswer = selectRequest(string.Format("select * from answer where 시대 = '{0}' and 문제ID = '{1}';", dynastySelection.options[dynastySelection.value].text, problemNum.options[problemNum.value].text));
@@ -463,5 +471,20 @@ public class problemAddModifyMaker : MonoBehaviour
             default: break;
         }
         return problemImg = dynastyImageGraph[int.Parse(problemID) - 1];
+    }
+
+    void Run()
+    {
+        string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
+        SqlConn = new MySqlConnection(strConn);
+        try
+        {
+            SqlConn.Open();
+            haveServerError = false;
+        }
+        catch
+        {
+            haveServerError = true;
+        }
     }
 }

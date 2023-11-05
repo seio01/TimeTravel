@@ -13848,6 +13848,7 @@ MonoBehaviour:
   addButton: {fileID: 880641623}
   modifyButton: {fileID: 616299240}
   problemGraphScript: {fileID: 872449824}
+  canNotConnectServerPanel: {fileID: 1999272853}
 --- !u!114 &872449824
 MonoBehaviour:
   m_ObjectHideFlags: 0
