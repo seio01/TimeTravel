@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using System.Threading;
 
 public class adminLogin : MonoBehaviour
 {
@@ -24,13 +25,30 @@ public class adminLogin : MonoBehaviour
     public GameObject canNotConnectServerPanel;
     // Start is called before the first frame update
 
+    bool canConnect;
     void Start()
     {
-        Invoke("connectServer", 1f);
+        loginButton.onClick.AddListener(loginToSQLServer);
+    }
+
+    void OnEnable()
+    {
+        canConnect = false;
+        IDField.text ="";
+        pwdField.text = "";
+        inCorrectText.gameObject.SetActive(false);
+        Thread thread = new Thread(Run);
+        thread.Start();
     }
 
     void loginToSQLServer()
     {
+        if (canConnect == false)
+        {
+            canNotConnectServerPanel.SetActive(true);
+            this.gameObject.SetActive(false);
+            return;
+        }
         string id = IDField.text;
         string pwd = pwdField.text;
         string loginQuery = string.Format("select * from admin where adminID='{0}' and adminPWD='{1}';", id, pwd);
@@ -73,20 +91,18 @@ public class adminLogin : MonoBehaviour
         }
     }
 
-    void connectServer()
+    void Run()
     {
         string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
         SqlConn = new MySqlConnection(strConn);
         try
         {
             SqlConn.Open();
-            inCorrectText.gameObject.SetActive(false);
-            loginButton.onClick.AddListener(loginToSQLServer);
+            canConnect = true;
         }
         catch
         {
-            canNotConnectServerPanel.SetActive(true);
-            this.gameObject.SetActive(false);
+            canConnect = false;
         }
     }
 }
