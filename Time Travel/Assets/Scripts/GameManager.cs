@@ -544,7 +544,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 break;
             default:
                 spaceCategory = "Problem";
-                spaceText.text = "현재 칸은 문제 칸입니다.\n 문제를 맞추면 이동가능합니다.";
+                spaceText.text = "현재 칸은 문제 칸입니다.\n 문제를 맞히면 이동가능합니다.";
                 break;
         }
         space.SetActive(true);
